@@ -16,8 +16,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":32,
-                 "y":96
+                 "x":13,
+                 "y":106
                 }, 
                 {
                  "height":32,
@@ -27,8 +27,8 @@
                  "type":"",
                  "visible":true,
                  "width":416,
-                 "x":64,
-                 "y":224
+                 "x":49,
+                 "y":233
                 }, 
                 {
                  "height":32,
@@ -38,8 +38,8 @@
                  "type":"",
                  "visible":true,
                  "width":192,
-                 "x":448,
-                 "y":192
+                 "x":466,
+                 "y":202
                 }, 
                 {
                  "height":160,
@@ -49,8 +49,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":608,
-                 "y":32
+                 "x":619,
+                 "y":44
                 }, 
                 {
                  "height":32,
@@ -60,8 +60,8 @@
                  "type":"",
                  "visible":true,
                  "width":160,
-                 "x":448,
-                 "y":32
+                 "x":455.344104686874,
+                 "y":21.3176659100013
                 }, 
                 {
                  "height":32,
@@ -71,8 +71,8 @@
                  "type":"",
                  "visible":true,
                  "width":256,
-                 "x":224,
-                 "y":0
+                 "x":222.66470823875,
+                 "y":-12.0176258512485
                 }, 
                 {
                  "height":128,
@@ -82,8 +82,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":192,
-                 "y":0
+                 "x":177,
+                 "y":-9
                 }, 
                 {
                  "height":32,
@@ -93,96 +93,8 @@
                  "type":"",
                  "visible":true,
                  "width":128,
-                 "x":64,
-                 "y":96
-                }, 
-                {
-                 "height":52.2445176533227,
-                 "id":82,
-                 "name":"bed",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":44.5908622009251,
-                 "x":225.949219659911,
-                 "y":85.521280489834
-                }, 
-                {
-                 "height":18.3022195600812,
-                 "id":83,
-                 "name":"drink",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32.2784599514159,
-                 "x":269.209011347376,
-                 "y":93.5077035705966
-                }, 
-                {
-                 "height":35.2733686067019,
-                 "id":84,
-                 "name":"dining char",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":30.9473894379555,
-                 "x":368.040996971815,
-                 "y":185.018801371003
-                }, 
-                {
-                 "height":27.6197131543043,
-                 "id":85,
-                 "name":"dining chair",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":31.9456923230508,
-                 "x":405.310971348707,
-                 "y":157.066320588333
-                }, 
-                {
-                 "height":35.9389038634322,
-                 "id":86,
-                 "name":"dining table",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":54.5738910518785,
-                 "x":393.996871984293,
-                 "y":186.017104256098
-                }, 
-                {
-                 "height":29.2835512961299,
-                 "id":87,
-                 "name":"suitcase",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32.9439952081461,
-                 "x":446.241389637616,
-                 "y":117.13420518452
-                }, 
-                {
-                 "height":37.6027420052577,
-                 "id":88,
-                 "name":"kitchen",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":129.113839805664,
-                 "x":477.521546703937,
-                 "y":110.478852617217
-                }, 
-                {
-                 "height":57.9015673355296,
-                 "id":89,
-                 "name":"desk",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":68.2173638148481,
-                 "x":381.351702106419,
-                 "y":71.2122724701341
+                 "x":55.988249432501,
+                 "y":85.3176659100013
                 }, 
                 {
                  "height":48.070503404994,
@@ -192,8 +104,8 @@
                  "type":"",
                  "visible":true,
                  "width":48.070503404994,
-                 "x":64.094004539992,
-                 "y":146.882093737482
+                 "x":62.7587127787422,
+                 "y":144.879156095607
                 }, 
                 {
                  "height":38.7234610762452,
@@ -203,8 +115,8 @@
                  "type":"",
                  "visible":true,
                  "width":114.167445586861,
-                 "x":109.493924422486,
-                 "y":158.89971958873
+                 "x":106,
+                 "y":146
                 }, 
                 {
                  "height":72.7734009881159,
@@ -213,7 +125,7 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":30.7117105087462,
+                 "width":22.717986380024,
                  "x":192.282013619976,
                  "y":120.176258512485
                 }, 
@@ -225,12 +137,45 @@
                  "type":"",
                  "visible":true,
                  "width":96.141006809988,
-                 "x":289.090666310589,
-                 "y":52.7440245693684
+                 "x":288.423020429964,
+                 "y":50.0734410468687
+                }, 
+                {
+                 "height":14,
+                 "id":98,
+                 "name":"desk",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":47,
+                 "x":398,
+                 "y":89
+                }, 
+                {
+                 "height":37,
+                 "id":99,
+                 "name":"bed",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":27,
+                 "x":233,
+                 "y":88
+                }, 
+                {
+                 "height":24,
+                 "id":100,
+                 "name":"dining table",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":35,
+                 "x":410,
+                 "y":194
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -274,7 +219,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -926,7 +871,7 @@
          "y":0
         }],
  "nextlayerid":67,
- "nextobjectid":95,
+ "nextobjectid":101,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

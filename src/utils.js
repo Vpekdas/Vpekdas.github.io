@@ -17,6 +17,7 @@ export function displayDialogue(text, onDisplayEnd) {
 	}, 5);
 
 	const closeBtn = document.getElementById("close");
+
 	function onCloseClick() {
 		onDisplayEnd();
 		dialogueUI.style.display = "none";
@@ -25,5 +26,15 @@ export function displayDialogue(text, onDisplayEnd) {
 		closeBtn.removeEventListener("click", onCloseClick);
 	}
 
-	closeBtn.addEventListener("close", onCloseClick);
+	closeBtn.addEventListener("click", onCloseClick);
+}
+
+export function setCamScale(k) {
+	const  resizeFactor = k.width() / k.height();
+	if (resizeFactor < 1) {
+		k.camScale(k.vec2(1));
+		return;
+	}
+
+	k.camScale(k.vec2(1.5));
 }
