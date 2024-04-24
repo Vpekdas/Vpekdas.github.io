@@ -2,7 +2,7 @@ import { k } from "./KaboomCtx";
 import { dialogueData, offsetX, offsetY, scaleFactor } from "./constants";
 import { displayDialogue, setCamScale } from "./utils";
 
-k.loadSprite("character", "./character.png", {
+k.loadSprite("player", "./character.png", {
 	sliceX: 4,
 	sliceY: 4,
 	anims: {
@@ -15,6 +15,12 @@ k.loadSprite("character", "./character.png", {
 	},
 });
 
+k.loadSprite("1", "./1.png");
+k.loadSprite("2", "./2.png");
+k.loadSprite("3", "./3.png");
+k.loadSprite("4", "./4.png");
+k.loadSprite("5", "./5.png");
+
 k.loadSprite("map", "./map.png");
 
 k.setBackground(k.Color.fromHex("#000000"));
@@ -23,20 +29,35 @@ k.scene("main", async () => {
 	const mapData = await (await fetch("./map.json")).json()
 	const layers = mapData.layers;
 
+	const bg1 = k.add([
+		k.sprite("1"), k.pos(0), k.scale(3)]);
+
+	const bg2 = k.add([
+		k.sprite("2"), k.pos(0), k.scale(3)]);
+
+	const bg3 = k.add([
+		k.sprite("3"), k.pos(0), k.scale(3)]);
+
+	const bg4 = k.add([
+		k.sprite("4"), k.pos(0), k.scale(3)]);
+
+	const bg5 = k.add([
+		k.sprite("5"), k.pos(0), k.scale(3)]);
+
 	const map = k.add([
 		k.sprite("map"), k.pos(0), k.scale(scaleFactor)]);
 	
 	const player = k.add([
-		k.sprite("character", { anim: "idle-down" }),
-		k.area([
-			{ shape: new k.Rect(k.vec2(0, 3), 10, 10) },
-		]),
+		k.sprite("player", { anim: "idle-down" }),
+		k.area({
+			shape: new k.Rect(k.vec2(0, 3), 10, 16),
+		  }),
 		k.body(),
 		k.anchor("center"),
 		k.pos(),
-		k.scale(scaleFactor),
+		k.scale(2),
 		{
-			speed: 250,
+			speed: 300,
 			direction: "down",
 			isInDialogue: false,
 		},
@@ -48,10 +69,10 @@ k.scene("main", async () => {
 			for (const boundary of layer.objects) {
 				map.add([
 					k.area({
-						shape: new k.Rect(k.vec2(0), boundary.width, boundary.height),
+						shape: new k.Rect(k.vec2(0, 0), boundary.width, boundary.height),
 					}),
 					k.body({ isStatic: true }),
-					k.pos(boundary.x + offsetX, boundary.y + offsetY),
+					k.pos(boundary.x + offsetX + 2, boundary.y + offsetY + 8),
 					boundary.name,
 				]);
 
@@ -64,11 +85,12 @@ k.scene("main", async () => {
 			}
 			continue;
 		}
+
 		if (layer.name ===	"spawnpoint") {
 			for (const entity of layer.objects) {
 				if (entity.name === "player") {
 					player.pos = k.vec2(
-						(map.pos.x + entity.x + offsetX) * scaleFactor,
+						(map.pos.x + entity.x + offsetX ) * scaleFactor,
 						(map.pos.y + entity.y + offsetY) * scaleFactor
 					);
 					continue;
@@ -85,10 +107,25 @@ k.scene("main", async () => {
 
 	k.onUpdate(() => {
 		k.camPos(player.pos.x, player.pos.y + 100)
+	
+		bg1.pos.x -= 0.15;
+		bg2.pos.x = player.pos.x * 0.10;
+		bg3.pos.x = player.pos.x * 0.20;
+		bg4.pos.x = player.pos.x * 0.30;
+		bg5.pos.x = player.pos.x * 0.40;
+	
+		if (bg1.pos.x + bg1.width <= 0) bg1.pos.x = 0;
+		if (bg2.pos.x + bg2.width <= 0) bg2.pos.x = 0;
+		if (bg3.pos.x + bg3.width <= 0) bg3.pos.x = 0;
+		if (bg4.pos.x + bg4.width <= 0) bg4.pos.x = 0;
+		if (bg5.pos.x + bg5.width <= 0) bg5.pos.x = 0;
+		console.log(bg1.pos.x);
 	});
 	
 	k.onMouseDown((mouseBtn) => {
-		if (mouseBtn !== "left" || player.isInDialogue) return;
+		if (mouseBtn !== "left" || player.isInDialogue) {
+			return;
+		}
 		const worldMousepos = k.toWorld(k.mousePos());
 		player.moveTo(worldMousepos, player.speed);
 
@@ -99,6 +136,7 @@ k.scene("main", async () => {
 		if (mouseAngle > lowerBound && mouseAngle < upperBound && player.curAnim() !== "walk-up") {
 			player.play("walk-up");
 			player.direction = "up";
+			
 		}
 		if (mouseAngle < -lowerBound && mouseAngle > -upperBound && player.curAnim() !== "walk-down") {
 			player.play("walk-down");
@@ -133,6 +171,5 @@ k.scene("main", async () => {
 	})
 
 });
-
 
 k.go("main");
