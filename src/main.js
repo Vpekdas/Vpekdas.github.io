@@ -15,6 +15,11 @@ k.loadSprite("player", "./character.png", {
 	},
 });
 
+k.loadSprite("so_long", "./spritesheet.png", {
+    sliceX: 21,
+    sliceY: 11,
+});
+
 k.loadSprite("1", "./1.png");
 k.loadSprite("2", "./2.png");
 k.loadSprite("3", "./3.png");
@@ -52,7 +57,7 @@ k.scene("main", async () => {
 
 	const map = k.add([
 		k.sprite("map"), k.pos(0), k.scale(scaleFactor)]);
-	
+
 	const player = k.add([
 		k.sprite("player", { anim: "idle-down" }),
 		k.area({
@@ -70,6 +75,8 @@ k.scene("main", async () => {
 		"player",
 	]);
 
+	let interactables = [];
+	
 	for (const layer of layers) {
 		if (layer.name === "boundaries") {
 			for (const boundary of layer.objects) {
@@ -81,8 +88,29 @@ k.scene("main", async () => {
 					k.pos(boundary.x + offsetX + 2, boundary.y + offsetY + 8),
 					boundary.name,
 				]);
-
+				
 				if (boundary.name) {
+					const originalSprite = k.add([
+						k.sprite("so_long", { frame: 82 }),
+						k.pos((boundary.x + offsetX - 2) * scaleFactor, (boundary.y + offsetY + 5) * scaleFactor),
+						k.scale(scaleFactor),
+					]);
+					const blinkSprite = k.add([
+						k.sprite("so_long", { frame: 82 }),
+						k.pos((boundary.x + offsetX - 2) * scaleFactor, (boundary.y + offsetY + 5) * scaleFactor),
+						k.color(127, 0, 255),
+						k.opacity(0.4),
+						k.scale(scaleFactor),
+
+					]);
+
+					const interactable = {
+						originalSprite,
+						blinkSprite,
+						blink: false,
+					};
+					interactables.push(interactable);
+
 					player.onCollide(boundary.name,  () => {
 						player.isInDialogue = true;
 						displayDialogue(dialogueData[boundary.name], () => player.isInDialogue = false)
@@ -133,6 +161,19 @@ k.scene("main", async () => {
 		if (bg3.pos.x + bg3.width <= 0) bg3.pos.x = 0;
 		if (bg4.pos.x + bg4.width <= 0) bg4.pos.x = 0;
 		if (bg5.pos.x + bg5.width <= 0) bg5.pos.x = 0;
+
+		for (const interactable of interactables) {
+			interactable.blink = Math.floor(k.time() / 0.5) % 2 === 0;
+	
+			if (interactable.blink) {
+				interactable.originalSprite.hidden = true;
+				interactable.blinkSprite.hidden = false;
+			} else {
+				interactable.originalSprite.hidden = false;
+				interactable.blinkSprite.hidden = true;
+			}
+		}
+
 	});
 	
 	k.onMouseDown((mouseBtn) => {
