@@ -31,6 +31,12 @@ k.scene("main", async () => {
 
 	const bg1 = k.add([
 		k.sprite("1"), k.pos(0), k.scale(3)]);
+	
+	const bg1dup = k.add([
+		k.sprite("1"), k.pos(bg1.width, 0), k.scale(3)]);
+
+	const bg2dup = k.add([
+		k.sprite("1"), k.pos(-bg1.width, 0), k.scale(3)]);
 
 	const bg2 = k.add([
 		k.sprite("2"), k.pos(0), k.scale(3)]);
@@ -109,17 +115,24 @@ k.scene("main", async () => {
 		k.camPos(player.pos.x, player.pos.y + 100)
 	
 		bg1.pos.x -= 0.15;
+		bg1dup.pos.x -= 0.15;
+		bg2dup.pos.x -= 0.15;
 		bg2.pos.x = player.pos.x * 0.10;
 		bg3.pos.x = player.pos.x * 0.20;
 		bg4.pos.x = player.pos.x * 0.30;
 		bg5.pos.x = player.pos.x * 0.40;
 	
-		if (bg1.pos.x + bg1.width <= 0) bg1.pos.x = 0;
+		if (bg1.pos.x + bg1.width <= 0) bg1.pos.x = 0 ;
+		if (bg1dup.pos.x <= 300) {
+			bg1dup.pos.x = bg1.width;
+		}
+		if (bg2dup.pos.x <= -1000) {
+			bg2dup.pos.x = bg1.width;
+		}
 		if (bg2.pos.x + bg2.width <= 0) bg2.pos.x = 0;
 		if (bg3.pos.x + bg3.width <= 0) bg3.pos.x = 0;
 		if (bg4.pos.x + bg4.width <= 0) bg4.pos.x = 0;
 		if (bg5.pos.x + bg5.width <= 0) bg5.pos.x = 0;
-		console.log(bg1.pos.x);
 	});
 	
 	k.onMouseDown((mouseBtn) => {
@@ -173,3 +186,7 @@ k.scene("main", async () => {
 });
 
 k.go("main");
+
+// TODO: When mouse is over a interactible, show a dialogue button with the link in it
+// TODO: Add some effect on interactible things
+// FIXME: Adjust parallax correctly, sometimes it reset too early
