@@ -15,18 +15,39 @@ k.loadSprite("player", "./character.png", {
 	},
 });
 
-k.loadSprite("so_long", "./spritesheet.png", {
+k.loadSprite("tiles", "./spritesheet.png", {
     sliceX: 21,
     sliceY: 11,
 });
 
-k.loadSprite("1", "./1.png");
-k.loadSprite("2", "./2.png");
-k.loadSprite("3", "./3.png");
-k.loadSprite("4", "./4.png");
-k.loadSprite("5", "./5.png");
+k.loadSprite("1", "./background/1.png");
+k.loadSprite("2", "./background/2.png");
+k.loadSprite("3", "./background/3.png");
+k.loadSprite("4", "./background/4.png");
+k.loadSprite("5", "./background/5.png");
 
 k.loadSprite("map", "./map.png");
+
+function createInteractable(boundary, offsetX, offsetY, scaleFactor, frame) {
+	const originalSprite = k.add([
+	  k.sprite("tiles", { frame }),
+	  k.pos((boundary.x + offsetX - 2) * scaleFactor, (boundary.y + offsetY + 5) * scaleFactor),
+	  k.scale(scaleFactor),
+	]);
+	const blinkSprite = k.add([
+	  k.sprite("tiles", { frame }),
+	  k.pos((boundary.x + offsetX - 2) * scaleFactor, (boundary.y + offsetY + 5) * scaleFactor),
+	  k.color(127, 0, 255),
+	  k.opacity(0.4),
+	  k.scale(scaleFactor),
+	]);
+  
+	return {
+	  originalSprite,
+	  blinkSprite,
+	  blink: false,
+	};
+  }
 
 k.setBackground(k.Color.fromHex("#000000"));
 
@@ -90,27 +111,20 @@ k.scene("main", async () => {
 				]);
 				
 				if (boundary.name) {
-					const originalSprite = k.add([
-						k.sprite("so_long", { frame: 82 }),
-						k.pos((boundary.x + offsetX - 2) * scaleFactor, (boundary.y + offsetY + 5) * scaleFactor),
-						k.scale(scaleFactor),
-					]);
-					const blinkSprite = k.add([
-						k.sprite("so_long", { frame: 82 }),
-						k.pos((boundary.x + offsetX - 2) * scaleFactor, (boundary.y + offsetY + 5) * scaleFactor),
-						k.color(127, 0, 255),
-						k.opacity(0.4),
-						k.scale(scaleFactor),
-
-					]);
-
-					const interactable = {
-						originalSprite,
-						blinkSprite,
-						blink: false,
-					};
-					interactables.push(interactable);
-
+					if (boundary.name === "so_long") {
+						const interactable = createInteractable(boundary, offsetX, offsetY, scaleFactor, 82);
+						interactables.push(interactable);
+					}
+					if (boundary.name === "printf") {
+						const interactable = createInteractable(boundary, offsetX + 2, offsetY + 1, scaleFactor, 13);
+						const interactable2 = createInteractable(boundary, offsetX + 34, offsetY + 1, scaleFactor, 14);
+						interactables.push(interactable);
+						interactables.push(interactable2);
+					}
+					if(boundary.name == "get_next_line") {
+						const interactable = createInteractable(boundary, offsetX + 1, offsetY - 5, scaleFactor, 124);
+						interactables.push(interactable);
+					}
 					player.onCollide(boundary.name,  () => {
 						player.isInDialogue = true;
 						displayDialogue(dialogueData[boundary.name], () => player.isInDialogue = false)
