@@ -1,4 +1,4 @@
-import kaboom from "kaboom.js";
+import kaboom from "kaboom";
 
 export const k = kaboom({
     global: false,
