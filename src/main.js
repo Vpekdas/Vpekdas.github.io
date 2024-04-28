@@ -1,6 +1,6 @@
-import { k } from "./KaboomCtx";
-import { dialogueData, offsetX, offsetY, scaleFactor } from "./constants";
-import { displayDialogue, setCamScale } from "./utils";
+import { k } from "./KaboomCtx.js";
+import { dialogueData, offsetX, offsetY, scaleFactor } from "./constants.js";
+import { displayDialogue, setCamScale } from "./utils.js";
 
 k.loadSprite("player", "./character.png", {
 	sliceX: 4,
