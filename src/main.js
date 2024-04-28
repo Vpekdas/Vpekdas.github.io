@@ -2,7 +2,7 @@ import { k } from "./KaboomCtx.js";
 import { dialogueData, offsetX, offsetY, scaleFactor } from "./constants.js";
 import { displayDialogue, setCamScale } from "./utils.js";
 
-k.loadSprite("player", "./character.png", {
+k.loadSprite("player", "./character/character.png", {
 	sliceX: 4,
 	sliceY: 4,
 	anims: {
@@ -20,6 +20,16 @@ k.loadSprite("tiles", "./spritesheet.png", {
     sliceY: 11,
 });
 
+k.loadSprite("pipe", "./pipe/1.png");
+
+k.loadSprite("furniture", "./furniture/hous_furniture.png", {
+	sliceX: 13,
+    sliceY: 18,
+});
+
+k.loadSprite("book", "./books/1.png");
+k.loadSprite("book2", "./books/2.png");
+
 k.loadSprite("1", "./background/1.png");
 k.loadSprite("2", "./background/2.png");
 k.loadSprite("3", "./background/3.png");
@@ -33,12 +43,120 @@ function createInteractable(boundary, offsetX, offsetY, scaleFactor, frame) {
 	  k.sprite("tiles", { frame }),
 	  k.pos((boundary.x + offsetX - 2) * scaleFactor, (boundary.y + offsetY + 5) * scaleFactor),
 	  k.scale(scaleFactor),
+
 	]);
 	const blinkSprite = k.add([
 	  k.sprite("tiles", { frame }),
 	  k.pos((boundary.x + offsetX - 2) * scaleFactor, (boundary.y + offsetY + 5) * scaleFactor),
-	  k.color(127, 0, 255),
-	  k.opacity(0.4),
+	  k.color(255, 255, 255),
+	  k.opacity(0.75),
+	  k.scale(scaleFactor),
+	]);
+  
+	return {
+	  originalSprite,
+	  blinkSprite,
+	  blink: false,
+	};
+  }
+
+  function createInteractable2(boundary, offsetX, offsetY, scaleFactor, frame) {
+	const originalSprite = k.add([
+	  k.sprite("pipe", { frame }),
+	  k.pos((boundary.x + offsetX) * scaleFactor, (boundary.y + offsetY) * scaleFactor),
+	  k.scale(scaleFactor),
+	]);
+	const blinkSprite = k.add([
+	  k.sprite("pipe", { frame }),
+	  k.pos((boundary.x + offsetX) * scaleFactor, (boundary.y + offsetY) * scaleFactor),
+	  k.color(255, 255, 255),
+	  k.opacity(0.75),
+	  k.scale(scaleFactor),
+	]);
+  
+	return {
+	  originalSprite,
+	  blinkSprite,
+	  blink: false,
+	};
+  }
+
+  function createInteractable3(boundary, offsetX, offsetY, scaleFactor, frame) {
+	const originalSprite = k.add([
+	  k.sprite("furniture", { frame }),
+	  k.pos((boundary.x + offsetX) * scaleFactor, (boundary.y + offsetY) * scaleFactor),
+	  k.scale(scaleFactor),
+	]);
+	const blinkSprite = k.add([
+	  k.sprite("furniture", { frame }),
+	  k.pos((boundary.x + offsetX) * scaleFactor, (boundary.y + offsetY) * scaleFactor),
+	  k.color(255, 255, 255),
+	  k.opacity(0.75),
+	  k.scale(scaleFactor),
+	]);
+  
+	return {
+	  originalSprite,
+	  blinkSprite,
+	  blink: false,
+	};
+  }
+
+  function createInteractable4(boundary, offsetX, offsetY, scaleFactor, frame) {
+	const originalSprite = k.add([
+	  k.sprite("furniture", { frame }),
+	  k.pos((boundary.x + offsetX) * scaleFactor, (boundary.y + offsetY) * scaleFactor),
+	  k.scale(scaleFactor),
+	]);
+	const blinkSprite = k.add([
+	  k.sprite("furniture", { frame }),
+	  k.pos((boundary.x + offsetX) * scaleFactor, (boundary.y + offsetY) * scaleFactor),
+	  k.color(255, 255, 255),
+	  k.opacity(0.75),
+	  k.scale(scaleFactor),
+	]);
+  
+	return {
+	  originalSprite,
+	  blinkSprite,
+	  blink: false,
+	};
+  }
+
+  function createInteractable5(boundary, offsetX, offsetY, scaleFactor, frame) {
+	const originalSprite = k.add([
+	  k.sprite("book", { frame }),
+	  k.pos((boundary.x + offsetX - 2) * scaleFactor, (boundary.y + offsetY + 5) * scaleFactor),
+	  k.scale(scaleFactor),
+
+	]);
+	const blinkSprite = k.add([
+	  k.sprite("book", { frame }),
+	  k.pos((boundary.x + offsetX - 2) * scaleFactor, (boundary.y + offsetY + 5) * scaleFactor),
+	  k.color(255, 255, 255),
+	  k.opacity(0.75),
+	  k.scale(scaleFactor),
+	]);
+  
+	return {
+	  originalSprite,
+	  blinkSprite,
+	  blink: false,
+	};
+  }
+
+  function createInteractable6(boundary, offsetX, offsetY, scaleFactor, frame) {
+	const originalSprite = k.add([
+	  k.sprite("book2", { frame }),
+	  k.pos((boundary.x + offsetX - 2) * scaleFactor, (boundary.y + offsetY + 5) * scaleFactor),
+	  k.scale(scaleFactor),
+
+	]);
+	const blinkSprite = k.add([
+	  k.sprite("book2", { frame }),
+	  k.pos((boundary.x + offsetX - 2) * scaleFactor, (boundary.y + offsetY + 5) * scaleFactor),
+	  k.color(255, 255, 255),
+	  k.opacity(0.75),
 	  k.scale(scaleFactor),
 	]);
   
@@ -54,6 +172,7 @@ k.setBackground(k.Color.fromHex("#000000"));
 k.scene("main", async () => {
 	const mapData = await (await fetch("./map.json")).json()
 	const layers = mapData.layers;
+	let interactables = [];
 
 	const bg1 = k.add([
 		k.sprite("1"), k.pos(0), k.scale(3)]);
@@ -96,8 +215,7 @@ k.scene("main", async () => {
 		"player",
 	]);
 
-	let interactables = [];
-	
+
 	for (const layer of layers) {
 		if (layer.name === "boundaries") {
 			for (const boundary of layer.objects) {
@@ -106,25 +224,56 @@ k.scene("main", async () => {
 						shape: new k.Rect(k.vec2(0, 0), boundary.width, boundary.height),
 					}),
 					k.body({ isStatic: true }),
-					k.pos(boundary.x + offsetX + 2, boundary.y + offsetY + 8),
+					k.pos(boundary.x + offsetX + 16, boundary.y + offsetY + 8),
 					boundary.name,
 				]);
 				
 				if (boundary.name) {
 					if (boundary.name === "so_long") {
-						const interactable = createInteractable(boundary, offsetX, offsetY, scaleFactor, 82);
+						const interactable = createInteractable(boundary, offsetX + 14, offsetY, scaleFactor, 82);
 						interactables.push(interactable);
 					}
 					if (boundary.name === "printf") {
-						const interactable = createInteractable(boundary, offsetX + 2, offsetY + 1, scaleFactor, 13);
-						const interactable2 = createInteractable(boundary, offsetX + 34, offsetY + 1, scaleFactor, 14);
+						const interactable = createInteractable(boundary, offsetX + 16, offsetY + 1, scaleFactor, 13);
+						const interactable2 = createInteractable(boundary, offsetX + 48, offsetY + 1, scaleFactor, 14);
 						interactables.push(interactable);
 						interactables.push(interactable2);
 					}
-					if(boundary.name == "get_next_line") {
-						const interactable = createInteractable(boundary, offsetX + 1, offsetY - 5, scaleFactor, 124);
+					if (boundary.name == "get_next_line") {
+						const interactable = createInteractable(boundary, offsetX + 15, offsetY - 5, scaleFactor, 124);
 						interactables.push(interactable);
 					}
+					if (boundary.name == "pipex") {
+						const interactable = createInteractable2(boundary, offsetX + 15, offsetY - 5, scaleFactor, 0);
+						interactables.push(interactable);
+					}
+					if (boundary.name == "libft") {
+						const interactable = createInteractable3(boundary, offsetX + 16, offsetY + 8, scaleFactor, 54);
+						const interactable2 = createInteractable3(boundary, offsetX + 32, offsetY + 8, scaleFactor, 55);
+						const interactable3 = createInteractable3(boundary, offsetX + 48, offsetY + 8, scaleFactor, 56);
+						const interactable4 = createInteractable3(boundary, offsetX + 16, offsetY + 16 + 8, scaleFactor, 67);
+						const interactable5 = createInteractable3(boundary, offsetX + 32, offsetY + 16 + 8, scaleFactor, 68);
+						const interactable6 = createInteractable3(boundary, offsetX + 48, offsetY + 16 + 8, scaleFactor, 69);
+						const interactable7 = createInteractable3(boundary, offsetX + 16, offsetY + 32 + 8, scaleFactor, 80);
+						const interactable8 = createInteractable3(boundary, offsetX + 32, offsetY + 32 + 8, scaleFactor, 81);
+						const interactable9 = createInteractable3(boundary, offsetX + 48, offsetY + 32 + 8, scaleFactor, 82);
+						interactables.push(interactable);
+						interactables.push(interactable2);
+						interactables.push(interactable3);
+						interactables.push(interactable4);
+						interactables.push(interactable5);
+						interactables.push(interactable6);
+						interactables.push(interactable7);
+						interactables.push(interactable8);
+						interactables.push(interactable9);
+					}
+					if (boundary.name === "push_swap") {
+						const interactable = createInteractable5(boundary, offsetX + 16, offsetY + 8, scaleFactor, 0);
+						const interactable2 = createInteractable6(boundary, offsetX + 16, offsetY + 32, scaleFactor, 0);
+						interactables.push(interactable);
+						interactables.push(interactable2);
+					}
+
 					player.onCollide(boundary.name,  () => {
 						player.isInDialogue = true;
 						displayDialogue(dialogueData[boundary.name], () => player.isInDialogue = false)
@@ -162,14 +311,15 @@ k.scene("main", async () => {
 		bg2.pos.x = player.pos.x * 0.10;
 		bg3.pos.x = player.pos.x * 0.20;
 		bg4.pos.x = player.pos.x * 0.30;
-		bg5.pos.x = player.pos.x * 0.40;
+		bg5.pos.x = player.pos.x * 0.60;
 	
-		if (bg1.pos.x + bg1.width <= 0) bg1.pos.x = 0 ;
-		if (bg1dup.pos.x <= 300) {
+		if (bg1.pos.x <= -bg1.width)
+			bg1.pos.x = 0;
+		if (bg1dup.pos.x <= 0) {
 			bg1dup.pos.x = bg1.width;
 		}
-		if (bg2dup.pos.x <= -1000) {
-			bg2dup.pos.x = bg1.width;
+		if (bg2dup.pos.x <= -bg1.width * 2) {
+			bg2dup.pos.x = -bg1.width;
 		}
 		if (bg2.pos.x + bg2.width <= 0) bg2.pos.x = 0;
 		if (bg3.pos.x + bg3.width <= 0) bg3.pos.x = 0;
@@ -187,7 +337,6 @@ k.scene("main", async () => {
 				interactable.blinkSprite.hidden = true;
 			}
 		}
-
 	});
 	
 	k.onMouseDown((mouseBtn) => {
@@ -242,6 +391,7 @@ k.scene("main", async () => {
 
 k.go("main");
 
-// TODO: When mouse is over a interactible, show a dialogue button with the link in it
-// TODO: Add some effect on interactible things
-// FIXME: Adjust parallax correctly, sometimes it reset too early
+// TODO: When mouse is over a interactible, show a dialogue button with the link in it (hover with kaboom).
+// TODO: Library hitbox is meh, you go through it and its weird, on the contrary pipe is a great idea.
+// TODO: Found a way to go through tiles => place them directly with kabbom.js so use this for go through door :)
+// TODO: Found a way for parallax => place the same bg at pos 0, pos width and pos -width then reset at their initial pos if they are colliding,
