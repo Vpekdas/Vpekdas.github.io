@@ -1,64 +1,8 @@
 import { k } from "./KaboomCtx.js";
 import { dialogueData, offsetX, offsetY, scaleFactor } from "./constants.js";
-import { displayDialogue, setCamScale } from "./utils.js";
+import { createHoverEvents, createInteractable, displayDialogue, loadAllressources, setCamScale } from "./utils.js";
 
-k.loadSprite("player", "./character/character.png", {
-	sliceX: 4,
-	sliceY: 4,
-	anims: {
-		"idle-down": 0,
-		"walk-down": {from: 0, to: 3, loop: true, speed: 8 },
-		"idle-side": 4,
-		"walk-side": {from: 4, to: 7, loop: true, speed: 8 },
-		"idle-up": 12,
-		"walk-up": {from: 12, to: 15, loop: true, speed: 8 },
-	},
-});
-
-k.loadSprite("tiles", "./spritesheet.png", {
-    sliceX: 21,
-    sliceY: 11,
-});
-
-k.loadSprite("pipe", "./pipe/1.png");
-
-k.loadSprite("furniture", "./furniture/hous_furniture.png", {
-	sliceX: 13,
-    sliceY: 18,
-});
-
-k.loadSprite("book", "./books/1.png");
-k.loadSprite("book2", "./books/2.png");
-
-k.loadSprite("1", "./background/1.png");
-k.loadSprite("2", "./background/2.png");
-k.loadSprite("3", "./background/3.png");
-k.loadSprite("4", "./background/4.png");
-k.loadSprite("5", "./background/5.png");
-
-k.loadSprite("map", "./map.png");
-
-function createInteractable(boundary, offsetX, offsetY, scaleFactor, frame) {
-	const originalSprite = k.add([
-	  k.sprite("tiles", { frame }),
-	  k.pos((boundary.x + offsetX - 2) * scaleFactor, (boundary.y + offsetY + 5) * scaleFactor),
-	  k.scale(scaleFactor),
-
-	]);
-	const blinkSprite = k.add([
-	  k.sprite("tiles", { frame }),
-	  k.pos((boundary.x + offsetX - 2) * scaleFactor, (boundary.y + offsetY + 5) * scaleFactor),
-	  k.color(255, 255, 255),
-	  k.opacity(0.75),
-	  k.scale(scaleFactor),
-	]);
-  
-	return {
-	  originalSprite,
-	  blinkSprite,
-	  blink: false,
-	};
-  }
+loadAllressources(k);
 
   function createInteractable2(boundary, offsetX, offsetY, scaleFactor, frame) {
 	const originalSprite = k.add([
@@ -230,17 +174,17 @@ k.scene("main", async () => {
 				
 				if (boundary.name) {
 					if (boundary.name === "so_long") {
-						const interactable = createInteractable(boundary, offsetX + 14, offsetY, scaleFactor, 82);
+						const interactable = createInteractable(k, boundary, 82, 28, 22);
 						interactables.push(interactable);
 					}
 					if (boundary.name === "printf") {
-						const interactable = createInteractable(boundary, offsetX + 16, offsetY + 1, scaleFactor, 13);
-						const interactable2 = createInteractable(boundary, offsetX + 48, offsetY + 1, scaleFactor, 14);
+						const interactable = createInteractable(k, boundary, 13, 32, 17);
+						const interactable2 = createInteractable(k, boundary, 14, 64, 17);
 						interactables.push(interactable);
 						interactables.push(interactable2);
 					}
 					if (boundary.name == "get_next_line") {
-						const interactable = createInteractable(boundary, offsetX + 15, offsetY - 5, scaleFactor, 124);
+						const interactable = createInteractable(k, boundary, 124, 31, 14);
 						interactables.push(interactable);
 					}
 					if (boundary.name == "pipex") {
@@ -303,6 +247,7 @@ k.scene("main", async () => {
 	});
 
 	k.onUpdate(() => {
+
 		k.camPos(player.pos.x, player.pos.y + 100)
 	
 		bg1.pos.x -= 0.15;
@@ -338,7 +283,9 @@ k.scene("main", async () => {
 			}
 		}
 	});
-	
+
+	createHoverEvents(k, "get_next_line");
+
 	k.onMouseDown((mouseBtn) => {
 		if (mouseBtn !== "left" || player.isInDialogue) {
 			return;
