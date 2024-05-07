@@ -41,7 +41,7 @@ export function setCamScale(k) {
 	k.camScale(k.vec2(1.5));
 }
 
-export function createHoverEvents(k, projectName) {
+export function createHoverEvents(k, projectName, bubbleX, bubbleY, bubbleScale, textSize, textWidth, textX, textY) {
 	let bubble = null;
 	let bubbleText = null;
   
@@ -49,17 +49,17 @@ export function createHoverEvents(k, projectName) {
 	  if (!bubble) {
 		bubble = k.add([
 		  k.sprite("hover"),
-		  k.pos(obj.pos.x, obj.pos.y + 32),
-		  k.scale(0.70),
+		  k.pos(obj.pos.x + bubbleX, obj.pos.y + bubbleY),
+		  k.scale(bubbleScale),
 		]);
   
 		bubbleText = k.add([
 		  k.text(projectName, {
-			size: 24,
-			width: bubble.width,
+			size: textSize,
+			width: textWidth,
 			font: "myFont",
 		  }),
-		  k.pos(obj.pos.x + 48, obj.pos.y + 48),
+		  k.pos(obj.pos.x + textX, obj.pos.y + textY),
 		]);
 	  }
 	});
@@ -119,15 +119,14 @@ export function createHoverEvents(k, projectName) {
 	k.loadSprite("map", "./map.png");
   };
   
-
-  export function createInteractable(k, boundary, frame, offsetX, offsetY) {
+  export function createInteractable(k, tiles ,boundary, frame, offsetX, offsetY) {
 	const originalSprite = k.add([
-	  k.sprite("tiles", { frame }),
+	  k.sprite(tiles, { frame }),
 	  k.pos((boundary.x + offsetX ) * scaleFactor, (boundary.y + offsetY) * scaleFactor),
 	  k.scale(scaleFactor),
 	]);
 	const blinkSprite = k.add([
-	  k.sprite("tiles", { frame }),
+	  k.sprite(tiles, { frame }),
 	  k.pos((boundary.x + offsetX) * scaleFactor, (boundary.y + offsetY) * scaleFactor),
 	  k.color(255, 255, 255),
 	  k.opacity(0.75),
