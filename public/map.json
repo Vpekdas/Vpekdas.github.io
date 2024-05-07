@@ -22,7 +22,7 @@
                 {
                  "height":35,
                  "id":154,
-                 "name":"printf",
+                 "name":"ft_printf",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -327,17 +327,6 @@
                  "width":125,
                  "x":97,
                  "y":80
-                }, 
-                {
-                 "height":31,
-                 "id":185,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":43,
-                 "x":224,
-                 "y":89
                 }, 
                 {
                  "height":166,
@@ -2055,15 +2044,15 @@
          "source":"spritesheet.tsx"
         }, 
         {
-         "firstgid":232,
+         "firstgid":468,
          "source":"hous_furniture.tsx"
         }, 
         {
-         "firstgid":466,
+         "firstgid":468,
          "source":"book_1.tsx"
         }, 
         {
-         "firstgid":467,
+         "firstgid":468,
          "source":"book_2.tsx"
         }, 
         {

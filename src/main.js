@@ -4,113 +4,6 @@ import { createHoverEvents, createInteractable, displayDialogue, loadAllressourc
 
 loadAllressources(k);
 
-  function createInteractable2(boundary, offsetX, offsetY, scaleFactor, frame) {
-	const originalSprite = k.add([
-	  k.sprite("pipe", { frame }),
-	  k.pos((boundary.x + offsetX) * scaleFactor, (boundary.y + offsetY) * scaleFactor),
-	  k.scale(scaleFactor),
-	]);
-	const blinkSprite = k.add([
-	  k.sprite("pipe", { frame }),
-	  k.pos((boundary.x + offsetX) * scaleFactor, (boundary.y + offsetY) * scaleFactor),
-	  k.color(255, 255, 255),
-	  k.opacity(0.75),
-	  k.scale(scaleFactor),
-	]);
-  
-	return {
-	  originalSprite,
-	  blinkSprite,
-	  blink: false,
-	};
-  }
-
-  function createInteractable3(boundary, offsetX, offsetY, scaleFactor, frame) {
-	const originalSprite = k.add([
-	  k.sprite("furniture", { frame }),
-	  k.pos((boundary.x + offsetX) * scaleFactor, (boundary.y + offsetY) * scaleFactor),
-	  k.scale(scaleFactor),
-	]);
-	const blinkSprite = k.add([
-	  k.sprite("furniture", { frame }),
-	  k.pos((boundary.x + offsetX) * scaleFactor, (boundary.y + offsetY) * scaleFactor),
-	  k.color(255, 255, 255),
-	  k.opacity(0.75),
-	  k.scale(scaleFactor),
-	]);
-  
-	return {
-	  originalSprite,
-	  blinkSprite,
-	  blink: false,
-	};
-  }
-
-  function createInteractable4(boundary, offsetX, offsetY, scaleFactor, frame) {
-	const originalSprite = k.add([
-	  k.sprite("furniture", { frame }),
-	  k.pos((boundary.x + offsetX) * scaleFactor, (boundary.y + offsetY) * scaleFactor),
-	  k.scale(scaleFactor),
-	]);
-	const blinkSprite = k.add([
-	  k.sprite("furniture", { frame }),
-	  k.pos((boundary.x + offsetX) * scaleFactor, (boundary.y + offsetY) * scaleFactor),
-	  k.color(255, 255, 255),
-	  k.opacity(0.75),
-	  k.scale(scaleFactor),
-	]);
-  
-	return {
-	  originalSprite,
-	  blinkSprite,
-	  blink: false,
-	};
-  }
-
-  function createInteractable5(boundary, offsetX, offsetY, scaleFactor, frame) {
-	const originalSprite = k.add([
-	  k.sprite("book", { frame }),
-	  k.pos((boundary.x + offsetX - 2) * scaleFactor, (boundary.y + offsetY + 5) * scaleFactor),
-	  k.scale(scaleFactor),
-
-	]);
-	const blinkSprite = k.add([
-	  k.sprite("book", { frame }),
-	  k.pos((boundary.x + offsetX - 2) * scaleFactor, (boundary.y + offsetY + 5) * scaleFactor),
-	  k.color(255, 255, 255),
-	  k.opacity(0.75),
-	  k.scale(scaleFactor),
-	]);
-  
-	return {
-	  originalSprite,
-	  blinkSprite,
-	  blink: false,
-	};
-  }
-
-  function createInteractable6(boundary, offsetX, offsetY, scaleFactor, frame) {
-	const originalSprite = k.add([
-	  k.sprite("book2", { frame }),
-	  k.pos((boundary.x + offsetX - 2) * scaleFactor, (boundary.y + offsetY + 5) * scaleFactor),
-	  k.scale(scaleFactor),
-
-	]);
-	const blinkSprite = k.add([
-	  k.sprite("book2", { frame }),
-	  k.pos((boundary.x + offsetX - 2) * scaleFactor, (boundary.y + offsetY + 5) * scaleFactor),
-	  k.color(255, 255, 255),
-	  k.opacity(0.75),
-	  k.scale(scaleFactor),
-	]);
-  
-	return {
-	  originalSprite,
-	  blinkSprite,
-	  blink: false,
-	};
-  }
-
 k.setBackground(k.Color.fromHex("#000000"));
 
 k.scene("main", async () => {
@@ -174,33 +67,33 @@ k.scene("main", async () => {
 				
 				if (boundary.name) {
 					if (boundary.name === "so_long") {
-						const interactable = createInteractable(k, boundary, 82, 28, 22);
+						const interactable = createInteractable(k, "tiles", boundary, 82, 28, 22);
 						interactables.push(interactable);
 					}
-					if (boundary.name === "printf") {
-						const interactable = createInteractable(k, boundary, 13, 32, 17);
-						const interactable2 = createInteractable(k, boundary, 14, 64, 17);
+					if (boundary.name === "ft_printf") {
+						const interactable = createInteractable(k, "tiles", boundary, 13, 32, 17);
+						const interactable2 = createInteractable(k, "tiles", boundary, 14, 64, 17);
 						interactables.push(interactable);
 						interactables.push(interactable2);
 					}
 					if (boundary.name == "get_next_line") {
-						const interactable = createInteractable(k, boundary, 124, 31, 14);
+						const interactable = createInteractable(k, "tiles", boundary, 124, 31, 14);
 						interactables.push(interactable);
 					}
 					if (boundary.name == "pipex") {
-						const interactable = createInteractable2(boundary, offsetX + 15, offsetY - 5, scaleFactor, 0);
+						const interactable = createInteractable(k, "pipe", boundary, 0, 31, 14);
 						interactables.push(interactable);
 					}
 					if (boundary.name == "libft") {
-						const interactable = createInteractable3(boundary, offsetX + 16, offsetY + 8, scaleFactor, 54);
-						const interactable2 = createInteractable3(boundary, offsetX + 32, offsetY + 8, scaleFactor, 55);
-						const interactable3 = createInteractable3(boundary, offsetX + 48, offsetY + 8, scaleFactor, 56);
-						const interactable4 = createInteractable3(boundary, offsetX + 16, offsetY + 16 + 8, scaleFactor, 67);
-						const interactable5 = createInteractable3(boundary, offsetX + 32, offsetY + 16 + 8, scaleFactor, 68);
-						const interactable6 = createInteractable3(boundary, offsetX + 48, offsetY + 16 + 8, scaleFactor, 69);
-						const interactable7 = createInteractable3(boundary, offsetX + 16, offsetY + 32 + 8, scaleFactor, 80);
-						const interactable8 = createInteractable3(boundary, offsetX + 32, offsetY + 32 + 8, scaleFactor, 81);
-						const interactable9 = createInteractable3(boundary, offsetX + 48, offsetY + 32 + 8, scaleFactor, 82);
+						const interactable  = createInteractable(k, "furniture", boundary, 54, 32, 16);
+						const interactable2 = createInteractable(k, "furniture", boundary, 55, 48, 16);
+						const interactable3 = createInteractable(k, "furniture", boundary, 56, 64, 16);
+						const interactable4 = createInteractable(k, "furniture", boundary, 67, 32, 32);
+						const interactable5 = createInteractable(k, "furniture", boundary, 68, 48, 32);
+						const interactable6 = createInteractable(k, "furniture", boundary, 69, 64, 32);
+						const interactable7 = createInteractable(k, "furniture", boundary, 80, 32, 48);
+						const interactable8 = createInteractable(k, "furniture", boundary, 81, 48, 48);
+						const interactable9 = createInteractable(k, "furniture", boundary, 82, 64, 48);
 						interactables.push(interactable);
 						interactables.push(interactable2);
 						interactables.push(interactable3);
@@ -212,8 +105,8 @@ k.scene("main", async () => {
 						interactables.push(interactable9);
 					}
 					if (boundary.name === "push_swap") {
-						const interactable = createInteractable5(boundary, offsetX + 16, offsetY + 8, scaleFactor, 0);
-						const interactable2 = createInteractable6(boundary, offsetX + 16, offsetY + 32, scaleFactor, 0);
+						const interactable = createInteractable(k, "book", boundary, 0, 32, 28);
+						const interactable2 = createInteractable(k, "book2", boundary, 0, 32, 48);
 						interactables.push(interactable);
 						interactables.push(interactable2);
 					}
@@ -284,7 +177,12 @@ k.scene("main", async () => {
 		}
 	});
 
-	createHoverEvents(k, "get_next_line");
+	createHoverEvents(k, "libft", 500, 250, 0.70, 26, 64, 600, 260);
+	createHoverEvents(k, "get_next_line", 100, 20, 0.70, 26, 250, 150, 35);
+	createHoverEvents(k, "ft_printf", 200, 110, 0.70, 26, 250, 280, 120);
+	createHoverEvents(k, "pipex", 300, 350, 0.70, 26, 250, 400, 360);
+	createHoverEvents(k, "so_long", 300, 150, 0.70, 26, 250, 390, 160);
+	createHoverEvents(k, "push_swap", 450, 250, 0.70, 26, 250, 520, 260);
 
 	k.onMouseDown((mouseBtn) => {
 		if (mouseBtn !== "left" || player.isInDialogue) {
@@ -338,7 +236,5 @@ k.scene("main", async () => {
 
 k.go("main");
 
-// TODO: When mouse is over a interactible, show a dialogue button with the link in it (hover with kaboom).
 // TODO: Library hitbox is meh, you go through it and its weird, on the contrary pipe is a great idea.
-// TODO: Found a way to go through tiles => place them directly with kabbom.js so use this for go through door :)
-// TODO: Found a way for parallax => place the same bg at pos 0, pos width and pos -width then reset at their initial pos if they are colliding,
+// TODO: The parallax cannot be seen if we go at the limit of bottom
