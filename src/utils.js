@@ -82,6 +82,17 @@ export function createHoverEvents(k, projectName, bubbleX, bubbleY, bubbleScale,
 
 	k.loadSprite("hover", "./hover/hover.png");
 	
+	k.loadSprite("indicator", "./ui/1.png", {
+		sliceX: 8,
+		sliceY: 2,
+		anims: {
+			"top_left": {from: 0, to: 3, loop: true, speed: 8 },
+			"top_right": {from: 4, to: 7, loop: true, speed: 8 },
+			"bot_left": {from: 8, to: 11, loop: true, speed: 8 },
+			"bot_right": {from: 12, to: 15, loop: true, speed: 8 },
+		},
+	});
+
 	k.loadSprite("player", "./character/character.png", {
 		sliceX: 4,
 		sliceY: 4,
@@ -139,3 +150,13 @@ export function createHoverEvents(k, projectName, bubbleX, bubbleY, bubbleScale,
 	  blink: false,
 	};
   };
+
+  export function createIndicator(x, y, animation, k) {
+    const indicator = k.add([
+        k.sprite("indicator"),
+        k.pos(x * scaleFactor, y * scaleFactor),
+        k.scale(scaleFactor),
+    ]);
+    indicator.play(animation);
+    return indicator;
+}

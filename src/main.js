@@ -1,6 +1,6 @@
 import { k } from "./KaboomCtx.js";
 import { dialogueData, offsetX, offsetY, scaleFactor } from "./constants.js";
-import { createHoverEvents, createInteractable, displayDialogue, loadAllressources, setCamScale } from "./utils.js";
+import { createHoverEvents, createInteractable, displayDialogue, loadAllressources, setCamScale ,createIndicator} from "./utils.js";
 
 loadAllressources(k);
 
@@ -67,10 +67,20 @@ k.scene("main", async () => {
 				
 				if (boundary.name) {
 					if (boundary.name === "so_long") {
+						const indicator1 = createIndicator(boundary.x + 24, boundary.y + 12, "top_left", k);
+						const indicator2 = createIndicator(boundary.x + 48, boundary.y + 12, "top_right", k);
+						const indicator3 = createIndicator(boundary.x + 24, boundary.y + 48, "bot_left", k);
+						const indicator4 = createIndicator(boundary.x + 48, boundary.y + 48, "bot_right", k);
+
 						const interactable = createInteractable(k, "tiles", boundary, 82, 28, 22);
 						interactables.push(interactable);
 					}
 					if (boundary.name === "ft_printf") {
+						const indicator1 = createIndicator(boundary.x + 22, boundary.y + 10, "top_left", k);
+						const indicator2 = createIndicator(boundary.x + 86, boundary.y + 10, "top_right", k);
+						const indicator3 = createIndicator(boundary.x + 22, boundary.y + 38, "bot_left", k);
+						const indicator4 = createIndicator(boundary.x + 86, boundary.y + 38, "bot_right", k);
+
 						const interactable = createInteractable(k, "tiles", boundary, 13, 32, 17);
 						const interactable2 = createInteractable(k, "tiles", boundary, 14, 64, 17);
 						interactables.push(interactable);
