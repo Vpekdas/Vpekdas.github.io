@@ -246,5 +246,11 @@ k.scene("main", async () => {
 
 k.go("main");
 
-// TODO: Library hitbox is meh, you go through it and its weird, on the contrary pipe is a great idea.
+// TODO: Library hitbox could be better, you go through it and its weird, on the contrary pipe is a great idea.
+// TODO: If you want to go inside a door, just add sprite in js and not in tiled map.
 // TODO: The parallax cannot be seen if we go at the limit of bottom
+// TODO: Add indicator to other project.
+// TODO: Write the description of each project.
+// TODO: Add minishell and philosopher project.
+// TODO: Refactor parallax code.
+
