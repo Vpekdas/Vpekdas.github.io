@@ -130,15 +130,26 @@ export function createHoverEvents(k, projectName, bubbleX, bubbleY, bubbleScale,
 	k.loadSprite("map", "./map.png");
   };
   
-  export function createInteractable(k, tiles ,boundary, frame, offsetX, offsetY) {
+
+  export function createTile(k, tiles, frame, x, y) {
 	const originalSprite = k.add([
 	  k.sprite(tiles, { frame }),
-	  k.pos((boundary.x + offsetX ) * scaleFactor, (boundary.y + offsetY) * scaleFactor),
+	  k.pos(x * scaleFactor, y * scaleFactor),
+	  k.scale(scaleFactor),
+	]);
+
+	return originalSprite;
+}
+
+  export function createInteractable(k, tiles ,boundary, frame, modifX, modifY) {
+	const originalSprite = k.add([
+	  k.sprite(tiles, { frame }),
+	  k.pos((boundary.x + offsetX + modifX) * scaleFactor, (boundary.y + offsetY + modifY) * scaleFactor),
 	  k.scale(scaleFactor),
 	]);
 	const blinkSprite = k.add([
 	  k.sprite(tiles, { frame }),
-	  k.pos((boundary.x + offsetX) * scaleFactor, (boundary.y + offsetY) * scaleFactor),
+	  k.pos((boundary.x + offsetX + modifX) * scaleFactor, (boundary.y + offsetY + modifY) * scaleFactor),
 	  k.color(255, 255, 255),
 	  k.opacity(0.75),
 	  k.scale(scaleFactor),
@@ -154,7 +165,7 @@ export function createHoverEvents(k, projectName, bubbleX, bubbleY, bubbleScale,
   export function createIndicator(x, y, animation, k) {
     const indicator = k.add([
         k.sprite("indicator"),
-        k.pos(x * scaleFactor, y * scaleFactor),
+        k.pos((x + offsetX) * scaleFactor, (y + offsetY) * scaleFactor),
         k.scale(scaleFactor),
     ]);
     indicator.play(animation);

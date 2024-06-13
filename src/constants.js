@@ -1,6 +1,6 @@
 export const scaleFactor = 2;
-export const offsetX = 16;
-export const offsetY = 16;
+export const offsetX = 20;
+export const offsetY = 20;
 
 export const dialogueData = {
     libft: `<a href="https://github.com/Vpekdas/libft">libft</a>`,

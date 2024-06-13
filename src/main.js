@@ -1,6 +1,6 @@
 import { k } from "./KaboomCtx.js";
 import { dialogueData, offsetX, offsetY, scaleFactor } from "./constants.js";
-import { createHoverEvents, createInteractable, displayDialogue, loadAllressources, setCamScale ,createIndicator} from "./utils.js";
+import { createHoverEvents, createInteractable, displayDialogue, loadAllressources, setCamScale ,createIndicator, createTile} from "./utils.js";
 
 loadAllressources(k);
 
@@ -52,6 +52,22 @@ k.scene("main", async () => {
 		"player",
 	]);
 
+	const wall = createTile(k, "tiles", 2, 114, 151);
+	const wall2 = createTile(k, "tiles", 23, 114, 183);
+	const wall3 = createTile(k, "tiles", 2, 82, 151);
+	const wall4 = createTile(k, "tiles", 23, 82, 183);
+	const wall5 = createTile(k, "tiles", 2, 50, 151);
+	const wall6 = createTile(k, "tiles", 23, 50, 183);
+
+
+	const door2 = createTile(k, "tiles", 153, 48, 150);
+	const door3 = createTile(k, "tiles", 154, 80, 150);
+	const door4 = createTile(k, "tiles", 155, 112, 150);
+	const door5 = createTile(k, "tiles", 174, 48, 182);
+	const door6 = createTile(k, "tiles", 175, 80, 182);
+	const door7 = createTile(k, "tiles", 176, 112, 182);
+
+
 
 	for (const layer of layers) {
 		if (layer.name === "boundaries") {
@@ -61,18 +77,18 @@ k.scene("main", async () => {
 						shape: new k.Rect(k.vec2(0, 0), boundary.width, boundary.height),
 					}),
 					k.body({ isStatic: true }),
-					k.pos(boundary.x + offsetX + 16, boundary.y + offsetY + 8),
+					k.pos(boundary.x + offsetX, boundary.y + offsetY),
 					boundary.name,
 				]);
 				
 				if (boundary.name) {
 					if (boundary.name === "so_long") {
-						const indicator1 = createIndicator(boundary.x + 24, boundary.y + 12, "top_left", k);
-						const indicator2 = createIndicator(boundary.x + 48, boundary.y + 12, "top_right", k);
-						const indicator3 = createIndicator(boundary.x + 24, boundary.y + 48, "bot_left", k);
-						const indicator4 = createIndicator(boundary.x + 48, boundary.y + 48, "bot_right", k);
+						const indicator1 = createIndicator(boundary.x - 8, boundary.y - 8, "top_left", k);
+						const indicator3 = createIndicator(boundary.x - 8, boundary.y + boundary.height - 8, "bot_left", k);
+						const indicator2 = createIndicator(boundary.x + boundary.width - 8 , boundary.y - 8, "top_right", k);
+						const indicator4 = createIndicator(boundary.x + boundary.width - 8, boundary.y + boundary.height - 8, "bot_right", k);
 
-						const interactable = createInteractable(k, "tiles", boundary, 82, 28, 22);
+						const interactable = createInteractable(k, "tiles", boundary, 82, 0 ,0);
 						interactables.push(interactable);
 					}
 					if (boundary.name === "ft_printf") {
@@ -81,8 +97,8 @@ k.scene("main", async () => {
 						const indicator3 = createIndicator(boundary.x + 22, boundary.y + 38, "bot_left", k);
 						const indicator4 = createIndicator(boundary.x + 86, boundary.y + 38, "bot_right", k);
 
-						const interactable = createInteractable(k, "tiles", boundary, 13, 32, 17);
-						const interactable2 = createInteractable(k, "tiles", boundary, 14, 64, 17);
+						const interactable = createInteractable(k, "tiles", boundary, 13, 0 , 0);
+						const interactable2 = createInteractable(k, "tiles", boundary, 14, 32, 0);
 						interactables.push(interactable);
 						interactables.push(interactable2);
 					}
@@ -246,11 +262,8 @@ k.scene("main", async () => {
 
 k.go("main");
 
-// TODO: Library hitbox could be better, you go through it and its weird, on the contrary pipe is a great idea.
-// TODO: If you want to go inside a door, just add sprite in js and not in tiled map.
 // TODO: The parallax cannot be seen if we go at the limit of bottom
-// TODO: Add indicator to other project.
-// TODO: Write the description of each project.
+// TODO: Write a description for project.
 // TODO: Add minishell and philosopher project.
 // TODO: Refactor parallax code.
 
