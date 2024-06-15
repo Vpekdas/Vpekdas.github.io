@@ -121,11 +121,11 @@ export function createHoverEvents(k, projectName, bubbleX, bubbleY, bubbleScale,
 	k.loadSprite("book", "./books/1.png");
 	k.loadSprite("book2", "./books/2.png");
 	
-	k.loadSprite("1", "./background/1.png");
-	k.loadSprite("2", "./background/2.png");
-	k.loadSprite("3", "./background/3.png");
-	k.loadSprite("4", "./background/4.png");
-	k.loadSprite("5", "./background/5.png");
+	k.loadSprite("background_1", "./background/1.png");
+	k.loadSprite("background_2", "./background/2.png");
+	k.loadSprite("background_3", "./background/3.png");
+	k.loadSprite("background_4", "./background/4.png");
+	k.loadSprite("background_5", "./background/5.png");
 	
 	k.loadSprite("map", "./map.png");
   };
@@ -170,4 +170,22 @@ export function createHoverEvents(k, projectName, bubbleX, bubbleY, bubbleScale,
     ]);
     indicator.play(animation);
     return indicator;
+}
+
+export function createBackground(k, backgroundNumber, spriteName) {
+
+	const	backgroundArray = [];
+	const	tempSprite = k.add([k.sprite(spriteName)]);
+	const	spriteWidth = tempSprite.width;
+
+	for (let i = 0; i < backgroundNumber; i++) {
+		backgroundArray.push(k.add ([
+			k.sprite(spriteName),
+			k.pos(i * spriteWidth - k.width() * scaleFactor, 0),
+			k.scale(scaleFactor)
+		]));
+		console.log("pos : %d", backgroundArray[i].pos.x);
+	}
+	destroy(tempSprite);
+	return backgroundArray;
 }

@@ -1,36 +1,21 @@
 import { k } from "./KaboomCtx.js";
 import { dialogueData, offsetX, offsetY, scaleFactor } from "./constants.js";
-import { createHoverEvents, createInteractable, displayDialogue, loadAllressources, setCamScale ,createIndicator, createTile} from "./utils.js";
+import { createHoverEvents, createInteractable, displayDialogue, loadAllressources, setCamScale ,createIndicator, createTile, createBackground} from "./utils.js";
 
 loadAllressources(k);
 
-k.setBackground(k.Color.fromHex("#000000"));
+k.setBackground(k.Color.fromHex("#2e51b2"));
 
 k.scene("main", async () => {
 	const mapData = await (await fetch("./map.json")).json()
 	const layers = mapData.layers;
 	let interactables = [];
 
-	const bg1 = k.add([
-		k.sprite("1"), k.pos(0), k.scale(3)]);
-	
-	const bg1dup = k.add([
-		k.sprite("1"), k.pos(bg1.width, 0), k.scale(3)]);
-
-	const bg2dup = k.add([
-		k.sprite("1"), k.pos(-bg1.width, 0), k.scale(3)]);
-
-	const bg2 = k.add([
-		k.sprite("2"), k.pos(0), k.scale(3)]);
-
-	const bg3 = k.add([
-		k.sprite("3"), k.pos(0), k.scale(3)]);
-
-	const bg4 = k.add([
-		k.sprite("4"), k.pos(0), k.scale(3)]);
-
-	const bg5 = k.add([
-		k.sprite("5"), k.pos(0), k.scale(3)]);
+	const background_1 = createBackground(k, 4, "background_1");
+	const background_2 = createBackground(k, 4, "background_2");
+	const background_3 = createBackground(k, 4, "background_3");
+	const background_4 = createBackground(k, 4, "background_4");
+	const background_5 = createBackground(k, 4, "background_5");
 
 	const map = k.add([
 		k.sprite("map"), k.pos(0), k.scale(scaleFactor)]);
@@ -52,6 +37,7 @@ k.scene("main", async () => {
 		"player",
 	]);
 
+
 	const wall = createTile(k, "tiles", 2, 114, 151);
 	const wall2 = createTile(k, "tiles", 23, 114, 183);
 	const wall3 = createTile(k, "tiles", 2, 82, 151);
@@ -66,7 +52,6 @@ k.scene("main", async () => {
 	const door5 = createTile(k, "tiles", 174, 48, 182);
 	const door6 = createTile(k, "tiles", 175, 80, 182);
 	const door7 = createTile(k, "tiles", 176, 112, 182);
-
 
 
 	for (const layer of layers) {
@@ -168,27 +153,45 @@ k.scene("main", async () => {
 	k.onUpdate(() => {
 
 		k.camPos(player.pos.x, player.pos.y + 100)
-	
-		bg1.pos.x -= 0.15;
-		bg1dup.pos.x -= 0.15;
-		bg2dup.pos.x -= 0.15;
-		bg2.pos.x = player.pos.x * 0.10;
-		bg3.pos.x = player.pos.x * 0.20;
-		bg4.pos.x = player.pos.x * 0.30;
-		bg5.pos.x = player.pos.x * 0.60;
-	
-		if (bg1.pos.x <= -bg1.width)
-			bg1.pos.x = 0;
-		if (bg1dup.pos.x <= 0) {
-			bg1dup.pos.x = bg1.width;
+		
+		const backgroundCamY = player.pos.y - 200;
+
+		for (let i = 0; i < background_1.length; i++) {
+			background_1[i].pos.x -= scaleFactor;
+			// background_1[i].pos.y = backgroundCamY;
+			if (background_1[i].pos.x <= i * background_1[i].width - k.width() * scaleFactor)
+				background_1[i].pos.x = i * background_1[i].width * 2;
 		}
-		if (bg2dup.pos.x <= -bg1.width * 2) {
-			bg2dup.pos.x = -bg1.width;
+
+		for (let i = 0; i < background_2.length; i++) {
+			background_2[i].pos.x = player.pos.x * 0.20;
+			background_2[i].pos.y = backgroundCamY;
+			if (background_2[i].pos.x <= i * background_2[i].width - k.width() * scaleFactor)
+				background_2[i].pos.x = i * background_2[i].width * 2;
 		}
-		if (bg2.pos.x + bg2.width <= 0) bg2.pos.x = 0;
-		if (bg3.pos.x + bg3.width <= 0) bg3.pos.x = 0;
-		if (bg4.pos.x + bg4.width <= 0) bg4.pos.x = 0;
-		if (bg5.pos.x + bg5.width <= 0) bg5.pos.x = 0;
+
+		for (let i = 0; i < background_3.length; i++) {
+			background_3[i].pos.x = player.pos.x * 0.30;
+			background_3[i].pos.y = backgroundCamY;
+			if (background_3[i].pos.x <= i * background_3[i].width - k.width() * scaleFactor)
+				background_3[i].pos.x = i * background_3[i].width * 2;
+		}
+
+		for (let i = 0; i < background_4.length; i++) {
+			background_4[i].pos.x = player.pos.x * 0.50;
+			background_4[i].pos.y = backgroundCamY;
+			if (background_4[i].pos.x <= i * background_4[i].width - k.width() * scaleFactor)
+				background_4[i].pos.x = i * background_4[i].width * 2;
+		}
+
+		for (let i = 0; i < background_5.length; i++) {
+			background_5[i].pos.x = player.pos.x * 0.70;
+			background_5[i].pos.y = backgroundCamY;
+			if (background_5[i].pos.x <= i * background_5[i].width - k.width() * scaleFactor)
+				background_5[i].pos.x = i * background_5[i].width * 2;
+		}
+
+	
 
 		for (const interactable of interactables) {
 			interactable.blink = Math.floor(k.time() / 0.5) % 2 === 0;
@@ -262,8 +265,6 @@ k.scene("main", async () => {
 
 k.go("main");
 
-// TODO: The parallax cannot be seen if we go at the limit of bottom
 // TODO: Write a description for project.
 // TODO: Add minishell and philosopher project.
-// TODO: Refactor parallax code.
-
+// TODO: Add blinking and interactable for remaining project.
