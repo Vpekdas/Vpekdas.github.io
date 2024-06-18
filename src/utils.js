@@ -1,4 +1,4 @@
-import { dialogueData, offsetX, offsetY, scaleFactor } from "./constants.js";
+import {SCALE_FACTOR, OFFSET_X, OFFSET_Y} from "./constants.js";
 
 export function displayDialogue(text, onDisplayEnd) {
 	const dialogueUI = document.getElementById("textbox-container");
@@ -41,30 +41,31 @@ export function setCamScale(k) {
 	k.camScale(k.vec2(1.5));
 }
 
-export function createHoverEvents(k, projectName, bubbleX, bubbleY, bubbleScale, textSize, textWidth, textX, textY) {
+export function createHoverEvents(k, options) {
+	let { name, bubbleX, bubbleY, bubbleScale, textSize, textWidth, textX, textY, sprite = "hover", font = "myFont" } = options;
 	let bubble = null;
 	let bubbleText = null;
   
-	k.onHover(projectName, (obj) => {
+	k.onHover(name, (obj) => {
 	  if (!bubble) {
 		bubble = k.add([
-		  k.sprite("hover"),
+		  k.sprite(sprite),
 		  k.pos(obj.pos.x + bubbleX, obj.pos.y + bubbleY),
 		  k.scale(bubbleScale),
 		]);
   
 		bubbleText = k.add([
-		  k.text(projectName, {
+		  k.text(name, {
 			size: textSize,
 			width: textWidth,
-			font: "myFont",
+			font: font,
 		  }),
 		  k.pos(obj.pos.x + textX, obj.pos.y + textY),
 		]);
 	  }
 	});
   
-	k.onHoverEnd(projectName, (obj) => {
+	k.onHoverEnd(name, () => {
 	  if (bubble) {
 		k.destroy(bubble);
 		bubble = null;
@@ -77,65 +78,67 @@ export function createHoverEvents(k, projectName, bubbleX, bubbleY, bubbleScale,
 	});
   };
 
-  export function loadAllressources (k) {
-	k.loadFont("myFont", "ThaleahFat.ttf");
+  export function loadAllResources(k) {
+    const resources = {
+        fonts: [
+            { name: "myFont", path: "ThaleahFat.ttf" }
+        ],
+        sprites: [
+            { name: "hover", path: "./hover/hover.png" },
+            { name: "indicator", path: "./ui/1.png",
+				config: { sliceX: 8, sliceY: 2,
+				anims: { 
+				"top_left": { from: 0, to: 3, loop: true, speed: 8 },
+				"top_right": { from: 4, to: 7, loop: true, speed: 8 },
+				"bot_left": { from: 8, to: 11, loop: true, speed: 8 },
+				"bot_right": { from: 12, to: 15, loop: true, speed: 8 }
+			} } },
+            { name: "player", path: "./character/character.png", 
+				config: { sliceX: 4, sliceY: 4,
+				anims: {
+					"idle-down": 0,
+					"walk-down": { from: 0, to: 3, loop: true, speed: 8 },
+					"idle-side": 4, "walk-side": { from: 4, to: 7, loop: true, speed: 8 },
+					"idle-up": 12, "walk-up": { from: 12, to: 15, loop: true, speed: 8 }
+				 } } },
+            { name: "tiles", path: "./spritesheet.png",
+				config:
+				{ sliceX: 21, sliceY: 11}
+			},
+            { name: "pipe", path: "./pipe/1.png" },
+            { name: "furniture", path: "./furniture/hous_furniture.png",
+				config: { sliceX: 13, sliceY: 18 }
+			},
+            { name: "book", path: "./books/1.png" },
+            { name: "book2", path: "./books/2.png" },
+            { name: "background_1", path: "./background/1.png" },
+            { name: "background_2", path: "./background/2.png" },
+            { name: "background_3", path: "./background/3.png" },
+            { name: "background_4", path: "./background/4.png" },
+            { name: "background_5", path: "./background/5.png" },
+            { name: "map", path: "./map.png" }
+        ]
+    };
 
-	k.loadSprite("hover", "./hover/hover.png");
-	
-	k.loadSprite("indicator", "./ui/1.png", {
-		sliceX: 8,
-		sliceY: 2,
-		anims: {
-			"top_left": {from: 0, to: 3, loop: true, speed: 8 },
-			"top_right": {from: 4, to: 7, loop: true, speed: 8 },
-			"bot_left": {from: 8, to: 11, loop: true, speed: 8 },
-			"bot_right": {from: 12, to: 15, loop: true, speed: 8 },
-		},
-	});
+    resources.fonts.forEach(font => {
+        k.loadFont(font.name, font.path);
+    });
 
-	k.loadSprite("player", "./character/character.png", {
-		sliceX: 4,
-		sliceY: 4,
-		anims: {
-			"idle-down": 0,
-			"walk-down": {from: 0, to: 3, loop: true, speed: 8 },
-			"idle-side": 4,
-			"walk-side": {from: 4, to: 7, loop: true, speed: 8 },
-			"idle-up": 12,
-			"walk-up": {from: 12, to: 15, loop: true, speed: 8 },
-		},
-	});
-	
-	k.loadSprite("tiles", "./spritesheet.png", {
-		sliceX: 21,
-		sliceY: 11,
-	});
-	
-	k.loadSprite("pipe", "./pipe/1.png");
-	
-	k.loadSprite("furniture", "./furniture/hous_furniture.png", {
-		sliceX: 13,
-		sliceY: 18,
-	});
-	
-	k.loadSprite("book", "./books/1.png");
-	k.loadSprite("book2", "./books/2.png");
-	
-	k.loadSprite("background_1", "./background/1.png");
-	k.loadSprite("background_2", "./background/2.png");
-	k.loadSprite("background_3", "./background/3.png");
-	k.loadSprite("background_4", "./background/4.png");
-	k.loadSprite("background_5", "./background/5.png");
-	
-	k.loadSprite("map", "./map.png");
-  };
+    resources.sprites.forEach(sprite => {
+        if (sprite.config) {
+            k.loadSprite(sprite.name, sprite.path, sprite.config);
+        } else {
+            k.loadSprite(sprite.name, sprite.path);
+        }
+    });
+};
   
 
   export function createTile(k, tiles, frame, x, y) {
 	const originalSprite = k.add([
 	  k.sprite(tiles, { frame }),
-	  k.pos(x * scaleFactor, y * scaleFactor),
-	  k.scale(scaleFactor),
+	  k.pos(x * SCALE_FACTOR, y * SCALE_FACTOR),
+	  k.scale(SCALE_FACTOR),
 	]);
 
 	return originalSprite;
@@ -144,15 +147,15 @@ export function createHoverEvents(k, projectName, bubbleX, bubbleY, bubbleScale,
   export function createInteractable(k, tiles ,boundary, frame, modifX, modifY) {
 	const originalSprite = k.add([
 	  k.sprite(tiles, { frame }),
-	  k.pos((boundary.x + offsetX + modifX) * scaleFactor, (boundary.y + offsetY + modifY) * scaleFactor),
-	  k.scale(scaleFactor),
+	  k.pos((boundary.x + OFFSET_X + modifX) * SCALE_FACTOR, (boundary.y + OFFSET_Y + modifY) * SCALE_FACTOR),
+	  k.scale(SCALE_FACTOR),
 	]);
 	const blinkSprite = k.add([
 	  k.sprite(tiles, { frame }),
-	  k.pos((boundary.x + offsetX + modifX) * scaleFactor, (boundary.y + offsetY + modifY) * scaleFactor),
+	  k.pos((boundary.x + OFFSET_X + modifX) * SCALE_FACTOR, (boundary.y + OFFSET_Y + modifY) * SCALE_FACTOR),
 	  k.color(255, 255, 255),
 	  k.opacity(0.75),
-	  k.scale(scaleFactor),
+	  k.scale(SCALE_FACTOR),
 	]);
   
 	return {
@@ -162,14 +165,14 @@ export function createHoverEvents(k, projectName, bubbleX, bubbleY, bubbleScale,
 	};
   };
 
-  export function createIndicator(x, y, animation, k) {
+  export function 
+  createIndicator(x, y, animation, k) {
     const indicator = k.add([
         k.sprite("indicator"),
-        k.pos((x + offsetX) * scaleFactor, (y + offsetY) * scaleFactor),
-        k.scale(scaleFactor),
+        k.pos((x + OFFSET_X) * SCALE_FACTOR, (y + OFFSET_Y) * SCALE_FACTOR),
+        k.scale(SCALE_FACTOR),
     ]);
     indicator.play(animation);
-    return indicator;
 }
 
 export function createBackground(k, backgroundNumber, spriteName) {
@@ -181,11 +184,27 @@ export function createBackground(k, backgroundNumber, spriteName) {
 	for (let i = 0; i < backgroundNumber; i++) {
 		backgroundArray.push(k.add ([
 			k.sprite(spriteName),
-			k.pos(i * spriteWidth - k.width() * scaleFactor, 0),
-			k.scale(scaleFactor)
+			k.pos(i * spriteWidth - k.width() * SCALE_FACTOR, 0),
+			k.scale(SCALE_FACTOR)
 		]));
 		console.log("pos : %d", backgroundArray[i].pos.x);
 	}
 	destroy(tempSprite);
 	return backgroundArray;
+}
+
+export function updateBackground (k, backgroundLayer, speed, backgroundCamY, playerX) {
+	for (let i = 0; i < backgroundLayer.length; i++) {
+		if (speed === 0) {
+			backgroundLayer[i].pos.x -= SCALE_FACTOR;
+			if (backgroundLayer[i].pos.x <= i * backgroundLayer[i].width - k.width() * SCALE_FACTOR)
+				backgroundLayer[i].pos.x = i * backgroundLayer[i].width * 2;
+		}
+		else {
+			backgroundLayer[i].pos.x = playerX * 0.10;
+			backgroundLayer[i].pos.y = backgroundCamY;
+			if (backgroundLayer[i].pos.x <= i * backgroundLayer[i].width - k.width() * SCALE_FACTOR)
+				backgroundLayer[i].pos.x = i * backgroundLayer[i].width * 2;
+		}
+	}
 }
