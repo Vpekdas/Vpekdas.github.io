@@ -42,6 +42,61 @@
                  "width":32,
                  "x":371,
                  "y":42
+                }, 
+                {
+                 "height":32,
+                 "id":213,
+                 "name":"ft_printf",
+                 "rotation":1.07172718481282,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":222.229522087779,
+                 "y":42.4596809967851
+                }, 
+                {
+                 "height":32,
+                 "id":214,
+                 "name":"get_next_line",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":175,
+                 "y":104
+                }, 
+                {
+                 "height":32,
+                 "id":215,
+                 "name":"pipex",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":96,
+                 "x":321,
+                 "y":417
+                }, 
+                {
+                 "height":48,
+                 "id":216,
+                 "name":"libft",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":48,
+                 "x":549,
+                 "y":310
+                }, 
+                {
+                 "height":32,
+                 "id":220,
+                 "name":"push_swap",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":606,
+                 "y":307
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1288,7 +1343,7 @@
          "y":0
         }],
  "nextlayerid":189,
- "nextobjectid":213,
+ "nextobjectid":221,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",
@@ -1307,11 +1362,11 @@
          "source":"books\/book_1.tsx"
         }, 
         {
-         "firstgid":466,
+         "firstgid":467,
          "source":"books\/book_2.tsx"
         }, 
         {
-         "firstgid":467,
+         "firstgid":468,
          "source":"pipe\/pipe.tsx"
         }],
  "tilewidth":32,

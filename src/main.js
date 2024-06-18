@@ -1,24 +1,22 @@
 import { k } from "./KaboomCtx.js";
-import { dialogueData, offsetX, offsetY, scaleFactor } from "./constants.js";
-import { createHoverEvents, createInteractable, displayDialogue, loadAllressources, setCamScale ,createIndicator, createTile, createBackground} from "./utils.js";
+import { BACKGROUND_COUNT, OFFSET_X, OFFSET_Y, PLAYER_SPEED, PROJECT_LINKS, SCALE_FACTOR } from "./constants.js";
+import { createHoverEvents, createInteractable, displayDialogue, loadAllResources, setCamScale ,createIndicator, createTile, createBackground, updateBackground} from "./utils.js";
 
-loadAllressources(k);
+loadAllResources(k);
 
 k.setBackground(k.Color.fromHex("#2e51b2"));
 
 k.scene("main", async () => {
-	const mapData = await (await fetch("./map.json")).json()
-	const layers = mapData.layers;
-	let interactables = [];
+	const 	mapData = await (await fetch("./map.json")).json()
+	const 	layers = mapData.layers;
+	const 	interactables = [];
+	const	backgrounds = [];
 
-	const background_1 = createBackground(k, 4, "background_1");
-	const background_2 = createBackground(k, 4, "background_2");
-	const background_3 = createBackground(k, 4, "background_3");
-	const background_4 = createBackground(k, 4, "background_4");
-	const background_5 = createBackground(k, 4, "background_5");
+	for (let i = 0; i < BACKGROUND_COUNT; i++)
+		backgrounds.push(createBackground(k, 4, `background_${i + 1}`))
 
 	const map = k.add([
-		k.sprite("map"), k.pos(0), k.scale(scaleFactor)]);
+		k.sprite("map"), k.pos(0), k.scale(SCALE_FACTOR)]);
 
 	const player = k.add([
 		k.sprite("player", { anim: "idle-down" }),
@@ -28,9 +26,9 @@ k.scene("main", async () => {
 		k.body(),
 		k.anchor("center"),
 		k.pos(),
-		k.scale(2),
+		k.scale(SCALE_FACTOR),
 		{
-			speed: 300,
+			speed: PLAYER_SPEED,
 			direction: "down",
 			isInDialogue: false,
 		},
@@ -38,20 +36,15 @@ k.scene("main", async () => {
 	]);
 
 
-	const wall = createTile(k, "tiles", 2, 114, 151);
-	const wall2 = createTile(k, "tiles", 23, 114, 183);
-	const wall3 = createTile(k, "tiles", 2, 82, 151);
-	const wall4 = createTile(k, "tiles", 23, 82, 183);
-	const wall5 = createTile(k, "tiles", 2, 50, 151);
-	const wall6 = createTile(k, "tiles", 23, 50, 183);
-
-
-	const door2 = createTile(k, "tiles", 153, 48, 150);
-	const door3 = createTile(k, "tiles", 154, 80, 150);
-	const door4 = createTile(k, "tiles", 155, 112, 150);
-	const door5 = createTile(k, "tiles", 174, 48, 182);
-	const door6 = createTile(k, "tiles", 175, 80, 182);
-	const door7 = createTile(k, "tiles", 176, 112, 182);
+for (let i = 0; i < 3; i++) {
+	createTile(k, "tiles", 2, 114 - 32 * i, 151);
+	createTile(k, "tiles", 23, 114 - 32 * i, 183);
+  }
+  
+  for (let i = 0; i < 3; i++) {
+	createTile(k, "tiles", 153 + i, 48 + 32 * i, 150);
+	createTile(k, "tiles", 174 + i, 48 + 32 * i, 182);
+  }
 
 
 	for (const layer of layers) {
@@ -62,69 +55,119 @@ k.scene("main", async () => {
 						shape: new k.Rect(k.vec2(0, 0), boundary.width, boundary.height),
 					}),
 					k.body({ isStatic: true }),
-					k.pos(boundary.x + offsetX, boundary.y + offsetY),
+					k.pos(boundary.x + OFFSET_X, boundary.y + OFFSET_Y),
 					boundary.name,
 				]);
 				
 				if (boundary.name) {
 					if (boundary.name === "so_long") {
-						const indicator1 = createIndicator(boundary.x - 8, boundary.y - 8, "top_left", k);
-						const indicator3 = createIndicator(boundary.x - 8, boundary.y + boundary.height - 8, "bot_left", k);
-						const indicator2 = createIndicator(boundary.x + boundary.width - 8 , boundary.y - 8, "top_right", k);
-						const indicator4 = createIndicator(boundary.x + boundary.width - 8, boundary.y + boundary.height - 8, "bot_right", k);
+						const soLongIndicatorOffsets = [
+						  { dx: -8, dy: -8, direction: "top_left" },
+						  { dx: -8, dy: boundary.height - 8, direction: "bot_left" },
+						  { dx: boundary.width - 8, dy: -8, direction: "top_right" },
+						  { dx: boundary.width - 8, dy: boundary.height - 8, direction: "bot_right" }
+						];
+					  
+						soLongIndicatorOffsets.forEach(({ dx, dy, direction }) => {
+						  createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
+						});
+					  
+						interactables.push(createInteractable(k, "tiles", boundary, 82, 0, 0));
+					  }
+					  if (boundary.name === "ft_printf") {
+						const ftPrintfIndicatorOffsets = [
+								{ dx: -8, dy: -8, direction: "top_left" },
+								{ dx: -8, dy: boundary.height - 8, direction: "bot_left" },
+								{ dx: boundary.width - 8, dy: -8, direction: "top_right" },
+								{ dx: boundary.width - 8, dy: boundary.height - 8, direction: "bot_right" }
+							  ];
+						  
+							  ftPrintfIndicatorOffsets.forEach(({ dx, dy, direction }) => {
+								createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
+							  });
 
-						const interactable = createInteractable(k, "tiles", boundary, 82, 0 ,0);
-						interactables.push(interactable);
-					}
-					if (boundary.name === "ft_printf") {
-						const indicator1 = createIndicator(boundary.x + 22, boundary.y + 10, "top_left", k);
-						const indicator2 = createIndicator(boundary.x + 86, boundary.y + 10, "top_right", k);
-						const indicator3 = createIndicator(boundary.x + 22, boundary.y + 38, "bot_left", k);
-						const indicator4 = createIndicator(boundary.x + 86, boundary.y + 38, "bot_right", k);
-
-						const interactable = createInteractable(k, "tiles", boundary, 13, 0 , 0);
-						const interactable2 = createInteractable(k, "tiles", boundary, 14, 32, 0);
-						interactables.push(interactable);
-						interactables.push(interactable2);
-					}
+						  const interactable = createInteractable(k, "tiles", boundary, 13, 0 , 0);
+						  const interactable2 = createInteractable(k, "tiles", boundary, 14, 32, 0);
+						  interactables.push(interactable);
+						  interactables.push(interactable2);
+					  }
 					if (boundary.name == "get_next_line") {
-						const interactable = createInteractable(k, "tiles", boundary, 124, 31, 14);
-						interactables.push(interactable);
+						const getNextLineIndicatorOffsets = [
+							{ dx: -8, dy: -8, direction: "top_left" },
+							{ dx: -8, dy: boundary.height - 8, direction: "bot_left" },
+							{ dx: boundary.width - 8, dy: -8, direction: "top_right" },
+							{ dx: boundary.width - 8, dy: boundary.height - 8, direction: "bot_right" }
+						  ];
+					  
+						  getNextLineIndicatorOffsets.forEach(({ dx, dy, direction }) => {
+							createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
+						  });
+						interactables.push(createInteractable(k, "tiles", boundary, 124, 0, 0));
 					}
 					if (boundary.name == "pipex") {
-						const interactable = createInteractable(k, "pipe", boundary, 0, 31, 14);
-						interactables.push(interactable);
+						const pipexIndicatorOffsets = [
+							{ dx: -8, dy: -16, direction: "top_left" },
+							{ dx: -8, dy: boundary.height - 8, direction: "bot_left" },
+							{ dx: boundary.width - 0, dy: -16, direction: "top_right" },
+							{ dx: boundary.width - 0, dy: boundary.height - 8, direction: "bot_right" }
+						  ];
+					  
+						  pipexIndicatorOffsets.forEach(({ dx, dy, direction }) => {
+							createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
+						  });
+						interactables.push(createInteractable(k, "pipe", boundary, 0, 0, -8));
 					}
 					if (boundary.name == "libft") {
-						const interactable  = createInteractable(k, "furniture", boundary, 54, 32, 16);
-						const interactable2 = createInteractable(k, "furniture", boundary, 55, 48, 16);
-						const interactable3 = createInteractable(k, "furniture", boundary, 56, 64, 16);
-						const interactable4 = createInteractable(k, "furniture", boundary, 67, 32, 32);
-						const interactable5 = createInteractable(k, "furniture", boundary, 68, 48, 32);
-						const interactable6 = createInteractable(k, "furniture", boundary, 69, 64, 32);
-						const interactable7 = createInteractable(k, "furniture", boundary, 80, 32, 48);
-						const interactable8 = createInteractable(k, "furniture", boundary, 81, 48, 48);
-						const interactable9 = createInteractable(k, "furniture", boundary, 82, 64, 48);
-						interactables.push(interactable);
-						interactables.push(interactable2);
-						interactables.push(interactable3);
-						interactables.push(interactable4);
-						interactables.push(interactable5);
-						interactables.push(interactable6);
-						interactables.push(interactable7);
-						interactables.push(interactable8);
-						interactables.push(interactable9);
-					}
+						const libftIndicatorOffsets = [
+							{ dx: -16, dy: -8, direction: "top_left" },
+							{ dx: -16, dy: boundary.height - 0, direction: "bot_left" },
+							{ dx: boundary.width - 0, dy: -8, direction: "top_right" },
+							{ dx: boundary.width - 0, dy: boundary.height - 0, direction: "bot_right" }
+						  ];
+					  
+						  libftIndicatorOffsets.forEach(({ dx, dy, direction }) => {
+							createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
+						  });
+						const furnitures = [
+							{ frame: 54, x: 0, y: 8 },
+							{ frame: 55, x: 16, y: 8 },
+							{ frame: 56, x: 32, y: 8 },
+							{ frame: 67, x: 0, y: 24 },
+							{ frame: 68, x: 16, y: 24 },
+							{ frame: 69, x: 32, y: 24 },
+							{ frame: 80, x: 0, y: 40 },
+							{ frame: 81, x: 16, y: 40 },
+							{ frame: 82, x: 32, y: 40 }
+						  ];
+						  
+						  furnitures.forEach(({frame, x, y }) => {
+							interactables.push(createInteractable(k, "furniture", boundary, frame, x, y));
+						  });
+					  }
 					if (boundary.name === "push_swap") {
-						const interactable = createInteractable(k, "book", boundary, 0, 32, 28);
-						const interactable2 = createInteractable(k, "book2", boundary, 0, 32, 48);
-						interactables.push(interactable);
-						interactables.push(interactable2);
+						const pushSwapIndicatorOffsets = [
+							{ dx: -8, dy: -8, direction: "top_left" },
+							{ dx: -8, dy: boundary.height - 8, direction: "bot_left" },
+							{ dx: boundary.width - 8, dy: -8, direction: "top_right" },
+							{ dx: boundary.width - 8, dy: boundary.height - 8, direction: "bot_right" }
+						  ];
+					  
+						  pushSwapIndicatorOffsets.forEach(({ dx, dy, direction }) => {
+							createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
+						  });
+						const books = [
+							{ type: "book", x: 0, y: 0 },
+							{ type: "book2", x: 0, y: 24 }
+						  ];
+						  
+						  books.forEach(({ type, x, y }) => {
+							interactables.push(createInteractable(k, type, boundary, 0, x, y));
+						  });
 					}
 
 					player.onCollide(boundary.name,  () => {
 						player.isInDialogue = true;
-						displayDialogue(dialogueData[boundary.name], () => player.isInDialogue = false)
+						displayDialogue(PROJECT_LINKS[boundary.name], () => player.isInDialogue = false)
 					});
 				}
 			}
@@ -135,8 +178,8 @@ k.scene("main", async () => {
 			for (const entity of layer.objects) {
 				if (entity.name === "player") {
 					player.pos = k.vec2(
-						(map.pos.x + entity.x + offsetX ) * scaleFactor,
-						(map.pos.y + entity.y + offsetY) * scaleFactor
+						(map.pos.x + entity.x + OFFSET_X) * SCALE_FACTOR,
+						(map.pos.y + entity.y + OFFSET_Y) * SCALE_FACTOR
 					);
 					continue;
 				}
@@ -155,43 +198,12 @@ k.scene("main", async () => {
 		k.camPos(player.pos.x, player.pos.y + 100)
 		
 		const backgroundCamY = player.pos.y - 200;
+		let	speed = 0;
 
-		for (let i = 0; i < background_1.length; i++) {
-			background_1[i].pos.x -= scaleFactor;
-			// background_1[i].pos.y = backgroundCamY;
-			if (background_1[i].pos.x <= i * background_1[i].width - k.width() * scaleFactor)
-				background_1[i].pos.x = i * background_1[i].width * 2;
+		for (let i = 0; i < backgrounds.length; i++) {
+			updateBackground(k, backgrounds[i], speed, backgroundCamY, player.pos.x);
+			speed += 0.20;
 		}
-
-		for (let i = 0; i < background_2.length; i++) {
-			background_2[i].pos.x = player.pos.x * 0.20;
-			background_2[i].pos.y = backgroundCamY;
-			if (background_2[i].pos.x <= i * background_2[i].width - k.width() * scaleFactor)
-				background_2[i].pos.x = i * background_2[i].width * 2;
-		}
-
-		for (let i = 0; i < background_3.length; i++) {
-			background_3[i].pos.x = player.pos.x * 0.30;
-			background_3[i].pos.y = backgroundCamY;
-			if (background_3[i].pos.x <= i * background_3[i].width - k.width() * scaleFactor)
-				background_3[i].pos.x = i * background_3[i].width * 2;
-		}
-
-		for (let i = 0; i < background_4.length; i++) {
-			background_4[i].pos.x = player.pos.x * 0.50;
-			background_4[i].pos.y = backgroundCamY;
-			if (background_4[i].pos.x <= i * background_4[i].width - k.width() * scaleFactor)
-				background_4[i].pos.x = i * background_4[i].width * 2;
-		}
-
-		for (let i = 0; i < background_5.length; i++) {
-			background_5[i].pos.x = player.pos.x * 0.70;
-			background_5[i].pos.y = backgroundCamY;
-			if (background_5[i].pos.x <= i * background_5[i].width - k.width() * scaleFactor)
-				background_5[i].pos.x = i * background_5[i].width * 2;
-		}
-
-	
 
 		for (const interactable of interactables) {
 			interactable.blink = Math.floor(k.time() / 0.5) % 2 === 0;
@@ -205,13 +217,18 @@ k.scene("main", async () => {
 			}
 		}
 	});
+	const hoverEvents = [
+		{ name: "libft", bubbleX: 500, bubbleY: 250, bubbleScale: 0.70, textSize: 26, textWidth: 64, textX: 600, textY: 260 },
+		{ name: "get_next_line", bubbleX: 100, bubbleY: 20, bubbleScale: 0.70, textSize: 26, textWidth: 250, textX: 150, textY: 35 },
+		{ name: "ft_printf", bubbleX: 200, bubbleY: 110, bubbleScale: 0.70, textSize: 26, textWidth: 250, textX: 280, textY: 120 },
+		{ name: "pipex", bubbleX: 300, bubbleY: 350, bubbleScale: 0.70, textSize: 26, textWidth: 250, textX: 400, textY: 360 },
+		{ name: "so_long", bubbleX: 300, bubbleY: 150, bubbleScale: 0.70, textSize: 26, textWidth: 250, textX: 390, textY: 160 },
+		{ name: "push_swap", bubbleX: 450, bubbleY: 250, bubbleScale: 0.70, textSize: 26, textWidth: 250, textX: 520, textY: 260 }
+	];
 
-	createHoverEvents(k, "libft", 500, 250, 0.70, 26, 64, 600, 260);
-	createHoverEvents(k, "get_next_line", 100, 20, 0.70, 26, 250, 150, 35);
-	createHoverEvents(k, "ft_printf", 200, 110, 0.70, 26, 250, 280, 120);
-	createHoverEvents(k, "pipex", 300, 350, 0.70, 26, 250, 400, 360);
-	createHoverEvents(k, "so_long", 300, 150, 0.70, 26, 250, 390, 160);
-	createHoverEvents(k, "push_swap", 450, 250, 0.70, 26, 250, 520, 260);
+	hoverEvents.forEach(event => {
+		createHoverEvents(k, event);
+	});
 
 	k.onMouseDown((mouseBtn) => {
 		if (mouseBtn !== "left" || player.isInDialogue) {
