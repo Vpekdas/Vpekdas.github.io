@@ -1,6 +1,6 @@
 import { k } from "./KaboomCtx.js";
-import { BACKGROUND_COUNT, OFFSET_X, OFFSET_Y, PLAYER_SPEED, PROJECT_LINKS, SCALE_FACTOR } from "./constants.js";
-import { createHoverEvents, createInteractable, displayDialogue, loadAllResources, setCamScale ,createIndicator, createTile, createBackground, updateBackground} from "./utils.js";
+import { BACKGROUND_COUNT, OFFSET_X, OFFSET_Y, PLAYER_SPEED, PROJECT_LINKS, SCALE_FACTOR , DEF_SCALE_IND, INDICATOR_OFFSET, FURNITURES, BOOKS, HOVER_EVENTS} from "./constants.js";
+import { createHoverEvents, createInteractable, displayDialogue, loadAllResources, setCamScale ,createIndicator, createTile, createBackground, updateBackground, getIndicatorOffset} from "./utils.js";
 
 loadAllResources(k);
 
@@ -61,106 +61,82 @@ for (let i = 0; i < 3; i++) {
 				
 				if (boundary.name) {
 					if (boundary.name === "so_long") {
-						const soLongIndicatorOffsets = [
-						  { dx: -8, dy: -8, direction: "top_left" },
-						  { dx: -8, dy: boundary.height - 8, direction: "bot_left" },
-						  { dx: boundary.width - 8, dy: -8, direction: "top_right" },
-						  { dx: boundary.width - 8, dy: boundary.height - 8, direction: "bot_right" }
-						];
+						const soLongIndicatorOffsets = getIndicatorOffset(boundary, DEF_SCALE_IND, INDICATOR_OFFSET);
 					  
 						soLongIndicatorOffsets.forEach(({ dx, dy, direction }) => {
 						  createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
 						});
-					  
+					
 						interactables.push(createInteractable(k, "tiles", boundary, 82, 0, 0));
 					  }
 					  if (boundary.name === "ft_printf") {
-						const ftPrintfIndicatorOffsets = [
-								{ dx: -8, dy: -8, direction: "top_left" },
-								{ dx: -8, dy: boundary.height - 8, direction: "bot_left" },
-								{ dx: boundary.width - 8, dy: -8, direction: "top_right" },
-								{ dx: boundary.width - 8, dy: boundary.height - 8, direction: "bot_right" }
-							  ];
+						const ftPrintfIndicatorOffsets = getIndicatorOffset(boundary, DEF_SCALE_IND, INDICATOR_OFFSET);
 						  
-							  ftPrintfIndicatorOffsets.forEach(({ dx, dy, direction }) => {
-								createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
-							  });
+						ftPrintfIndicatorOffsets.forEach(({ dx, dy, direction }) => {
+						createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
+						});
 
 						  const interactable = createInteractable(k, "tiles", boundary, 13, 0 , 0);
 						  const interactable2 = createInteractable(k, "tiles", boundary, 14, 32, 0);
+
 						  interactables.push(interactable);
 						  interactables.push(interactable2);
 					  }
 					if (boundary.name == "get_next_line") {
-						const getNextLineIndicatorOffsets = [
-							{ dx: -8, dy: -8, direction: "top_left" },
-							{ dx: -8, dy: boundary.height - 8, direction: "bot_left" },
-							{ dx: boundary.width - 8, dy: -8, direction: "top_right" },
-							{ dx: boundary.width - 8, dy: boundary.height - 8, direction: "bot_right" }
-						  ];
+						const getNextLineIndicatorOffsets = getIndicatorOffset(boundary, DEF_SCALE_IND, INDICATOR_OFFSET);
 					  
 						  getNextLineIndicatorOffsets.forEach(({ dx, dy, direction }) => {
 							createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
 						  });
+
 						interactables.push(createInteractable(k, "tiles", boundary, 124, 0, 0));
 					}
 					if (boundary.name == "pipex") {
-						const pipexIndicatorOffsets = [
-							{ dx: -8, dy: -16, direction: "top_left" },
-							{ dx: -8, dy: boundary.height - 8, direction: "bot_left" },
-							{ dx: boundary.width - 0, dy: -16, direction: "top_right" },
-							{ dx: boundary.width - 0, dy: boundary.height - 8, direction: "bot_right" }
-						  ];
-					  
+						const modified_DEF_SCALE_IND = DEF_SCALE_IND.map(indicator => {
+							if (indicator.name === "topLeft" || indicator.name === "topRight") {
+							  return {
+								...indicator,
+								y: indicator.y * 2,
+							  };
+							}
+							return indicator;
+						  });
+						const	pipexIndicatorOffsets = getIndicatorOffset(boundary, modified_DEF_SCALE_IND, INDICATOR_OFFSET);
+
 						  pipexIndicatorOffsets.forEach(({ dx, dy, direction }) => {
 							createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
 						  });
+
 						interactables.push(createInteractable(k, "pipe", boundary, 0, 0, -8));
 					}
 					if (boundary.name == "libft") {
-						const libftIndicatorOffsets = [
-							{ dx: -16, dy: -8, direction: "top_left" },
-							{ dx: -16, dy: boundary.height - 0, direction: "bot_left" },
-							{ dx: boundary.width - 0, dy: -8, direction: "top_right" },
-							{ dx: boundary.width - 0, dy: boundary.height - 0, direction: "bot_right" }
-						  ];
+						const modified_DEF_SCALE_IND = DEF_SCALE_IND.map(indicator => {
+							if (indicator.name === "bottomLeft" || indicator.name === "bottomRight") {
+							  return {
+								...indicator,
+								y: indicator.y * -0.5,
+							  };
+							}
+							return indicator;
+						  }); 
+						const	libftIndicatorOffsets = getIndicatorOffset(boundary, modified_DEF_SCALE_IND, INDICATOR_OFFSET);
 					  
 						  libftIndicatorOffsets.forEach(({ dx, dy, direction }) => {
 							createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
 						  });
-						const furnitures = [
-							{ frame: 54, x: 0, y: 8 },
-							{ frame: 55, x: 16, y: 8 },
-							{ frame: 56, x: 32, y: 8 },
-							{ frame: 67, x: 0, y: 24 },
-							{ frame: 68, x: 16, y: 24 },
-							{ frame: 69, x: 32, y: 24 },
-							{ frame: 80, x: 0, y: 40 },
-							{ frame: 81, x: 16, y: 40 },
-							{ frame: 82, x: 32, y: 40 }
-						  ];
-						  
-						  furnitures.forEach(({frame, x, y }) => {
+
+						  FURNITURES.forEach(({frame, x, y }) => {
 							interactables.push(createInteractable(k, "furniture", boundary, frame, x, y));
 						  });
 					  }
 					if (boundary.name === "push_swap") {
-						const pushSwapIndicatorOffsets = [
-							{ dx: -8, dy: -8, direction: "top_left" },
-							{ dx: -8, dy: boundary.height - 8, direction: "bot_left" },
-							{ dx: boundary.width - 8, dy: -8, direction: "top_right" },
-							{ dx: boundary.width - 8, dy: boundary.height - 8, direction: "bot_right" }
-						  ];
+						const	pushSwapIndicatorOffsets = getIndicatorOffset(boundary, DEF_SCALE_IND, INDICATOR_OFFSET);
 					  
 						  pushSwapIndicatorOffsets.forEach(({ dx, dy, direction }) => {
 							createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
 						  });
-						const books = [
-							{ type: "book", x: 0, y: 0 },
-							{ type: "book2", x: 0, y: 24 }
-						  ];
-						  
-						  books.forEach(({ type, x, y }) => {
+
+						  BOOKS.forEach(({ type, x, y }) => {
 							interactables.push(createInteractable(k, type, boundary, 0, x, y));
 						  });
 					}
@@ -217,16 +193,8 @@ for (let i = 0; i < 3; i++) {
 			}
 		}
 	});
-	const hoverEvents = [
-		{ name: "libft", bubbleX: 500, bubbleY: 250, bubbleScale: 0.70, textSize: 26, textWidth: 64, textX: 600, textY: 260 },
-		{ name: "get_next_line", bubbleX: 100, bubbleY: 20, bubbleScale: 0.70, textSize: 26, textWidth: 250, textX: 150, textY: 35 },
-		{ name: "ft_printf", bubbleX: 200, bubbleY: 110, bubbleScale: 0.70, textSize: 26, textWidth: 250, textX: 280, textY: 120 },
-		{ name: "pipex", bubbleX: 300, bubbleY: 350, bubbleScale: 0.70, textSize: 26, textWidth: 250, textX: 400, textY: 360 },
-		{ name: "so_long", bubbleX: 300, bubbleY: 150, bubbleScale: 0.70, textSize: 26, textWidth: 250, textX: 390, textY: 160 },
-		{ name: "push_swap", bubbleX: 450, bubbleY: 250, bubbleScale: 0.70, textSize: 26, textWidth: 250, textX: 520, textY: 260 }
-	];
 
-	hoverEvents.forEach(event => {
+	HOVER_EVENTS.forEach(event => {
 		createHoverEvents(k, event);
 	});
 
@@ -284,4 +252,3 @@ k.go("main");
 
 // TODO: Write a description for project.
 // TODO: Add minishell and philosopher project.
-// TODO: Add blinking and interactable for remaining project.

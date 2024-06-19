@@ -1,4 +1,4 @@
-import {SCALE_FACTOR, OFFSET_X, OFFSET_Y} from "./constants.js";
+import {SCALE_FACTOR, OFFSET_X, OFFSET_Y, INDICATOR_OFFSET} from "./constants.js";
 
 export function displayDialogue(text, onDisplayEnd) {
 	const dialogueUI = document.getElementById("textbox-container");
@@ -207,4 +207,17 @@ export function updateBackground (k, backgroundLayer, speed, backgroundCamY, pla
 				backgroundLayer[i].pos.x = i * backgroundLayer[i].width * 2;
 		}
 	}
+}
+
+export function getIndicatorOffset (boundary, indicatorScale, offset) {
+	const	topLeft = indicatorScale[0];
+	const	topRight = indicatorScale[1];
+	const	bottomLeft = indicatorScale[2];
+	const	bottomRight = indicatorScale[3];
+	return ([
+		{ dx: -offset * topLeft.x, dy: -offset * topLeft.y, direction: "top_left" },
+		{ dx: -offset * bottomLeft.x, dy: boundary.height - offset * bottomLeft.y, direction: "bot_left" },
+		{ dx: boundary.width - offset * topRight.x, dy: -offset * topRight.y, direction: "top_right" },
+		{ dx: boundary.width - offset * bottomRight.x, dy: boundary.height - offset * bottomRight.y, direction: "bot_right" }
+	  ]);
 }
