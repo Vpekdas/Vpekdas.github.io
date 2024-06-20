@@ -1,22 +1,33 @@
 import { k } from "./KaboomCtx.js";
-import { BACKGROUND_COUNT, OFFSET_X, OFFSET_Y, PLAYER_SPEED, PROJECT_LINKS, SCALE_FACTOR , DEF_SCALE_IND, INDICATOR_OFFSET, FURNITURES, BOOKS, HOVER_EVENTS} from "./constants.js";
-import { createHoverEvents, createInteractable, displayDialogue, loadAllResources, setCamScale ,createIndicator, createTile, createBackground, updateBackground, getIndicatorOffset} from "./utils.js";
 
-loadAllResources(k);
+import * as GameConstants from './constants/GameConstants.js';
+import * as UI from "./constants/UIConstants.js";
+import * as ProjectConstants from "./constants/ProjectConstants.js";
+
+import * as BackgroundUtils from "./utils/BackgroundUtils.js";
+import * as CameraUtils from "./utils/cameraUtils.js";
+import * as DialogueManager from "./utils/dialogueManager.js";
+import * as EventHandlers from "./handlers/eventHandlers.js";
+import * as GameElements from "./elements/gameElements.js";
+import * as ResourceLoader from "./elements/resourceLoader.js";
+import * as IndicatorUtils from "./utils/IndicatorUtils.js";
+
+ResourceLoader.loadAllResources(k);
 
 k.setBackground(k.Color.fromHex("#2e51b2"));
 
 k.scene("main", async () => {
-	const 	mapData = await (await fetch("./map.json")).json()
+	const 	mapData = await (await fetch("assets/map/map.json")).json()
 	const 	layers = mapData.layers;
 	const 	interactables = [];
 	const	backgrounds = [];
 
-	for (let i = 0; i < BACKGROUND_COUNT; i++)
-		backgrounds.push(createBackground(k, 4, `background_${i + 1}`))
+
+	for (let i = 0; i < GameConstants.BACKGROUND_COUNT; i++)
+		backgrounds.push(BackgroundUtils.createBackground(k, 5, `background_${i + 1}`))
 
 	const map = k.add([
-		k.sprite("map"), k.pos(0), k.scale(SCALE_FACTOR)]);
+		k.sprite("map"), k.pos(0), k.scale(GameConstants.SCALE_FACTOR)]);
 
 	const player = k.add([
 		k.sprite("player", { anim: "idle-down" }),
@@ -26,9 +37,9 @@ k.scene("main", async () => {
 		k.body(),
 		k.anchor("center"),
 		k.pos(),
-		k.scale(SCALE_FACTOR),
+		k.scale(GameConstants.SCALE_FACTOR),
 		{
-			speed: PLAYER_SPEED,
+			speed: GameConstants.PLAYER_SPEED,
 			direction: "down",
 			isInDialogue: false,
 		},
@@ -37,14 +48,14 @@ k.scene("main", async () => {
 
 
 for (let i = 0; i < 3; i++) {
-	createTile(k, "tiles", 2, 114 - 32 * i, 151);
-	createTile(k, "tiles", 23, 114 - 32 * i, 183);
-  }
+	GameElements.createTile(k, "tiles", 2, 114 - 32 * i, 151);
+	GameElements.createTile(k, "tiles", 23, 114 - 32 * i, 183);
+}
   
-  for (let i = 0; i < 3; i++) {
-	createTile(k, "tiles", 153 + i, 48 + 32 * i, 150);
-	createTile(k, "tiles", 174 + i, 48 + 32 * i, 182);
-  }
+for (let i = 0; i < 3; i++) {
+	GameElements.createTile(k, "tiles", 153 + i, 48 + 32 * i, 150);
+	GameElements.createTile(k, "tiles", 174 + i, 48 + 32 * i, 182);
+}
 
 
 	for (const layer of layers) {
@@ -55,44 +66,44 @@ for (let i = 0; i < 3; i++) {
 						shape: new k.Rect(k.vec2(0, 0), boundary.width, boundary.height),
 					}),
 					k.body({ isStatic: true }),
-					k.pos(boundary.x + OFFSET_X, boundary.y + OFFSET_Y),
+					k.pos(boundary.x + GameConstants.OFFSET_X, boundary.y + GameConstants.OFFSET_Y),
 					boundary.name,
 				]);
 				
 				if (boundary.name) {
 					if (boundary.name === "so_long") {
-						const soLongIndicatorOffsets = getIndicatorOffset(boundary, DEF_SCALE_IND, INDICATOR_OFFSET);
+						const soLongIndicatorOffsets = IndicatorUtils.getIndicatorOffset(boundary, GameConstants.DEF_SCALE_IND, GameConstants.INDICATOR_OFFSET);
 					  
 						soLongIndicatorOffsets.forEach(({ dx, dy, direction }) => {
-						  createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
+						  IndicatorUtils.createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
 						});
 					
-						interactables.push(createInteractable(k, "tiles", boundary, 82, 0, 0));
+						interactables.push(GameElements.createInteractable(k, "tiles", boundary, 82, 0, 0));
 					  }
 					  if (boundary.name === "ft_printf") {
-						const ftPrintfIndicatorOffsets = getIndicatorOffset(boundary, DEF_SCALE_IND, INDICATOR_OFFSET);
+						const ftPrintfIndicatorOffsets = IndicatorUtils.getIndicatorOffset(boundary, GameConstants.DEF_SCALE_IND, GameConstants.INDICATOR_OFFSET);
 						  
 						ftPrintfIndicatorOffsets.forEach(({ dx, dy, direction }) => {
-						createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
+						IndicatorUtils.createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
 						});
 
-						  const interactable = createInteractable(k, "tiles", boundary, 13, 0 , 0);
-						  const interactable2 = createInteractable(k, "tiles", boundary, 14, 32, 0);
+						  const interactable = GameElements.createInteractable(k, "tiles", boundary, 13, 0 , 0);
+						  const interactable2 = GameElements.createInteractable(k, "tiles", boundary, 14, 32, 0);
 
 						  interactables.push(interactable);
 						  interactables.push(interactable2);
 					  }
 					if (boundary.name == "get_next_line") {
-						const getNextLineIndicatorOffsets = getIndicatorOffset(boundary, DEF_SCALE_IND, INDICATOR_OFFSET);
+						const getNextLineIndicatorOffsets = IndicatorUtils.getIndicatorOffset(boundary, GameConstants.DEF_SCALE_IND, GameConstants.INDICATOR_OFFSET);
 					  
 						  getNextLineIndicatorOffsets.forEach(({ dx, dy, direction }) => {
-							createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
+							IndicatorUtils.createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
 						  });
 
-						interactables.push(createInteractable(k, "tiles", boundary, 124, 0, 0));
+						interactables.push(GameElements.createInteractable(k, "tiles", boundary, 124, 0, 0));
 					}
 					if (boundary.name == "pipex") {
-						const modified_DEF_SCALE_IND = DEF_SCALE_IND.map(indicator => {
+						const modified_DEF_SCALE_IND = GameConstants.DEF_SCALE_IND.map(indicator => {
 							if (indicator.name === "topLeft" || indicator.name === "topRight") {
 							  return {
 								...indicator,
@@ -101,16 +112,16 @@ for (let i = 0; i < 3; i++) {
 							}
 							return indicator;
 						  });
-						const	pipexIndicatorOffsets = getIndicatorOffset(boundary, modified_DEF_SCALE_IND, INDICATOR_OFFSET);
+						const	pipexIndicatorOffsets = IndicatorUtils.getIndicatorOffset(boundary, modified_DEF_SCALE_IND, GameConstants.INDICATOR_OFFSET);
 
 						  pipexIndicatorOffsets.forEach(({ dx, dy, direction }) => {
-							createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
+							IndicatorUtils.createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
 						  });
 
-						interactables.push(createInteractable(k, "pipe", boundary, 0, 0, -8));
+						interactables.push(GameElements.createInteractable(k, "pipe", boundary, 0, 0, -8));
 					}
 					if (boundary.name == "libft") {
-						const modified_DEF_SCALE_IND = DEF_SCALE_IND.map(indicator => {
+						const modified_DEF_SCALE_IND = GameConstants.DEF_SCALE_IND.map(indicator => {
 							if (indicator.name === "bottomLeft" || indicator.name === "bottomRight") {
 							  return {
 								...indicator,
@@ -119,31 +130,31 @@ for (let i = 0; i < 3; i++) {
 							}
 							return indicator;
 						  }); 
-						const	libftIndicatorOffsets = getIndicatorOffset(boundary, modified_DEF_SCALE_IND, INDICATOR_OFFSET);
+						const	libftIndicatorOffsets = IndicatorUtils.getIndicatorOffset(boundary, modified_DEF_SCALE_IND, GameConstants.INDICATOR_OFFSET);
 					  
 						  libftIndicatorOffsets.forEach(({ dx, dy, direction }) => {
-							createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
+							IndicatorUtils.createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
 						  });
 
-						  FURNITURES.forEach(({frame, x, y }) => {
-							interactables.push(createInteractable(k, "furniture", boundary, frame, x, y));
+						  GameConstants.FURNITURES.forEach(({frame, x, y }) => {
+							interactables.push(GameElements.createInteractable(k, "furniture", boundary, frame, x, y));
 						  });
 					  }
 					if (boundary.name === "push_swap") {
-						const	pushSwapIndicatorOffsets = getIndicatorOffset(boundary, DEF_SCALE_IND, INDICATOR_OFFSET);
+						const	pushSwapIndicatorOffsets = IndicatorUtils.getIndicatorOffset(boundary, GameConstants.DEF_SCALE_IND, GameConstants.INDICATOR_OFFSET);
 					  
 						  pushSwapIndicatorOffsets.forEach(({ dx, dy, direction }) => {
-							createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
+							IndicatorUtils.createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
 						  });
 
-						  BOOKS.forEach(({ type, x, y }) => {
-							interactables.push(createInteractable(k, type, boundary, 0, x, y));
+						  GameConstants.BOOKS.forEach(({ type, x, y }) => {
+							interactables.push(GameElements.createInteractable(k, type, boundary, 0, x, y));
 						  });
 					}
 
 					player.onCollide(boundary.name,  () => {
 						player.isInDialogue = true;
-						displayDialogue(PROJECT_LINKS[boundary.name], () => player.isInDialogue = false)
+						DialogueManager.displayDialogue(ProjectConstants.PROJECT_LINKS[boundary.name], () => player.isInDialogue = false)
 					});
 				}
 			}
@@ -154,8 +165,8 @@ for (let i = 0; i < 3; i++) {
 			for (const entity of layer.objects) {
 				if (entity.name === "player") {
 					player.pos = k.vec2(
-						(map.pos.x + entity.x + OFFSET_X) * SCALE_FACTOR,
-						(map.pos.y + entity.y + OFFSET_Y) * SCALE_FACTOR
+						(map.pos.x + entity.x + GameConstants.OFFSET_X) * GameConstants.SCALE_FACTOR,
+						(map.pos.y + entity.y + GameConstants.OFFSET_Y) * GameConstants.SCALE_FACTOR
 					);
 					continue;
 				}
@@ -163,22 +174,22 @@ for (let i = 0; i < 3; i++) {
 		}
 	}
 
-	setCamScale(k);
+	CameraUtils.setCamScale(k);
 
 	k.onResize(() => {
-		setCamScale(k);
+		CameraUtils.setCamScale(k);
 	});
 
 	k.onUpdate(() => {
 
-		k.camPos(player.pos.x, player.pos.y + 100)
-		
-		const backgroundCamY = player.pos.y - 200;
-		let	speed = 0;
+		k.camPos(player.pos.x, player.pos.y + GameConstants.CAMERA_OFFSET_Y)
 
+		const backgroundCamY = player.pos.y - GameConstants.BACKGROUND_OFFSET_Y;
+		let	speed = 0;
+	
 		for (let i = 0; i < backgrounds.length; i++) {
-			updateBackground(k, backgrounds[i], speed, backgroundCamY, player.pos.x);
-			speed += 0.20;
+			BackgroundUtils.updateBackground(k, backgrounds[i], speed, backgroundCamY, player.pos.x);
+			speed += GameConstants.BACKGROUND_SPEED_INCREMENT;
 		}
 
 		for (const interactable of interactables) {
@@ -194,8 +205,8 @@ for (let i = 0; i < 3; i++) {
 		}
 	});
 
-	HOVER_EVENTS.forEach(event => {
-		createHoverEvents(k, event);
+	UI.HOVER_EVENTS.forEach(event => {
+		EventHandlers.createHoverEvents(k, event);
 	});
 
 	k.onMouseDown((mouseBtn) => {
@@ -252,3 +263,5 @@ k.go("main");
 
 // TODO: Write a description for project.
 // TODO: Add minishell and philosopher project.
+// FIXME: Custom font does not work anymore.
+// FIXME: For Parallax: Clouds must be updated every tickle, other background  on mouse down.
