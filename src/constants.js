@@ -93,37 +93,31 @@ export const PROJECT_DESCRIPTIONS = {
     libft: {
         title: `Neon Code Forger`,
         story: `In the neon-lit alleyways of Cyber City, you embarked on a quest to forge <a href="https://github.com/Vpekdas/libft" target="_blank">libft</a>, a powerful toolkit of neon code. Each function you crafted was a beacon in the digital darkness, arming you for the cyber battles in the realm of low-level programming.`,
-        challenge: `Synthesize over 40 standard C library functions from the digital ether.`,
         achievement: `Mastered the cyber arts of memory allocation, string manipulation, and data processing, becoming a legend in the neon code underworld.`,
     },
     get_next_line: {
         title: `The Datastream Navigator`,
         story: `In the sprawling data jungles of Neo-Tokyo, you uncovered <a href="https://github.com/Vpekdas/get_next_line" target="_blank">get_next_line</a>, a cyber spell to navigate the endless data streams. Your odyssey honed your skills in manipulating file descriptors and memory, essential for any cyber wizard.`,
-        challenge: `Craft a function to navigate and extract knowledge line by line from the data streams.`,
         achievement: `Elevated your status in the cyber realm with unparalleled expertise in file manipulation and dynamic memory allocation.`,
     },
     ft_printf: {
         title: `The Cyber Scribe`,
         story: `Amidst the cybernetic chaos of the metropolis, you initiated the <a href="https://github.com/Vpekdas/ft_printf" target="_blank">ft_printf</a> project, an endeavor to recreate the ancient artifact known as 'printf'. Your mission was to encode the essence of digital expression, enabling the translation of thought into visible form across the neon screens.`,
-        challenge: `Re-engineer the 'printf' function, capturing its ability to format and display data across a multitude of cybernetic displays.`,
         achievement: `Your creation became the standard for data expression in the cyber realm, bridging the gap between thought and digital manifestation.`,
     },
     pipex: {
         title: `The Protocol Weaver`,
         story: `In the labyrinth of the digital underweb, you discovered <a href="https://github.com/Vpekdas/pipex" target="_blank">pipex</a>, a clandestine project to weave the protocols of old and new. This quest plunged you into the depths of system calls and inter-process communication, challenging you to master the arcane arts of data piping.`,
-        challenge: `Emulate the shell's pipe mechanism, '|', to direct data seamlessly between processes using custom commands.`,
         achievement: `Achieved mastery over the flow of data, becoming a revered architect of the underweb's information streams.`,
     },
     so_long: {
         title: `The Grid Runner`,
         story: `In the heart of the neon city's digital maze, you embarked on <a href="https://github.com/Vpekdas/so_long" target="_blank">so_long</a>, a daring adventure to navigate through the intricate circuits of the cyber grid. This journey tested your skills in creating and manipulating graphical environments, challenging you to outsmart the system's guardians.`,
-        challenge: `Design and implement a 2D maze game where the player must collect all items and reach the exit, using minimal moves.`,
         achievement: `Your game became a symbol of rebellion, teaching the denizens of the cyber world the value of strategy and perseverance.`,
     },
     push_swap: {
         title: `The Algorithmic Shuffler`,
         story: `Deep within the cybernetic core, you encountered <a href="https://github.com/Vpekdas/push_swap" target="_blank">push_swap</a>, a challenge of logic and efficiency. Tasked with sorting data in the least number of moves, this mission required you to delve into the realm of algorithms and data structures, pushing you to your limits.`,
-        challenge: `Devise a sorting algorithm that uses two stacks to sort data with a minimal set of operations, optimizing for efficiency.`,
         achievement: `Your algorithmic prowess not only streamlined the chaos of data but also set a new standard for computational efficiency in the cyber realm.`,
     },
 };
