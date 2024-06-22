@@ -383,6 +383,9 @@ k.scene("main", async () => {
 
 k.go("main");
 
-// TODO: Add minishell and philosopher project.
-// TODO: Add achivement feature. If somebody click on link project, he will receive a sort of achivement. Main quest is to unlock all.
-// TODO: Add bounding box for wall.
+// TODO: Implement achievement system using client-side storage (localStorage) to track and display unlocked achievements.
+// TODO: Develop progress tracking feature to monitor which projects or sections the visitor has interacted with.
+// TODO: Integrate social sharing options for achievements or progress milestones.
+// TODO: Add bounding boxes for walls or obstacles in the game environment to enhance interaction realism.
+// TODO: Incorporate the "Minishell" project as an interactive element within the game.
+// TODO: Integrate the "Philosopher" project, potentially as a puzzle or challenge within the game.
