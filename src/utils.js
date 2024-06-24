@@ -269,3 +269,118 @@ export function getIndicatorOffset(boundary, indicatorScale, offset) {
         },
     ];
 }
+
+export function countAchievemenDiscovered(projects) {
+    let achievement = 0;
+
+    for (let i = 0; i < projects.length; i++) {
+        if (projects[i].discovered === true) {
+            achievement++;
+        }
+    }
+    return achievement;
+}
+
+export function addProject(boundary, projects) {
+    projects.push({
+        name: boundary.name,
+        discovered: false,
+    });
+}
+
+export function setProjectAsDiscovered(projects, boundary) {
+    for (let i = 0; i < projects.length; i++) {
+        if (
+            boundary.name === projects[i].name &&
+            projects[i].discovered != true
+        ) {
+            projects[i].discovered = true;
+        }
+    }
+}
+
+export function updateProgress(projects, discovered) {
+    const elem = document.querySelector(".progress-done");
+    const achievementDiscovered = countAchievemenDiscovered(projects);
+    const achievementTotal = projects.length;
+    const interval = 100;
+    let currentWidth = (discovered / achievementTotal) * 100;
+    function frame() {
+        let targetWidth = (achievementDiscovered / achievementTotal) * 100;
+        {
+            if (currentWidth < targetWidth) {
+                currentWidth += 1;
+                elem.style.width = `${currentWidth.toFixed(0)}%`;
+                elem.innerHTML = `${currentWidth.toFixed(0)}%`;
+            }
+        }
+    }
+    setInterval(frame, interval);
+}
+
+export function showAchievementIcon(duration, path) {
+    const icon = document.querySelector(".achievement-icon");
+    icon.src = path;
+    icon.style.display = "none";
+    setTimeout(() => {
+        icon.style.display = "block";
+    }, duration);
+}
+
+export function showAchievementTitle(duration, text) {
+    const title = document.querySelector(".achievement-title");
+    title.style.display = "none";
+    title.textContent = text;
+    setTimeout(() => {
+        title.style.display = "block";
+    }, duration);
+}
+
+export function showAchievementDescription(duration, text) {
+    const description = document.querySelector(".achievement-description");
+    description.style.display = "none";
+    description.textContent = text;
+    setTimeout(() => {
+        description.style.display = "block";
+    }, duration);
+}
+
+export function showAchievementNotification(duration) {
+    const notification = document.querySelector(".achievement-notification");
+    notification.textContent = "Achievement Unlocked !";
+    notification.style.display = "block";
+
+    setTimeout(() => {
+        notification.style.animation = "scrollOut 0.5s ease-out forwards";
+
+        setTimeout(() => {
+            notification.style.display = "none";
+        }, 300);
+    }, duration);
+}
+
+export function showBannerTemporarily(duration) {
+    const banner = document.querySelector(".achievement-banner");
+    banner.style.display = "block";
+
+    setTimeout(() => {
+        banner.style.display = "none";
+    }, duration);
+}
+
+export function growBanner() {
+    const banner = document.querySelector(".achievement-banner");
+    let currentWidth = 0;
+    const maxWidth = 400;
+    const increment = 5;
+    const intervalTime = 20;
+
+    const interval = setInterval(() => {
+        currentWidth += increment;
+        banner.style.width = `${currentWidth}px`;
+
+        if (currentWidth >= maxWidth) {
+            clearInterval(interval);
+        }
+    }, intervalTime);
+}

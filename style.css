@@ -76,6 +76,7 @@ body {
     height: 30px;
     width: 1000px;
     border-radius: 20px;
+    overflow: hidden;
 }
 
 .progress-done {
@@ -83,13 +84,119 @@ body {
     font-weight: bolder;
     color: #fff;
     height: 100%;
-    background: linear-gradient(to left, rgb(253, 2, 140), rgb(240, 199, 230));
+    background: linear-gradient(
+        to right,
+        #06beb6 40%,
+        #48b1bf 50%,
+        #06beb6 60%
+    );
+    background-size: 200% 100%;
     border-radius: 20px;
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 0;
     box-shadow:
-        0 0 3px -5px rgb(253, 2, 140),
-        0 3px 150px rgb(253, 2, 140);
+        0 0 3px -5px rgba(253, 2, 140, 0.5),
+        0 3px 150px rgba(253, 2, 140, 0.3);
     transition: width 0.5s ease;
+    overflow: hidden;
+    animation: shimmer 2s infinite linear;
+    position: relative;
+}
+
+.achievement-icon {
+    width: 70px;
+    height: auto;
+    animation: fadeIn 2s ease-out forwards;
+}
+
+.achievement-banner {
+    display: none;
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    background: #ddd;
+    height: 70px;
+    width: 450px;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.achievement-title {
+    position: absolute;
+    text-align: center;
+    top: 0px;
+    left: 20%;
+    display: none;
+    color: #ffffff;
+    background-image: linear-gradient(to right, #5c84d9, #6e85b7);
+    padding: 5px 10px;
+    font-family: "Roboto", sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    animation: fadeIn 2s ease-out forwards;
+}
+
+.achievement-description {
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    display: none;
+    color: #333;
+    font-size: 20px;
+    text-align: left;
+    line-height: 15px;
+    animation: slideInFromBottom 0.5s ease-out forwards;
+}
+
+.achievement-notification {
+    display: none;
+    position: absolute;
+    text-align: left;
+    top: 40%;
+    left: 12%;
+    color: #333;
+    font-size: 30px;
+    text-align: left;
+    line-height: 15px;
+    animation: slideInFromBottom 0.5s ease-out forwards;
+    overflow: hidden;
+}
+
+@keyframes slideInFromBottom {
+    0% {
+        transform: translateY(100%);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes scrollOut {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-100%);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
 }

@@ -1,8 +1,39 @@
 import { k } from "./KaboomCtx.js";
-// prettier-ignore
-import { BACKGROUND_COUNT, OFFSET_X, OFFSET_Y, PLAYER_SPEED, SCALE_FACTOR, DEF_SCALE_IND, INDICATOR_OFFSET, FURNITURES, BOOKS, HOVER_EVENTS, PROJECT_DESCRIPTIONS,} from "./constants.js";
-// prettier-ignore
-import { createHoverEvents, createInteractable, displayDialogue, loadAllResources, setCamScale, createIndicator, createTile, createBackground, updateBackground, getIndicatorOffset,} from "./utils.js";
+import {
+    BACKGROUND_COUNT,
+    OFFSET_X,
+    OFFSET_Y,
+    PLAYER_SPEED,
+    SCALE_FACTOR,
+    DEF_SCALE_IND,
+    INDICATOR_OFFSET,
+    FURNITURES,
+    BOOKS,
+    HOVER_EVENTS,
+    PROJECT_DESCRIPTIONS,
+} from "./constants.js";
+import {
+    createHoverEvents,
+    createInteractable,
+    displayDialogue,
+    loadAllResources,
+    setCamScale,
+    createIndicator,
+    createTile,
+    createBackground,
+    updateBackground,
+    getIndicatorOffset,
+    updateProgress,
+    addProject,
+    setProjectAsDiscovered,
+    countAchievemenDiscovered,
+    growBanner,
+    showBannerTemporarily,
+    showAchievementTitle,
+    showAchievementDescription,
+    showAchievementIcon,
+    showAchievementNotification,
+} from "./utils.js";
 
 loadAllResources(k);
 
@@ -13,7 +44,8 @@ k.scene("main", async () => {
     const layers = mapData.layers;
     const interactables = [];
     const backgrounds = [];
-
+    const projects = [];
+    let animationBanner = false;
     for (let i = 0; i < BACKGROUND_COUNT; i++)
         backgrounds.push(createBackground(k, 4, `background_${i + 1}`));
 
@@ -86,6 +118,7 @@ k.scene("main", async () => {
                         interactables.push(
                             createInteractable(k, "tiles", boundary, 82, 0, 0)
                         );
+                        addProject(boundary, projects);
                     }
                     if (boundary.name === "ft_printf") {
                         const ftPrintfIndicatorOffsets = getIndicatorOffset(
@@ -124,6 +157,7 @@ k.scene("main", async () => {
 
                         interactables.push(interactable);
                         interactables.push(interactable2);
+                        addProject(boundary, projects);
                     }
                     if (boundary.name == "get_next_line") {
                         const getNextLineIndicatorOffsets = getIndicatorOffset(
@@ -146,6 +180,7 @@ k.scene("main", async () => {
                         interactables.push(
                             createInteractable(k, "tiles", boundary, 124, 0, 0)
                         );
+                        addProject(boundary, projects);
                     }
                     if (boundary.name == "pipex") {
                         const modified_DEF_SCALE_IND = DEF_SCALE_IND.map(
@@ -182,6 +217,7 @@ k.scene("main", async () => {
                         interactables.push(
                             createInteractable(k, "pipe", boundary, 0, 0, -8)
                         );
+                        addProject(boundary, projects);
                     }
                     if (boundary.name == "libft") {
                         const modified_DEF_SCALE_IND = DEF_SCALE_IND.map(
@@ -227,6 +263,7 @@ k.scene("main", async () => {
                                 )
                             );
                         });
+                        addProject(boundary, projects);
                     }
                     if (boundary.name === "push_swap") {
                         const pushSwapIndicatorOffsets = getIndicatorOffset(
@@ -251,6 +288,7 @@ k.scene("main", async () => {
                                 createInteractable(k, type, boundary, 0, x, y)
                             );
                         });
+                        addProject(boundary, projects);
                     }
 
                     player.onCollide(boundary.name, () => {
@@ -259,6 +297,32 @@ k.scene("main", async () => {
                             PROJECT_DESCRIPTIONS[boundary.name].story,
                             () => (player.isInDialogue = false)
                         );
+                        const discovered = countAchievemenDiscovered(projects);
+                        setProjectAsDiscovered(projects, boundary);
+                        if (animationBanner === false) {
+                            showBannerTemporarily(8000);
+                            showAchievementNotification(2200);
+                            showAchievementIcon(
+                                2800,
+                                PROJECT_DESCRIPTIONS[boundary.name].icon
+                            );
+                            showAchievementTitle(
+                                2800,
+                                PROJECT_DESCRIPTIONS[boundary.name].title
+                            );
+                            showAchievementDescription(
+                                2800,
+                                PROJECT_DESCRIPTIONS[boundary.name].achievement
+                            );
+                            growBanner();
+                            if (discovered <= projects.length) {
+                                updateProgress(projects, discovered);
+                            }
+                            animationBanner = true;
+                            setTimeout(() => {
+                                animationBanner = false;
+                            }, 8000);
+                        }
                     });
                 }
             }
@@ -278,6 +342,8 @@ k.scene("main", async () => {
                 }
             }
         }
+
+        window.addEventListener("DOMContentLoaded", updateProgress);
     }
 
     setCamScale(k);
