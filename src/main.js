@@ -33,6 +33,8 @@ import {
     showAchievementDescription,
     showAchievementIcon,
     showAchievementNotification,
+    closeDialogue,
+    showAchievement,
 } from "./utils.js";
 
 loadAllResources(k);
@@ -297,21 +299,29 @@ k.scene("main", async () => {
                             PROJECT_DESCRIPTIONS[boundary.name].story,
                             () => (player.isInDialogue = false)
                         );
-                        const discovered = countAchievemenDiscovered(projects);
-                        setProjectAsDiscovered(projects, boundary);
                         if (animationBanner === false) {
-                            showBannerTemporarily(8000);
-                            showAchievementNotification(2200);
+                            const discovered =
+                                countAchievemenDiscovered(projects);
+                            const projectIndex = projects.findIndex(
+                                (project) => project.name === boundary.name
+                            );
+                            if (projectIndex != -1) {
+                                if (projects[projectIndex].discovered) return;
+                            }
+                            setProjectAsDiscovered(projects, boundary);
+                            showAchievement(projects);
+                            showBannerTemporarily(7000);
+                            showAchievementNotification(2000);
                             showAchievementIcon(
-                                2800,
+                                3000,
                                 PROJECT_DESCRIPTIONS[boundary.name].icon
                             );
                             showAchievementTitle(
-                                2800,
+                                3000,
                                 PROJECT_DESCRIPTIONS[boundary.name].title
                             );
                             showAchievementDescription(
-                                2800,
+                                3000,
                                 PROJECT_DESCRIPTIONS[boundary.name].achievement
                             );
                             growBanner();
@@ -321,7 +331,7 @@ k.scene("main", async () => {
                             animationBanner = true;
                             setTimeout(() => {
                                 animationBanner = false;
-                            }, 8000);
+                            }, 7000);
                         }
                     });
                 }
@@ -389,8 +399,12 @@ k.scene("main", async () => {
     });
 
     k.onMouseDown((mouseBtn) => {
-        if (mouseBtn !== "left" || player.isInDialogue) {
+        if (mouseBtn !== "left") {
             return;
+        }
+        if (isMousePressed(mouseBtn) && player.isInDialogue) {
+            player.isInDialogue = false;
+            closeDialogue();
         }
 
         player.prevPosX = player.pos.x;

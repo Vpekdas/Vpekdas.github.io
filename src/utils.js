@@ -1,5 +1,5 @@
 // prettier-ignore
-import { SCALE_FACTOR, OFFSET_X, OFFSET_Y} from "./constants.js";
+import { SCALE_FACTOR, OFFSET_X, OFFSET_Y, PROJECT_DESCRIPTIONS} from "./constants.js";
 
 export function displayDialogue(text, onDisplayEnd) {
     const dialogueUI = document.getElementById("textbox-container");
@@ -28,8 +28,12 @@ export function displayDialogue(text, onDisplayEnd) {
         clearInterval(intervalRef);
         closeBtn.removeEventListener("click", onCloseClick);
     }
-
     closeBtn.addEventListener("click", onCloseClick);
+}
+
+export function closeDialogue() {
+    const dialogueUI = document.getElementById("textbox-container");
+    dialogueUI.style.display = "none";
 }
 
 export function setCamScale(k) {
@@ -223,9 +227,15 @@ export function createBackground(k, backgroundNumber, spriteName) {
     destroy(tempSprite);
     return backgroundArray;
 }
-// prettier-ignore
-export function updateBackground(k, backgroundLayer, speed, camY, playerX, prevX) {
-	let deltaX = playerX - prevX;
+export function updateBackground(
+    k,
+    backgroundLayer,
+    speed,
+    camY,
+    playerX,
+    prevX
+) {
+    let deltaX = playerX - prevX;
     for (let i = 0; i < backgroundLayer.length; i++) {
         if (speed === 0) {
             backgroundLayer[i].pos.x -= SCALE_FACTOR;
@@ -235,7 +245,8 @@ export function updateBackground(k, backgroundLayer, speed, camY, playerX, prevX
             )
                 backgroundLayer[i].pos.x = i * backgroundLayer[i].width * 2;
         } else {
-            backgroundLayer[i].pos.x = backgroundLayer[i].pos.x + deltaX * speed;
+            backgroundLayer[i].pos.x =
+                backgroundLayer[i].pos.x + deltaX * speed;
             backgroundLayer[i].pos.y = camY;
         }
     }
@@ -348,15 +359,18 @@ export function showAchievementDescription(duration, text) {
 export function showAchievementNotification(duration) {
     const notification = document.querySelector(".achievement-notification");
     notification.textContent = "Achievement Unlocked !";
-    notification.style.display = "block";
+    notification.style.display = "none";
 
     setTimeout(() => {
-        notification.style.animation = "scrollOut 0.5s ease-out forwards";
-
-        setTimeout(() => {
-            notification.style.display = "none";
-        }, 300);
+        notification.style.display = "block";
     }, duration);
+
+    setTimeout(
+        () => {
+            notification.style.display = "none";
+        },
+        duration + duration / 2
+    );
 }
 
 export function showBannerTemporarily(duration) {
@@ -383,4 +397,13 @@ export function growBanner() {
             clearInterval(interval);
         }
     }, intervalTime);
+}
+
+export function showAchievement(projects) {
+    for (let i = 0; i < projects.length; i++) {
+        const icon = document.getElementById(projects[i].name);
+        if (projects[i].discovered === true) {
+            icon.style.display = "block";
+        }
+    }
 }

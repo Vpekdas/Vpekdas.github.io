@@ -165,6 +165,68 @@ body {
     overflow: hidden;
 }
 
+#iconContainer {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.icon {
+    width: 70px;
+    height: 70px;
+    background-color: transparent;
+    display: none;
+}
+
+.icon img {
+    position: relative;
+    transform: scale(0.5);
+    transform-origin: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.5);
+    pointer-events: none;
+    animation: fadeIn 2s ease-out forwards;
+}
+
+.icon:hover img {
+    transform: translate(-50%, -50%) scale(0.55);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.tooltip {
+    width: auto;
+    background-color: #ffffff;
+    color: #333333;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 16px;
+    position: absolute;
+    z-index: 1;
+    top: 0%;
+    right: 0%;
+    margin-right: 10px;
+    opacity: 0;
+    transition:
+        opacity 0.3s,
+        transform 0.3s ease;
+    transform: translateY(-50%);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.icon:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(-130%);
+}
+
 @keyframes slideInFromBottom {
     0% {
         transform: translateY(100%);
