@@ -61,6 +61,7 @@ k.scene("main", async () => {
         k.body(),
         k.anchor("center"),
         k.pos(),
+        k.z(1),
         k.scale(SCALE_FACTOR),
         {
             speed: PLAYER_SPEED,
@@ -73,13 +74,21 @@ k.scene("main", async () => {
     ]);
 
     for (let i = 0; i < 3; i++) {
-        createTile(k, "tiles", 2, 114 - 32 * i, 151);
-        createTile(k, "tiles", 23, 114 - 32 * i, 183);
+        // createTile(k, "tiles", 2, 114 - 32 * i, 151);
+        // createTile(k, "tiles", 23, 114 - 32 * i, 183);
     }
 
+    // createTile(k, "tiles", 2, 114 - 32 * 0, 151, 2);
+    createTile(k, "tiles", 2, 114 - 32 * 1, 151);
+    createTile(k, "tiles", 2, 114 - 32 * 2, 151);
+
+    createTile(k, "tiles", 23, 114 - 32 * 1, 183);
+    createTile(k, "tiles", 23, 114 - 32 * 2, 183);
+
+	// DOOR
     for (let i = 0; i < 3; i++) {
-        createTile(k, "tiles", 153 + i, 48 + 32 * i, 150);
-        createTile(k, "tiles", 174 + i, 48 + 32 * i, 182);
+        createTile(k, "tiles", 153 + i, 48 + 6 + 32 * i, 150, 3);
+        createTile(k, "tiles", 174 + i, 48 + + 6+ 32 * i, 182, 0);
     }
 
     for (const layer of layers) {

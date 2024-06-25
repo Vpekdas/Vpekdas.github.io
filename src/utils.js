@@ -164,11 +164,12 @@ export function loadAllResources(k) {
     });
 }
 
-export function createTile(k, tiles, frame, x, y) {
+export function createTile(k, tiles, frame, x, y, z) {
     const originalSprite = k.add([
         k.sprite(tiles, { frame }),
         k.pos(x * SCALE_FACTOR, y * SCALE_FACTOR),
         k.scale(SCALE_FACTOR),
+        k.z(z),
     ]);
 
     return originalSprite;
