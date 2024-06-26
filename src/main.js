@@ -472,6 +472,8 @@ k.scene("main", async () => {
 
 k.go("main");
 
+// TODO: You can adapt the font size using https://stackoverflow.com/questions/72502079/how-can-i-check-if-the-device-which-is-using-my-website-is-a-mobile-user-or-no
+// TODO: Implement a key pressed feature. when it s pressed. it show a menu with all file.
 // TODO: Implement achievement system using client-side storage (localStorage) to track and display unlocked achievements.
 // TODO: Develop progress tracking feature to monitor which projects or sections the visitor has interacted with.
 // TODO: Integrate social sharing options for achievements or progress milestones.

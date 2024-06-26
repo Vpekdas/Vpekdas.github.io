@@ -74,7 +74,7 @@ body {
     transform: translate(-50%, 50%);
     background: #ddd;
     height: 30px;
-    width: 1000px;
+    width: 90%;
     border-radius: 20px;
     overflow: hidden;
 }
