@@ -1,5 +1,5 @@
 // prettier-ignore
-import { SCALE_FACTOR, OFFSET_X, OFFSET_Y} from "./constants.js";
+import { SCALE_FACTOR, OFFSET_X, OFFSET_Y, PROJECT_DESCRIPTIONS} from "./constants.js";
 
 export function displayDialogue(text, onDisplayEnd) {
     const dialogueUI = document.getElementById("textbox-container");
@@ -28,8 +28,12 @@ export function displayDialogue(text, onDisplayEnd) {
         clearInterval(intervalRef);
         closeBtn.removeEventListener("click", onCloseClick);
     }
-
     closeBtn.addEventListener("click", onCloseClick);
+}
+
+export function closeDialogue() {
+    const dialogueUI = document.getElementById("textbox-container");
+    dialogueUI.style.display = "none";
 }
 
 export function setCamScale(k) {
@@ -160,11 +164,12 @@ export function loadAllResources(k) {
     });
 }
 
-export function createTile(k, tiles, frame, x, y) {
+export function createTile(k, tiles, frame, x, y, z) {
     const originalSprite = k.add([
         k.sprite(tiles, { frame }),
         k.pos(x * SCALE_FACTOR, y * SCALE_FACTOR),
         k.scale(SCALE_FACTOR),
+        k.z(z),
     ]);
 
     return originalSprite;
@@ -213,26 +218,18 @@ export function createBackground(k, backgroundNumber, spriteName) {
 
     for (let i = 0; i < backgroundNumber; i++) {
         backgroundArray.push(
-            k.add([
-                k.sprite(spriteName),
-                k.pos(i * spriteWidth, 0),
-                k.scale(SCALE_FACTOR),
-            ])
+            k.add([k.sprite(spriteName), k.pos(i * spriteWidth, 0), k.scale(SCALE_FACTOR)])
         );
     }
     destroy(tempSprite);
     return backgroundArray;
 }
-// prettier-ignore
 export function updateBackground(k, backgroundLayer, speed, camY, playerX, prevX) {
-	let deltaX = playerX - prevX;
+    let deltaX = playerX - prevX;
     for (let i = 0; i < backgroundLayer.length; i++) {
         if (speed === 0) {
             backgroundLayer[i].pos.x -= SCALE_FACTOR;
-            if (
-                backgroundLayer[i].pos.x <=
-                i * backgroundLayer[i].width - k.width() * SCALE_FACTOR
-            )
+            if (backgroundLayer[i].pos.x <= i * backgroundLayer[i].width - k.width() * SCALE_FACTOR)
                 backgroundLayer[i].pos.x = i * backgroundLayer[i].width * 2;
         } else {
             backgroundLayer[i].pos.x = backgroundLayer[i].pos.x + deltaX * speed;
@@ -268,4 +265,131 @@ export function getIndicatorOffset(boundary, indicatorScale, offset) {
             direction: "bot_right",
         },
     ];
+}
+
+export function countAchievemenDiscovered(projects) {
+    let achievement = 0;
+
+    for (let i = 0; i < projects.length; i++) {
+        if (projects[i].discovered === true) {
+            achievement++;
+        }
+    }
+    return achievement;
+}
+
+export function addProject(boundary, projects) {
+    projects.push({
+        name: boundary.name,
+        discovered: false,
+    });
+}
+
+export function setProjectAsDiscovered(projects, boundary) {
+    for (let i = 0; i < projects.length; i++) {
+        if (boundary.name === projects[i].name && projects[i].discovered != true) {
+            projects[i].discovered = true;
+        }
+    }
+}
+
+export function updateProgress(projects, discovered) {
+    const elem = document.querySelector(".progress-done");
+    const achievementDiscovered = countAchievemenDiscovered(projects);
+    const achievementTotal = projects.length;
+    const interval = 100;
+    let currentWidth = (discovered / achievementTotal) * 100;
+    function frame() {
+        let targetWidth = (achievementDiscovered / achievementTotal) * 100;
+        {
+            if (currentWidth < targetWidth) {
+                currentWidth += 1;
+                if (currentWidth > 100) {
+                    currentWidth = 100;
+                }
+                elem.style.width = `${currentWidth.toFixed(0)}%`;
+                elem.innerHTML = `${currentWidth.toFixed(0)}%`;
+            }
+        }
+    }
+    setInterval(frame, interval);
+}
+
+export function showAchievementIcon(duration, path) {
+    const icon = document.querySelector(".achievement-icon");
+    icon.src = path;
+    icon.style.display = "none";
+    setTimeout(() => {
+        icon.style.display = "block";
+    }, duration);
+}
+
+export function showAchievementTitle(duration, text) {
+    const title = document.querySelector(".achievement-title");
+    title.style.display = "none";
+    title.textContent = text;
+    setTimeout(() => {
+        title.style.display = "block";
+    }, duration);
+}
+
+export function showAchievementDescription(duration, text) {
+    const description = document.querySelector(".achievement-description");
+    description.style.display = "none";
+    description.textContent = text;
+    setTimeout(() => {
+        description.style.display = "block";
+    }, duration);
+}
+
+export function showAchievementNotification(duration) {
+    const notification = document.querySelector(".achievement-notification");
+    notification.textContent = "Achievement Unlocked !";
+    notification.style.display = "none";
+
+    setTimeout(() => {
+        notification.style.display = "block";
+    }, duration);
+
+    setTimeout(
+        () => {
+            notification.style.display = "none";
+        },
+        duration + duration / 2
+    );
+}
+
+export function showBannerTemporarily(duration) {
+    const banner = document.querySelector(".achievement-banner");
+    banner.style.display = "block";
+
+    setTimeout(() => {
+        banner.style.display = "none";
+    }, duration);
+}
+
+export function growBanner() {
+    const banner = document.querySelector(".achievement-banner");
+    let currentWidth = 0;
+    const maxWidth = 400;
+    const increment = 5;
+    const intervalTime = 20;
+
+    const interval = setInterval(() => {
+        currentWidth += increment;
+        banner.style.width = `${currentWidth}px`;
+
+        if (currentWidth >= maxWidth) {
+            clearInterval(interval);
+        }
+    }, intervalTime);
+}
+
+export function showAchievement(projects) {
+    for (let i = 0; i < projects.length; i++) {
+        const icon = document.getElementById(projects[i].name);
+        if (projects[i].discovered === true) {
+            icon.style.display = "block";
+        }
+    }
 }

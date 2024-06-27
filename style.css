@@ -1,0 +1,264 @@
+@font-face {
+    font-family: monogram;
+    src: url(ThaleahFat.ttf);
+}
+
+body {
+    font-family: monogram, monospace;
+    font-size: 2rem;
+    overflow: hidden;
+}
+
+#app {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+#textbox {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    bottom: 2vh;
+    min-height: 10vh;
+    background: white;
+    border-radius: 3px;
+    outline-style: solid;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    word-spacing: 0.2rem;
+    filter: drop-shadow(0 0 0.75rem rgb(112, 112, 112));
+}
+
+.ui-text {
+    margin: 0;
+    user-select: none;
+}
+
+.ui-close-btn {
+    font-family: monogram, monospace;
+    border-style: none;
+    border-radius: 3px;
+    padding: 1rem;
+    font-size: inherit;
+}
+
+.btn-container {
+    align-self: flex-end;
+    margin-top: 1rem;
+}
+
+.note {
+    position: absolute;
+    left: 5%;
+    top: 1vh;
+    display: flex;
+    flex-direction: column;
+    color: rgb(238, 238, 238);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.progress {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    background: #ddd;
+    height: 30px;
+    width: 90%;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.progress-done {
+    font-family: monogram, monospace;
+    font-weight: bolder;
+    color: #fff;
+    height: 100%;
+    background: linear-gradient(
+        to right,
+        #06beb6 40%,
+        #48b1bf 50%,
+        #06beb6 60%
+    );
+    background-size: 200% 100%;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 0;
+    box-shadow:
+        0 0 3px -5px rgba(253, 2, 140, 0.5),
+        0 3px 150px rgba(253, 2, 140, 0.3);
+    transition: width 0.5s ease;
+    overflow: hidden;
+    animation: shimmer 2s infinite linear;
+    position: relative;
+}
+
+.achievement-icon {
+    width: 75px;
+    height: auto;
+    animation: fadeIn 2s ease-out forwards;
+}
+
+.achievement-banner {
+    display: none;
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    background: #ddd;
+    height: 80px;
+    width: 450px;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.achievement-title {
+    position: absolute;
+    text-align: center;
+    top: 0px;
+    left: 20%;
+    display: none;
+    color: #ffffff;
+    background-image: linear-gradient(to right, #5c84d9, #6e85b7);
+    padding: 5px 10px;
+    font-family: "Roboto", sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    animation: fadeIn 2s ease-out forwards;
+}
+
+.achievement-description {
+    position: absolute;
+    top: 40%;
+    left: 20%;
+    display: none;
+    color: #333;
+    font-size: 20px;
+    text-align: left;
+    line-height: 15px;
+    animation: slideInFromBottom 0.5s ease-out forwards;
+}
+
+.achievement-notification {
+    display: none;
+    position: absolute;
+    text-align: left;
+    top: 40%;
+    left: 12%;
+    color: #333;
+    font-size: 30px;
+    text-align: left;
+    line-height: 15px;
+    animation: slideInFromBottom 0.5s ease-out forwards;
+    overflow: hidden;
+}
+
+#iconContainer {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.icon {
+    width: 70px;
+    height: 70px;
+    background-color: transparent;
+    display: none;
+}
+
+.icon img {
+    position: relative;
+    transform: scale(0.5);
+    transform-origin: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.5);
+    pointer-events: none;
+    animation: fadeIn 2s ease-out forwards;
+}
+
+.icon:hover img {
+    transform: translate(-50%, -50%) scale(0.55);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.tooltip {
+    width: auto;
+    background-color: #ffffff;
+    color: #333333;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 16px;
+    position: absolute;
+    z-index: 1;
+    top: 0%;
+    right: 0%;
+    margin-right: 10px;
+    opacity: 0;
+    transition:
+        opacity 0.3s,
+        transform 0.3s ease;
+    transform: translateY(-50%);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.icon:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(-130%);
+}
+
+@keyframes slideInFromBottom {
+    0% {
+        transform: translateY(100%);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes scrollOut {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-100%);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}

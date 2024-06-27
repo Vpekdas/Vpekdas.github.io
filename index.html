@@ -1,94 +1,72 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
-  </head>
-  <body>
-	<style>
-
-		@font-face {
-			font-family: monogram;
-			src: url(ThaleahFat.ttf)
-		}
-
-		body {
-			font-family: monogram, monospace;
-			font-size: 2rem;
-			overflow: hidden;
-		}
-
-		#app {
-			width: 100%;
-			height: 100%;
-			position: relative;
-		}
-
-		#textbox {
-			position: absolute;
-			left: 10%;
-			right: 10%;
-			bottom: 2vh;
-			min-height: 10vh;
-			background: white;
-			border-radius: 3px;
-			outline-style: solid;
-			padding: 1rem;
-			display: flex;
-			flex-direction: column;
-			flex-wrap: wrap;
-			justify-content: flex-start;
-			align-items: flex-start;
-			word-spacing: 0.2rem;
-			filter: drop-shadow(0 0 0.75rem rgb(112, 112, 112));
-		}
-
-		.ui-text {
-			margin: 0;
-			user-select: none;
-		}
-
-		.ui-close-btn {
-			font-family: monogram, monospace;
-			border-style: none;
-			border-radius: 3px;
-			padding: 1rem;
-			font-size: inherit;
-		}
-
-		.btn-container {
-			align-self: flex-end;
-			margin-top: 1rem;
-		}
-
-		.note {
-			position: absolute;
-			left: 5%;
-			top: 1vh;
-			display: flex;
-			flex-direction: column;
-			color: rgb(238, 238, 238);
-		}
-
-	</style>
-    <div id="app">
-		<div>
-		  <p class="note">Tap/Click around to move</p>
-		  <div id="textbox-container" style="display: none">
-			<div id="textbox">
-			  <p id="dialogue" class="ui-text"></p>
-			  <div class="btn-container">
-				<button id="close" class="ui-close-btn">Close</button>
-			  </div>
-			</div>
-		  </div>
-		</div>
-		<canvas id="game"></canvas>
-	  </div>
-	<script type="module" src="src/main.js"></script>
-	</body>
-	</html>
-
-	
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Vite App</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div id="app">
+            <div>
+                <p class="note">Tap/Click around to move</p>
+                <div id="textbox-container" style="display: none">
+                    <div id="textbox">
+                        <p id="dialogue" class="ui-text"></p>
+                        <div class="btn-container">
+                            <button id="close" class="ui-close-btn">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <canvas id="game"></canvas>
+        </div>
+        <div class="progress">
+            <div class="progress-done"></div>
+        </div>
+        <div id="achievement-banner" class="achievement-banner">
+            <img src="" class="achievement-icon" />
+            <p class="achievement-title"></p>
+            <p class="achievement-description"></p>
+            <p class="achievement-notification"></p>
+        </div>
+        <div id="iconContainer">
+            <div class="icon" id="libft">
+                <img src="/achievement/libft.png" />
+                <span class="tooltip">Libft</span>
+            </div>
+            <div class="icon" id="ft_printf">
+                <img src="/achievement/ft_printf.png" />
+                <span class="tooltip">ft_printf</span>
+            </div>
+            <div class="icon" id="get_next_line">
+                <img src="/achievement/get_next_line.png" />
+                <span class="tooltip">get_next_line</span>
+            </div>
+            <div class="icon" id="push_swap">
+                <img src="/achievement/push_swap.png" />
+                <span class="tooltip">push_swap</span>
+            </div>
+            <div class="icon" id="pipex">
+                <img src="/achievement/pipex.png" />
+                <span class="tooltip">pipex</span>
+            </div>
+            <div class="icon" id="so_long">
+                <img src="/achievement/so_long.png" />
+                <span class="tooltip">so_long</span>
+            </div>
+            <div class="icon" id="philosophers">
+                <img src="/achievement/philosophers.png" />
+                <span class="tooltip">philosophers</span>
+            </div>
+            <div class="icon" id="minishell">
+                <img src="/achievement/minishell.png" />
+                <span class="tooltip">minishell</span>
+            </div>
+        </div>
+        <script type="module" src="src/main.js"></script>
+    </body>
+</html>
