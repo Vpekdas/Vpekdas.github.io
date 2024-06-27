@@ -87,6 +87,26 @@ export const HOVER_EVENTS = [
         textX: 520,
         textY: 260,
     },
+    {
+        name: "philosophers",
+        bubbleX: 350,
+        bubbleY: 150,
+        bubbleScale: 0.7,
+        textSize: 26,
+        textWidth: 250,
+        textX: 400,
+        textY: 160,
+    },
+    {
+        name: "minishell",
+        bubbleX: 350,
+        bubbleY: 210,
+        bubbleScale: 0.7,
+        textSize: 26,
+        textWidth: 250,
+        textX: 420,
+        textY: 220,
+    },
 ];
 
 export const PROJECT_DESCRIPTIONS = {
@@ -125,5 +145,17 @@ export const PROJECT_DESCRIPTIONS = {
         story: `Deep within the cybernetic core, you encountered <a href="https://github.com/Vpekdas/push_swap" target="_blank">push_swap</a>, a challenge of logic and efficiency. Tasked with sorting data in the least number of moves, this mission required you to delve into the realm of algorithms and data structures, pushing you to your limits.`,
         achievement: `Elevated computational efficiency to new heights.`,
         icon: `/achievement/push_swap.png`,
+    },
+    philosophers: {
+        title: `The Enlightened Thinker`,
+        story: `Amidst the digital expanse, you stumbled upon <a href="https://github.com/Vpekdas/philosophers" target="_blank">philosophers</a>, a quest for balance and resource management. In this challenge, you were tasked with ensuring the survival of philosophers by solving the classic dining philosophers problem without deadlock. It was a journey through the intricacies of concurrency and synchronization, testing your ability to maintain harmony in a system of competing needs.`,
+        achievement: `Mastered the art of concurrency, ensuring no philosopher was left starving.`,
+        icon: `/achievement/philosophers.png`,
+    },
+    minishell: {
+        title: `The Shell Sculptor`,
+        story: `Venturing deeper into the core of the digital realm, you uncovered <a href="https://github.com/Vpekdas/minishell" target="_blank">minishell</a>, a challenge to create your own command interpreter. This endeavor demanded a profound understanding of the Unix shell's workings, pushing you to replicate its functionality and grace under your command.`,
+        achievement: `Crafted a fully functional shell, mastering command interpretation and process management.`,
+        icon: `/achievement/minishell.png`,
     },
 };

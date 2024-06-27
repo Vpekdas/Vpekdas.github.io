@@ -218,36 +218,21 @@ export function createBackground(k, backgroundNumber, spriteName) {
 
     for (let i = 0; i < backgroundNumber; i++) {
         backgroundArray.push(
-            k.add([
-                k.sprite(spriteName),
-                k.pos(i * spriteWidth, 0),
-                k.scale(SCALE_FACTOR),
-            ])
+            k.add([k.sprite(spriteName), k.pos(i * spriteWidth, 0), k.scale(SCALE_FACTOR)])
         );
     }
     destroy(tempSprite);
     return backgroundArray;
 }
-export function updateBackground(
-    k,
-    backgroundLayer,
-    speed,
-    camY,
-    playerX,
-    prevX
-) {
+export function updateBackground(k, backgroundLayer, speed, camY, playerX, prevX) {
     let deltaX = playerX - prevX;
     for (let i = 0; i < backgroundLayer.length; i++) {
         if (speed === 0) {
             backgroundLayer[i].pos.x -= SCALE_FACTOR;
-            if (
-                backgroundLayer[i].pos.x <=
-                i * backgroundLayer[i].width - k.width() * SCALE_FACTOR
-            )
+            if (backgroundLayer[i].pos.x <= i * backgroundLayer[i].width - k.width() * SCALE_FACTOR)
                 backgroundLayer[i].pos.x = i * backgroundLayer[i].width * 2;
         } else {
-            backgroundLayer[i].pos.x =
-                backgroundLayer[i].pos.x + deltaX * speed;
+            backgroundLayer[i].pos.x = backgroundLayer[i].pos.x + deltaX * speed;
             backgroundLayer[i].pos.y = camY;
         }
     }
@@ -302,10 +287,7 @@ export function addProject(boundary, projects) {
 
 export function setProjectAsDiscovered(projects, boundary) {
     for (let i = 0; i < projects.length; i++) {
-        if (
-            boundary.name === projects[i].name &&
-            projects[i].discovered != true
-        ) {
+        if (boundary.name === projects[i].name && projects[i].discovered != true) {
             projects[i].discovered = true;
         }
     }
@@ -322,6 +304,9 @@ export function updateProgress(projects, discovered) {
         {
             if (currentWidth < targetWidth) {
                 currentWidth += 1;
+                if (currentWidth > 100) {
+                    currentWidth = 100;
+                }
                 elem.style.width = `${currentWidth.toFixed(0)}%`;
                 elem.innerHTML = `${currentWidth.toFixed(0)}%`;
             }

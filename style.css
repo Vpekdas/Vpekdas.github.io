@@ -106,7 +106,7 @@ body {
 }
 
 .achievement-icon {
-    width: 70px;
+    width: 75px;
     height: auto;
     animation: fadeIn 2s ease-out forwards;
 }
@@ -118,7 +118,7 @@ body {
     left: 50%;
     transform: translate(-50%, 50%);
     background: #ddd;
-    height: 70px;
+    height: 80px;
     width: 450px;
     border-radius: 50px;
     overflow: hidden;
@@ -141,7 +141,7 @@ body {
 
 .achievement-description {
     position: absolute;
-    top: 50%;
+    top: 40%;
     left: 20%;
     display: none;
     color: #333;
