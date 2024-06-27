@@ -1,8 +1,41 @@
 import { k } from "./KaboomCtx.js";
-// prettier-ignore
-import { BACKGROUND_COUNT, OFFSET_X, OFFSET_Y, PLAYER_SPEED, SCALE_FACTOR, DEF_SCALE_IND, INDICATOR_OFFSET, FURNITURES, BOOKS, HOVER_EVENTS, PROJECT_DESCRIPTIONS,} from "./constants.js";
-// prettier-ignore
-import { createHoverEvents, createInteractable, displayDialogue, loadAllResources, setCamScale, createIndicator, createTile, createBackground, updateBackground, getIndicatorOffset,} from "./utils.js";
+import {
+    BACKGROUND_COUNT,
+    OFFSET_X,
+    OFFSET_Y,
+    PLAYER_SPEED,
+    SCALE_FACTOR,
+    DEF_SCALE_IND,
+    INDICATOR_OFFSET,
+    FURNITURES,
+    BOOKS,
+    HOVER_EVENTS,
+    PROJECT_DESCRIPTIONS,
+} from "./constants.js";
+import {
+    createHoverEvents,
+    createInteractable,
+    displayDialogue,
+    loadAllResources,
+    setCamScale,
+    createIndicator,
+    createTile,
+    createBackground,
+    updateBackground,
+    getIndicatorOffset,
+    updateProgress,
+    addProject,
+    setProjectAsDiscovered,
+    countAchievemenDiscovered,
+    growBanner,
+    showBannerTemporarily,
+    showAchievementTitle,
+    showAchievementDescription,
+    showAchievementIcon,
+    showAchievementNotification,
+    closeDialogue,
+    showAchievement,
+} from "./utils.js";
 
 loadAllResources(k);
 
@@ -13,7 +46,8 @@ k.scene("main", async () => {
     const layers = mapData.layers;
     const interactables = [];
     const backgrounds = [];
-
+    const projects = [];
+    let animationBanner = false;
     for (let i = 0; i < BACKGROUND_COUNT; i++)
         backgrounds.push(createBackground(k, 4, `background_${i + 1}`));
 
@@ -27,6 +61,7 @@ k.scene("main", async () => {
         k.body(),
         k.anchor("center"),
         k.pos(),
+        k.z(1),
         k.scale(SCALE_FACTOR),
         {
             speed: PLAYER_SPEED,
@@ -38,14 +73,16 @@ k.scene("main", async () => {
         "player",
     ]);
 
-    for (let i = 0; i < 3; i++) {
-        createTile(k, "tiles", 2, 114 - 32 * i, 151);
-        createTile(k, "tiles", 23, 114 - 32 * i, 183);
-    }
+    createTile(k, "tiles", 2, 114 - 32 * 1, 151);
+    createTile(k, "tiles", 2, 114 - 32 * 2, 151);
 
+    createTile(k, "tiles", 23, 114 - 32 * 1, 183);
+    createTile(k, "tiles", 23, 114 - 32 * 2, 183);
+
+    // DOOR
     for (let i = 0; i < 3; i++) {
-        createTile(k, "tiles", 153 + i, 48 + 32 * i, 150);
-        createTile(k, "tiles", 174 + i, 48 + 32 * i, 182);
+        createTile(k, "tiles", 153 + i, 48 + 6 + 32 * i, 150, 3);
+        createTile(k, "tiles", 174 + i, 48 + +6 + 32 * i, 182, 0);
     }
 
     for (const layer of layers) {
@@ -53,11 +90,7 @@ k.scene("main", async () => {
             for (const boundary of layer.objects) {
                 map.add([
                     k.area({
-                        shape: new k.Rect(
-                            k.vec2(0, 0),
-                            boundary.width,
-                            boundary.height
-                        ),
+                        shape: new k.Rect(k.vec2(0, 0), boundary.width, boundary.height),
                     }),
                     k.body({ isStatic: true }),
                     k.pos(boundary.x + OFFSET_X, boundary.y + OFFSET_Y),
@@ -72,20 +105,12 @@ k.scene("main", async () => {
                             INDICATOR_OFFSET
                         );
 
-                        soLongIndicatorOffsets.forEach(
-                            ({ dx, dy, direction }) => {
-                                createIndicator(
-                                    boundary.x + dx,
-                                    boundary.y + dy,
-                                    direction,
-                                    k
-                                );
-                            }
-                        );
+                        soLongIndicatorOffsets.forEach(({ dx, dy, direction }) => {
+                            createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
+                        });
 
-                        interactables.push(
-                            createInteractable(k, "tiles", boundary, 82, 0, 0)
-                        );
+                        interactables.push(createInteractable(k, "tiles", boundary, 82, 0, 0));
+                        addProject(boundary, projects);
                     }
                     if (boundary.name === "ft_printf") {
                         const ftPrintfIndicatorOffsets = getIndicatorOffset(
@@ -94,36 +119,16 @@ k.scene("main", async () => {
                             INDICATOR_OFFSET
                         );
 
-                        ftPrintfIndicatorOffsets.forEach(
-                            ({ dx, dy, direction }) => {
-                                createIndicator(
-                                    boundary.x + dx,
-                                    boundary.y + dy,
-                                    direction,
-                                    k
-                                );
-                            }
-                        );
+                        ftPrintfIndicatorOffsets.forEach(({ dx, dy, direction }) => {
+                            createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
+                        });
 
-                        const interactable = createInteractable(
-                            k,
-                            "tiles",
-                            boundary,
-                            13,
-                            0,
-                            0
-                        );
-                        const interactable2 = createInteractable(
-                            k,
-                            "tiles",
-                            boundary,
-                            14,
-                            32,
-                            0
-                        );
+                        const interactable = createInteractable(k, "tiles", boundary, 13, 0, 0);
+                        const interactable2 = createInteractable(k, "tiles", boundary, 14, 32, 0);
 
                         interactables.push(interactable);
                         interactables.push(interactable2);
+                        addProject(boundary, projects);
                     }
                     if (boundary.name == "get_next_line") {
                         const getNextLineIndicatorOffsets = getIndicatorOffset(
@@ -132,101 +137,65 @@ k.scene("main", async () => {
                             INDICATOR_OFFSET
                         );
 
-                        getNextLineIndicatorOffsets.forEach(
-                            ({ dx, dy, direction }) => {
-                                createIndicator(
-                                    boundary.x + dx,
-                                    boundary.y + dy,
-                                    direction,
-                                    k
-                                );
-                            }
-                        );
+                        getNextLineIndicatorOffsets.forEach(({ dx, dy, direction }) => {
+                            createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
+                        });
 
-                        interactables.push(
-                            createInteractable(k, "tiles", boundary, 124, 0, 0)
-                        );
+                        interactables.push(createInteractable(k, "tiles", boundary, 124, 0, 0));
+                        addProject(boundary, projects);
                     }
                     if (boundary.name == "pipex") {
-                        const modified_DEF_SCALE_IND = DEF_SCALE_IND.map(
-                            (indicator) => {
-                                if (
-                                    indicator.name === "topLeft" ||
-                                    indicator.name === "topRight"
-                                ) {
-                                    return {
-                                        ...indicator,
-                                        y: indicator.y * 2,
-                                    };
-                                }
-                                return indicator;
+                        const modified_DEF_SCALE_IND = DEF_SCALE_IND.map((indicator) => {
+                            if (indicator.name === "topLeft" || indicator.name === "topRight") {
+                                return {
+                                    ...indicator,
+                                    y: indicator.y * 2,
+                                };
                             }
-                        );
+                            return indicator;
+                        });
                         const pipexIndicatorOffsets = getIndicatorOffset(
                             boundary,
                             modified_DEF_SCALE_IND,
                             INDICATOR_OFFSET
                         );
 
-                        pipexIndicatorOffsets.forEach(
-                            ({ dx, dy, direction }) => {
-                                createIndicator(
-                                    boundary.x + dx,
-                                    boundary.y + dy,
-                                    direction,
-                                    k
-                                );
-                            }
-                        );
+                        pipexIndicatorOffsets.forEach(({ dx, dy, direction }) => {
+                            createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
+                        });
 
-                        interactables.push(
-                            createInteractable(k, "pipe", boundary, 0, 0, -8)
-                        );
+                        interactables.push(createInteractable(k, "pipe", boundary, 0, 0, -8));
+                        addProject(boundary, projects);
                     }
                     if (boundary.name == "libft") {
-                        const modified_DEF_SCALE_IND = DEF_SCALE_IND.map(
-                            (indicator) => {
-                                if (
-                                    indicator.name === "bottomLeft" ||
-                                    indicator.name === "bottomRight"
-                                ) {
-                                    return {
-                                        ...indicator,
-                                        y: indicator.y * -0.5,
-                                    };
-                                }
-                                return indicator;
+                        const modified_DEF_SCALE_IND = DEF_SCALE_IND.map((indicator) => {
+                            if (
+                                indicator.name === "bottomLeft" ||
+                                indicator.name === "bottomRight"
+                            ) {
+                                return {
+                                    ...indicator,
+                                    y: indicator.y * -0.5,
+                                };
                             }
-                        );
+                            return indicator;
+                        });
                         const libftIndicatorOffsets = getIndicatorOffset(
                             boundary,
                             modified_DEF_SCALE_IND,
                             INDICATOR_OFFSET
                         );
 
-                        libftIndicatorOffsets.forEach(
-                            ({ dx, dy, direction }) => {
-                                createIndicator(
-                                    boundary.x + dx,
-                                    boundary.y + dy,
-                                    direction,
-                                    k
-                                );
-                            }
-                        );
+                        libftIndicatorOffsets.forEach(({ dx, dy, direction }) => {
+                            createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
+                        });
 
                         FURNITURES.forEach(({ frame, x, y }) => {
                             interactables.push(
-                                createInteractable(
-                                    k,
-                                    "furniture",
-                                    boundary,
-                                    frame,
-                                    x,
-                                    y
-                                )
+                                createInteractable(k, "furniture", boundary, frame, x, y)
                             );
                         });
+                        addProject(boundary, projects);
                     }
                     if (boundary.name === "push_swap") {
                         const pushSwapIndicatorOffsets = getIndicatorOffset(
@@ -235,22 +204,45 @@ k.scene("main", async () => {
                             INDICATOR_OFFSET
                         );
 
-                        pushSwapIndicatorOffsets.forEach(
-                            ({ dx, dy, direction }) => {
-                                createIndicator(
-                                    boundary.x + dx,
-                                    boundary.y + dy,
-                                    direction,
-                                    k
-                                );
-                            }
-                        );
+                        pushSwapIndicatorOffsets.forEach(({ dx, dy, direction }) => {
+                            createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
+                        });
 
                         BOOKS.forEach(({ type, x, y }) => {
-                            interactables.push(
-                                createInteractable(k, type, boundary, 0, x, y)
-                            );
+                            interactables.push(createInteractable(k, type, boundary, 0, x, y));
                         });
+                        addProject(boundary, projects);
+                    }
+                    if (boundary.name === "philosophers") {
+                        const PhilosophersIndicatorOffsets = getIndicatorOffset(
+                            boundary,
+                            DEF_SCALE_IND,
+                            INDICATOR_OFFSET
+                        );
+                        PhilosophersIndicatorOffsets.forEach(({ dx, dy, direction }) => {
+                            createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
+                        });
+                        interactables.push(createInteractable(k, "tiles", boundary, 159, -10, -13));
+                        interactables.push(createInteractable(k, "tiles", boundary, 160, 22, -13));
+                        interactables.push(createInteractable(k, "tiles", boundary, 180, -10, 19));
+                        interactables.push(createInteractable(k, "tiles", boundary, 181, 22, 19));
+                        createInteractable(k, "tiles", boundary, 163, -4, 0);
+                        createInteractable(k, "tiles", boundary, 166, 4, -12);
+                        addProject(boundary, projects);
+                    }
+                    if (boundary.name === "minishell") {
+                        const minishellIndicatorOffsets = getIndicatorOffset(
+                            boundary,
+                            DEF_SCALE_IND,
+                            INDICATOR_OFFSET
+                        );
+                        minishellIndicatorOffsets.forEach(({ dx, dy, direction }) => {
+                            createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
+                        });
+                        interactables.push(createInteractable(k, "tiles", boundary, 48, -18, 1));
+                        interactables.push(createInteractable(k, "tiles", boundary, 49, 14, 1));
+                        interactables.push(createInteractable(k, "tiles", boundary, 50, 46, 1));
+                        addProject(boundary, projects);
                     }
 
                     player.onCollide(boundary.name, () => {
@@ -259,6 +251,33 @@ k.scene("main", async () => {
                             PROJECT_DESCRIPTIONS[boundary.name].story,
                             () => (player.isInDialogue = false)
                         );
+                        if (animationBanner === false) {
+                            const discovered = countAchievemenDiscovered(projects);
+                            const projectIndex = projects.findIndex(
+                                (project) => project.name === boundary.name
+                            );
+                            if (projectIndex != -1) {
+                                if (projects[projectIndex].discovered) return;
+                            }
+                            setProjectAsDiscovered(projects, boundary);
+                            showAchievement(projects);
+                            showBannerTemporarily(7000);
+                            showAchievementNotification(2000);
+                            showAchievementIcon(3000, PROJECT_DESCRIPTIONS[boundary.name].icon);
+                            showAchievementTitle(3000, PROJECT_DESCRIPTIONS[boundary.name].title);
+                            showAchievementDescription(
+                                3000,
+                                PROJECT_DESCRIPTIONS[boundary.name].achievement
+                            );
+                            growBanner();
+                            if (discovered <= projects.length) {
+                                updateProgress(projects, discovered);
+                            }
+                            animationBanner = true;
+                            setTimeout(() => {
+                                animationBanner = false;
+                            }, 7000);
+                        }
                     });
                 }
             }
@@ -278,6 +297,8 @@ k.scene("main", async () => {
                 }
             }
         }
+
+        window.addEventListener("DOMContentLoaded", updateProgress);
     }
 
     setCamScale(k);
@@ -323,8 +344,12 @@ k.scene("main", async () => {
     });
 
     k.onMouseDown((mouseBtn) => {
-        if (mouseBtn !== "left" || player.isInDialogue) {
+        if (mouseBtn !== "left") {
             return;
+        }
+        if (isMousePressed(mouseBtn) && player.isInDialogue) {
+            player.isInDialogue = false;
+            closeDialogue();
         }
 
         player.prevPosX = player.pos.x;
@@ -336,11 +361,7 @@ k.scene("main", async () => {
         const lowerBound = 50;
         const upperBound = 125;
 
-        if (
-            mouseAngle > lowerBound &&
-            mouseAngle < upperBound &&
-            player.curAnim() !== "walk-up"
-        ) {
+        if (mouseAngle > lowerBound && mouseAngle < upperBound && player.curAnim() !== "walk-up") {
             player.play("walk-up");
             player.direction = "up";
         }
@@ -383,9 +404,6 @@ k.scene("main", async () => {
 
 k.go("main");
 
+// TODO: You can adapt the font size using https://stackoverflow.com/questions/72502079/how-can-i-check-if-the-device-which-is-using-my-website-is-a-mobile-user-or-no
+// TODO: Implement a key pressed feature. when it s pressed. it show a menu with all file.
 // TODO: Implement achievement system using client-side storage (localStorage) to track and display unlocked achievements.
-// TODO: Develop progress tracking feature to monitor which projects or sections the visitor has interacted with.
-// TODO: Integrate social sharing options for achievements or progress milestones.
-// TODO: Add bounding boxes for walls or obstacles in the game environment to enhance interaction realism.
-// TODO: Incorporate the "Minishell" project as an interactive element within the game.
-// TODO: Integrate the "Philosopher" project, potentially as a puzzle or challenge within the game.
