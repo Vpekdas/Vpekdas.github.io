@@ -84,12 +84,7 @@ body {
     font-weight: bolder;
     color: #fff;
     height: 100%;
-    background: linear-gradient(
-        to right,
-        #06beb6 40%,
-        #48b1bf 50%,
-        #06beb6 60%
-    );
+    background: linear-gradient(to right, #06beb6 40%, #48b1bf 50%, #06beb6 60%);
     background-size: 200% 100%;
     border-radius: 20px;
     display: flex;
@@ -227,6 +222,21 @@ body {
     transform: translateY(-130%);
 }
 
+.project-index {
+    position: absolute;
+    border-style: solid;
+    top: -10%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    border-color: #06beb6;
+    background: #1b1a1a;
+    height: 60%;
+    width: 40%;
+    border-radius: 10px;
+    overflow: hidden;
+    display: none;
+}
+
 @keyframes slideInFromBottom {
     0% {
         transform: translateY(100%);
@@ -261,4 +271,40 @@ body {
     100% {
         background-position: 1000px 0;
     }
+}
+
+.transition {
+    transition: all 0.2s linear;
+}
+
+.perspective_container {
+    position: relative;
+    max-width: 500px;
+    width: 100%;
+    border-radius: 10px;
+}
+
+.menu {
+    position: relative;
+    border: solid 2px #000000;
+    border-radius: 10px;
+	height: 100%;
+	width: -30%;
+	background-color: rgb(4, 0, 255);
+}
+
+.menu > .item {
+    position: relative;
+    color: #89f8f8;
+    background-color: rgba(255, 208, 1, 0.1);
+    border-radius: 5px;
+    padding: 6%;
+    margin: 6%;
+    transform: rotateX(30deg);
+    cursor: pointer;
+}
+
+.menu > .item:hover {
+    color: #010818;
+    background: #9effff;
 }
