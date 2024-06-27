@@ -35,6 +35,8 @@ import {
     showAchievementNotification,
     closeDialogue,
     showAchievement,
+    saveToLocalStorage,
+    loadLocalStorage,
 } from "./utils.js";
 
 loadAllResources(k);
@@ -256,9 +258,11 @@ k.scene("main", async () => {
                             const projectIndex = projects.findIndex(
                                 (project) => project.name === boundary.name
                             );
+
                             if (projectIndex != -1) {
                                 if (projects[projectIndex].discovered) return;
                             }
+                            saveToLocalStorage(boundary.name);
                             setProjectAsDiscovered(projects, boundary);
                             showAchievement(projects);
                             showBannerTemporarily(7000);
@@ -300,6 +304,9 @@ k.scene("main", async () => {
 
         window.addEventListener("DOMContentLoaded", updateProgress);
     }
+
+    loadLocalStorage(projects);
+    updateProgress(projects, false);
 
     setCamScale(k);
 
@@ -406,4 +413,3 @@ k.go("main");
 
 // TODO: You can adapt the font size using https://stackoverflow.com/questions/72502079/how-can-i-check-if-the-device-which-is-using-my-website-is-a-mobile-user-or-no
 // TODO: Implement a key pressed feature. when it s pressed. it show a menu with all file.
-// TODO: Implement achievement system using client-side storage (localStorage) to track and display unlocked achievements.
