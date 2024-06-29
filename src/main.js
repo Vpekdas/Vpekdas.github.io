@@ -37,7 +37,6 @@ import {
     showAchievement,
     saveToLocalStorage,
     loadLocalStorage,
-    menuScroll,
 } from "./utils.js";
 
 loadAllResources(k);
@@ -308,6 +307,7 @@ k.scene("main", async () => {
 
     loadLocalStorage(projects);
     updateProgress(projects, false);
+    showAchievement(projects);
 
     setCamScale(k);
 
@@ -414,5 +414,4 @@ k.go("main");
 
 // TODO: You can adapt the font size using https://stackoverflow.com/questions/72502079/how-can-i-check-if-the-device-which-is-using-my-website-is-a-mobile-user-or-no
 // TODO: Implement a key pressed feature. when it s pressed. it show a menu with all file.
-
-menuScroll();
+// TODO: Fix parallax: When collision occurs, background still moving.

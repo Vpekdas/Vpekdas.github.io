@@ -405,22 +405,3 @@ export function loadLocalStorage(projects) {
         }
     }
 }
-
-export function menuScroll() {
-    const menu = document.querySelector(".perspective-container");
-
-    menu.style.height = 0;
-
-    let currentHeight = 0;
-    const maxHeight = 500;
-    const increment = 5;
-    const intervalTime = 20;
-
-    const interval = setInterval(() => {
-        currentHeight += increment;
-        menu.style.height = `${currentHeight}px`;
-        if (currentHeight >= maxHeight) {
-            clearInterval(interval);
-        }
-    }, intervalTime);
-}
