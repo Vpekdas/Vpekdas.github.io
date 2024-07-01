@@ -222,32 +222,79 @@ body {
     transform: translateY(-130%);
 }
 
-.transition {
-    transition: all 0.2s linear;
-}
-
-#hexa-menu {
-    position: absolute;
-    top: 50%;
+#hexagon-menu {
+    position: fixed;
     left: 50%;
-    width: 400px;
-    height: 500px;
-    background-color: white;
+    top: 30%;
     transform: translate(-50%, -50%);
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 10px;
-	animation:  fadeIn 2s ease-out forwards;
 }
 
-.project {
+.bottom-row {
+    position: fixed;
+    top: 80%;
+    left: 115px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.hexagon-item {
     position: relative;
-	top: 15%;
-    left: 50%;
-    width: 300px;
-    height: 100px;
-    transform: translate(-50%, -50%);
-	background-color: red;
+    background-color: #7df9ff;
+    color: #ff2079;
+    text-align: center;
+    line-height: 200px;
+    width: 220px;
+    height: 220px;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexagon-item::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    background-color: #ff2079;
+    z-index: -1;
+    scale: 0.9;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.hexagon-item::after {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background-color: #1a1a2e;
+    z-index: -1;
+    scale: 0.8;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.hexagon-item:hover {
+    color: #ffd700;
+}
+
+.hexagon-item:hover::before {
+    background-color: #bb29eb;
+}
+
+.hexagon-item:hover::after {
+    background-color: #1a1a2e;
+    box-shadow:
+        0 0 10px 5px #0ff,
+        0 0 20px 10px #0ff;
 }
 
 @keyframes slideInFromBottom {
