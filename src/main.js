@@ -307,6 +307,7 @@ k.scene("main", async () => {
 
     loadLocalStorage(projects);
     updateProgress(projects, false);
+    showAchievement(projects);
 
     setCamScale(k);
 
@@ -407,9 +408,31 @@ k.scene("main", async () => {
         }
         player.play("idle-side");
     });
+
+    k.onKeyPress("m", () => {
+        const menu = document.getElementById("hexagon-menu");
+        menu.style.display = "flex";
+    });
+
+    k.onKeyPress("e", () => {
+        const menu = document.getElementById("hexagon-menu");
+        menu.style.display = "none";
+    });
+
+    k.onKeyPress("c", () => {
+        const note = document.querySelector(".note");
+        note.style.display = "none";
+    });
+
+	k.onKeyPress("h", () => {
+        const note = document.querySelector(".note");
+        note.style.display = "block";
+    });
 });
 
 k.go("main");
 
-// TODO: You can adapt the font size using https://stackoverflow.com/questions/72502079/how-can-i-check-if-the-device-which-is-using-my-website-is-a-mobile-user-or-no
-// TODO: Implement a key pressed feature. when it s pressed. it show a menu with all file.
+// TODO: Correct the parallax effect to stop when a collision occurs, preventing the background from moving.
+// TODO: Implement a feedback loop mechanism for user interactions.
+// TODO: Develop an interactive resume feature within the game.
+// TODO: Implement a text display that shows the names of badges on the right.
