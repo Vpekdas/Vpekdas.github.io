@@ -1,5 +1,4 @@
-// prettier-ignore
-import { SCALE_FACTOR, OFFSET_X, OFFSET_Y, PROJECT_DESCRIPTIONS} from "./constants.js";
+import { SCALE_FACTOR, OFFSET_X, OFFSET_Y } from "./constants.js";
 
 export function displayDialogue(text, onDisplayEnd) {
     const dialogueUI = document.getElementById("textbox-container");

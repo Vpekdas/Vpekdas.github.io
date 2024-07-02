@@ -59,6 +59,13 @@ body {
     display: flex;
     flex-direction: column;
     color: rgb(238, 238, 238);
+    font-size: 1.2em;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 400px;
+    animation: fadeIn 2s ease-out;
 }
 
 * {
@@ -84,12 +91,7 @@ body {
     font-weight: bolder;
     color: #fff;
     height: 100%;
-    background: linear-gradient(
-        to right,
-        #06beb6 40%,
-        #48b1bf 50%,
-        #06beb6 60%
-    );
+    background: linear-gradient(to right, #06beb6 40%, #48b1bf 50%, #06beb6 60%);
     background-size: 200% 100%;
     border-radius: 20px;
     display: flex;
@@ -133,9 +135,7 @@ body {
     color: #ffffff;
     background-image: linear-gradient(to right, #5c84d9, #6e85b7);
     padding: 5px 10px;
-    font-family: "Roboto", sans-serif;
     font-size: 18px;
-    font-weight: 700;
     animation: fadeIn 2s ease-out forwards;
 }
 
@@ -222,9 +222,85 @@ body {
 }
 
 .icon:hover .tooltip {
-    visibility: visible;
     opacity: 1;
     transform: translateY(-130%);
+}
+
+#hexagon-menu {
+    position: fixed;
+    left: 50%;
+    top: 30%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    display: none;
+}
+
+.bottom-row {
+    position: fixed;
+    top: 80%;
+    left: 115px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.hexagon-item {
+    position: relative;
+    background-color: #7df9ff;
+    color: #ff2079;
+    text-align: center;
+    line-height: 200px;
+    width: 220px;
+    height: 220px;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: scaleUp 1s ease-out forwards;
+}
+
+.hexagon-item::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    background-color: #ff2079;
+    z-index: -1;
+    scale: 0.9;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.hexagon-item::after {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background-color: #1a1a2e;
+    z-index: -1;
+    scale: 0.8;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.hexagon-item:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+}
+
+.hexagon-item:hover::before {
+    background-color: #bb29eb;
+}
+
+.hexagon-item:hover::after {
+    background-color: #1a1a2e;
+    box-shadow:
+        0 0 10px 5px #0ff,
+        0 0 20px 10px #0ff;
 }
 
 @keyframes slideInFromBottom {
@@ -260,5 +336,14 @@ body {
     }
     100% {
         background-position: 1000px 0;
+    }
+}
+
+@keyframes scaleUp {
+    from {
+        transform: scale(0.5);
+    }
+    to {
+        transform: scale(1);
     }
 }
