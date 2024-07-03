@@ -84,6 +84,7 @@ body {
     width: 90%;
     border-radius: 20px;
     overflow: hidden;
+    pointer-events: none;
 }
 
 .progress-done {
@@ -175,6 +176,26 @@ body {
     gap: 10px;
 }
 
+.icon-message-box {
+    position: relative;
+    right: 220px;
+    bottom: 180px;
+    display: flex;
+    width: 200px;
+    justify-content: center;
+    background-color: #0a0a12;
+    color: #00ffff;
+    border-radius: 5px;
+    padding: 5px 10px;
+    opacity: 0;
+    transition:
+        opacity 0.5s,
+        transform 0.5s;
+    pointer-events: none;
+    border: 1px solid #ff00ff;
+    box-shadow: 0 0 10px #ff00ff;
+}
+
 .icon {
     width: 70px;
     height: 70px;
@@ -189,8 +210,6 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.5);
-    pointer-events: none;
-    animation: fadeIn 2s ease-out forwards;
 }
 
 .icon:hover img {
@@ -201,29 +220,8 @@ body {
         box-shadow 0.3s ease;
 }
 
-.tooltip {
-    width: auto;
-    background-color: #ffffff;
-    color: #333333;
-    text-align: center;
-    border-radius: 6px;
-    padding: 8px 16px;
-    position: absolute;
-    z-index: 1;
-    top: 0%;
-    right: 0%;
-    margin-right: 10px;
-    opacity: 0;
-    transition:
-        opacity 0.3s,
-        transform 0.3s ease;
-    transform: translateY(-50%);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.icon:hover .tooltip {
-    opacity: 1;
-    transform: translateY(-130%);
+.icon:hover .icon-message-box {
+    animation: neonPulse 1.5s infinite ease-in-out;
 }
 
 #hexagon-menu {
@@ -345,5 +343,32 @@ body {
     }
     to {
         transform: scale(1);
+    }
+}
+
+@keyframes neonPulse {
+    0% {
+        box-shadow:
+            0 0 5px #ff00ff,
+            0 0 15px #ff00ff,
+            0 0 30px #ff00ff,
+            0 0 60px #ff00ff;
+        opacity: 1;
+    }
+    50% {
+        box-shadow:
+            0 0 2px #ff00ff,
+            0 0 4px #ff00ff,
+            0 0 6px #ff00ff,
+            0 0 10px #ff00ff;
+        opacity: 0.7;
+    }
+    100% {
+        box-shadow:
+            0 0 5px #ff00ff,
+            0 0 15px #ff00ff,
+            0 0 30px #ff00ff,
+            0 0 60px #ff00ff;
+        opacity: 1;
     }
 }

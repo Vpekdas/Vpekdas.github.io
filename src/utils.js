@@ -63,11 +63,7 @@ export function createHoverEvents(k, options) {
 
     k.onHover(name, (obj) => {
         if (!bubble) {
-            bubble = k.add([
-                k.sprite(sprite),
-                k.pos(obj.pos.x + bubbleX, obj.pos.y + bubbleY),
-                k.scale(bubbleScale),
-            ]);
+            bubble = k.add([k.sprite(sprite), k.pos(obj.pos.x + bubbleX, obj.pos.y + bubbleY), k.scale(bubbleScale)]);
 
             bubbleText = k.add([
                 k.text(name, {
@@ -177,18 +173,12 @@ export function createTile(k, tiles, frame, x, y, z) {
 export function createInteractable(k, tiles, boundary, frame, modifX, modifY) {
     const originalSprite = k.add([
         k.sprite(tiles, { frame }),
-        k.pos(
-            (boundary.x + OFFSET_X + modifX) * SCALE_FACTOR,
-            (boundary.y + OFFSET_Y + modifY) * SCALE_FACTOR
-        ),
+        k.pos((boundary.x + OFFSET_X + modifX) * SCALE_FACTOR, (boundary.y + OFFSET_Y + modifY) * SCALE_FACTOR),
         k.scale(SCALE_FACTOR),
     ]);
     const blinkSprite = k.add([
         k.sprite(tiles, { frame }),
-        k.pos(
-            (boundary.x + OFFSET_X + modifX) * SCALE_FACTOR,
-            (boundary.y + OFFSET_Y + modifY) * SCALE_FACTOR
-        ),
+        k.pos((boundary.x + OFFSET_X + modifX) * SCALE_FACTOR, (boundary.y + OFFSET_Y + modifY) * SCALE_FACTOR),
         k.color(255, 255, 255),
         k.opacity(0.75),
         k.scale(SCALE_FACTOR),
@@ -216,14 +206,12 @@ export function createBackground(k, backgroundNumber, spriteName) {
     const spriteWidth = tempSprite.width;
 
     for (let i = 0; i < backgroundNumber; i++) {
-        backgroundArray.push(
-            k.add([k.sprite(spriteName), k.pos(i * spriteWidth, 0), k.scale(SCALE_FACTOR)])
-        );
+        backgroundArray.push(k.add([k.sprite(spriteName), k.pos(i * spriteWidth, 0), k.scale(SCALE_FACTOR)]));
     }
     destroy(tempSprite);
     return backgroundArray;
 }
-export function updateBackground(k, backgroundLayer, speed, camY, playerX, prevX) {
+export function updateBackground(k, backgroundLayer, speed, camY, playerX, prevX, isColliding) {
     let deltaX = playerX - prevX;
     for (let i = 0; i < backgroundLayer.length; i++) {
         if (speed === 0) {
@@ -231,7 +219,7 @@ export function updateBackground(k, backgroundLayer, speed, camY, playerX, prevX
             if (backgroundLayer[i].pos.x <= i * backgroundLayer[i].width - k.width() * SCALE_FACTOR)
                 backgroundLayer[i].pos.x = i * backgroundLayer[i].width * 2;
         } else {
-            backgroundLayer[i].pos.x = backgroundLayer[i].pos.x + deltaX * speed;
+            if (!isColliding) backgroundLayer[i].pos.x = backgroundLayer[i].pos.x + deltaX * speed;
             backgroundLayer[i].pos.y = camY;
         }
     }
