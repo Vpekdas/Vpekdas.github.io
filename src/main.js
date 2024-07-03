@@ -49,9 +49,9 @@ k.scene("main", async () => {
     const interactables = [];
     const backgrounds = [];
     const projects = [];
+    let isColliding = false;
     let animationBanner = false;
-    for (let i = 0; i < BACKGROUND_COUNT; i++)
-        backgrounds.push(createBackground(k, 4, `background_${i + 1}`));
+    for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds.push(createBackground(k, 4, `background_${i + 1}`));
 
     const map = k.add([k.sprite("map"), k.pos(0), k.scale(SCALE_FACTOR)]);
 
@@ -101,11 +101,7 @@ k.scene("main", async () => {
 
                 if (boundary.name) {
                     if (boundary.name === "so_long") {
-                        const soLongIndicatorOffsets = getIndicatorOffset(
-                            boundary,
-                            DEF_SCALE_IND,
-                            INDICATOR_OFFSET
-                        );
+                        const soLongIndicatorOffsets = getIndicatorOffset(boundary, DEF_SCALE_IND, INDICATOR_OFFSET);
 
                         soLongIndicatorOffsets.forEach(({ dx, dy, direction }) => {
                             createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
@@ -115,11 +111,7 @@ k.scene("main", async () => {
                         addProject(boundary, projects);
                     }
                     if (boundary.name === "ft_printf") {
-                        const ftPrintfIndicatorOffsets = getIndicatorOffset(
-                            boundary,
-                            DEF_SCALE_IND,
-                            INDICATOR_OFFSET
-                        );
+                        const ftPrintfIndicatorOffsets = getIndicatorOffset(boundary, DEF_SCALE_IND, INDICATOR_OFFSET);
 
                         ftPrintfIndicatorOffsets.forEach(({ dx, dy, direction }) => {
                             createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
@@ -171,10 +163,7 @@ k.scene("main", async () => {
                     }
                     if (boundary.name == "libft") {
                         const modified_DEF_SCALE_IND = DEF_SCALE_IND.map((indicator) => {
-                            if (
-                                indicator.name === "bottomLeft" ||
-                                indicator.name === "bottomRight"
-                            ) {
+                            if (indicator.name === "bottomLeft" || indicator.name === "bottomRight") {
                                 return {
                                     ...indicator,
                                     y: indicator.y * -0.5,
@@ -193,18 +182,12 @@ k.scene("main", async () => {
                         });
 
                         FURNITURES.forEach(({ frame, x, y }) => {
-                            interactables.push(
-                                createInteractable(k, "furniture", boundary, frame, x, y)
-                            );
+                            interactables.push(createInteractable(k, "furniture", boundary, frame, x, y));
                         });
                         addProject(boundary, projects);
                     }
                     if (boundary.name === "push_swap") {
-                        const pushSwapIndicatorOffsets = getIndicatorOffset(
-                            boundary,
-                            DEF_SCALE_IND,
-                            INDICATOR_OFFSET
-                        );
+                        const pushSwapIndicatorOffsets = getIndicatorOffset(boundary, DEF_SCALE_IND, INDICATOR_OFFSET);
 
                         pushSwapIndicatorOffsets.forEach(({ dx, dy, direction }) => {
                             createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
@@ -233,11 +216,7 @@ k.scene("main", async () => {
                         addProject(boundary, projects);
                     }
                     if (boundary.name === "minishell") {
-                        const minishellIndicatorOffsets = getIndicatorOffset(
-                            boundary,
-                            DEF_SCALE_IND,
-                            INDICATOR_OFFSET
-                        );
+                        const minishellIndicatorOffsets = getIndicatorOffset(boundary, DEF_SCALE_IND, INDICATOR_OFFSET);
                         minishellIndicatorOffsets.forEach(({ dx, dy, direction }) => {
                             createIndicator(boundary.x + dx, boundary.y + dy, direction, k);
                         });
@@ -246,18 +225,18 @@ k.scene("main", async () => {
                         interactables.push(createInteractable(k, "tiles", boundary, 50, 46, 1));
                         addProject(boundary, projects);
                     }
-
+                    player.onCollide(() => {
+                        isColliding = true;
+                    });
+                    player.onCollideEnd(() => {
+                        isColliding = false;
+                    });
                     player.onCollide(boundary.name, () => {
                         player.isInDialogue = true;
-                        displayDialogue(
-                            PROJECT_DESCRIPTIONS[boundary.name].story,
-                            () => (player.isInDialogue = false)
-                        );
+                        displayDialogue(PROJECT_DESCRIPTIONS[boundary.name].story, () => (player.isInDialogue = false));
                         if (animationBanner === false) {
                             const discovered = countAchievemenDiscovered(projects);
-                            const projectIndex = projects.findIndex(
-                                (project) => project.name === boundary.name
-                            );
+                            const projectIndex = projects.findIndex((project) => project.name === boundary.name);
 
                             if (projectIndex != -1) {
                                 if (projects[projectIndex].discovered) return;
@@ -269,10 +248,7 @@ k.scene("main", async () => {
                             showAchievementNotification(2000);
                             showAchievementIcon(3000, PROJECT_DESCRIPTIONS[boundary.name].icon);
                             showAchievementTitle(3000, PROJECT_DESCRIPTIONS[boundary.name].title);
-                            showAchievementDescription(
-                                3000,
-                                PROJECT_DESCRIPTIONS[boundary.name].achievement
-                            );
+                            showAchievementDescription(3000, PROJECT_DESCRIPTIONS[boundary.name].achievement);
                             growBanner();
                             if (discovered <= projects.length) {
                                 updateProgress(projects, discovered);
@@ -320,16 +296,8 @@ k.scene("main", async () => {
 
         const backgroundCamY = player.pos.y - 200;
         let speed = 0;
-
         for (let i = 0; i < backgrounds.length; i++) {
-            updateBackground(
-                k,
-                backgrounds[i],
-                speed,
-                backgroundCamY,
-                player.pos.x,
-                player.prevPosX
-            );
+            updateBackground(k, backgrounds[i], speed, backgroundCamY, player.pos.x, player.prevPosX, isColliding);
             speed += 0.2;
         }
         player.prevPosX = player.pos.x;
@@ -373,11 +341,7 @@ k.scene("main", async () => {
             player.play("walk-up");
             player.direction = "up";
         }
-        if (
-            mouseAngle < -lowerBound &&
-            mouseAngle > -upperBound &&
-            player.curAnim() !== "walk-down"
-        ) {
+        if (mouseAngle < -lowerBound && mouseAngle > -upperBound && player.curAnim() !== "walk-down") {
             player.play("walk-down");
             player.direction = "down";
         }
@@ -424,7 +388,7 @@ k.scene("main", async () => {
         note.style.display = "none";
     });
 
-	k.onKeyPress("h", () => {
+    k.onKeyPress("h", () => {
         const note = document.querySelector(".note");
         note.style.display = "block";
     });
@@ -435,4 +399,3 @@ k.go("main");
 // TODO: Correct the parallax effect to stop when a collision occurs, preventing the background from moving.
 // TODO: Implement a feedback loop mechanism for user interactions.
 // TODO: Develop an interactive resume feature within the game.
-// TODO: Implement a text display that shows the names of badges on the right.
