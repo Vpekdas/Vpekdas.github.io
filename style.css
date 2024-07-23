@@ -59,12 +59,11 @@ body {
     display: flex;
     flex-direction: column;
     color: rgb(238, 238, 238);
-    font-size: 1.2em;
     color: #fff;
     background-color: rgba(0, 0, 0, 0.7);
     padding: 10px;
     border-radius: 5px;
-    max-width: 400px;
+    max-width: 80%;
     animation: fadeIn 2s ease-out;
 }
 

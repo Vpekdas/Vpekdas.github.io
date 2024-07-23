@@ -39,6 +39,28 @@ import {
     loadLocalStorage,
 } from "./utils.js";
 
+k.scene("menu", async () => {
+    const note = document.querySelector(".note");
+    const progresBarDone = document.querySelector(".progress-done ");
+    const progresBar = document.querySelector(".progress");
+    const achievement = document.getElementById("iconContainer");
+
+    note.style.display = "none";
+    progresBarDone.style.display = "none";
+    progresBar.style.display = "none";
+    achievement.style.display = "none";
+
+    k.setBackground(k.Color.fromHex("#000000"));
+
+    k.onKeyPress("g", () => {
+        k.go("main");
+        note.style.display = "block";
+        progresBarDone.style.display = "flex";
+        progresBar.style.display = "block";
+        achievement.style.display = "flex";
+    });
+});
+
 loadAllResources(k);
 
 k.setBackground(k.Color.fromHex("#2e51b2"));
@@ -394,8 +416,8 @@ k.scene("main", async () => {
     });
 });
 
-k.go("main");
+k.go("menu");
 
 // TODO: Correct the parallax effect to stop when a collision occurs, preventing the background from moving.
 // TODO: Implement a feedback loop mechanism for user interactions.
-// TODO: Develop an interactive resume feature within the game.
+// TODO: Add real time background changes.
