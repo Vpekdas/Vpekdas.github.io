@@ -143,9 +143,6 @@ export function loadAllResources(k) {
             { name: "background_4", path: "./background/4.png" },
             { name: "background_5", path: "./background/5.png" },
             { name: "map", path: "./map/map.png" },
-            { name: "msg", path: "menu/Msg01.png" },
-            { name: "msg2", path: "menu/Msg03.png" },
-            { name: "msg3", path: "menu/Msg10.png" },
         ],
     };
 

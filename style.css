@@ -305,6 +305,16 @@ body {
         0 0 20px 10px #0ff;
 }
 
+.test {
+    font-size: calc(32px + 2vmin);
+}
+
+#menu-container {
+    display: flex;
+    justify-content: space-evenly;
+    background-color: #2e51b2;
+}
+
 @keyframes slideInFromBottom {
     0% {
         transform: translateY(100%);
