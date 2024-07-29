@@ -143,6 +143,9 @@ export function loadAllResources(k) {
             { name: "background_4", path: "./background/4.png" },
             { name: "background_5", path: "./background/5.png" },
             { name: "map", path: "./map/map.png" },
+            { name: "msg", path: "menu/Msg01.png" },
+            { name: "msg2", path: "menu/Msg03.png" },
+            { name: "msg3", path: "menu/Msg10.png" },
         ],
     };
 
@@ -286,6 +289,10 @@ export function updateProgress(projects, discovered) {
     const achievementTotal = projects.length;
     const interval = 100;
     let currentWidth = (discovered / achievementTotal) * 100;
+    if (achievementDiscovered === achievementTotal) {
+        const highlight = document.querySelector(".highlight");
+        highlight.style.color = "green";
+    }
     function frame() {
         let targetWidth = (achievementDiscovered / achievementTotal) * 100;
         {
