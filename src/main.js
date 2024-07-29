@@ -11,6 +11,9 @@ import {
     BOOKS,
     HOVER_EVENTS,
     PROJECT_DESCRIPTIONS,
+    introBackground,
+    portfolioProjects,
+    futurePlans,
 } from "./constants.js";
 import {
     createHoverEvents,
@@ -38,6 +41,150 @@ import {
     saveToLocalStorage,
     loadLocalStorage,
 } from "./utils.js";
+
+k.scene("menu", async () => {
+    const note = document.querySelector(".note");
+    const progresBarDone = document.querySelector(".progress-done ");
+    const progresBar = document.querySelector(".progress");
+    const achievement = document.getElementById("iconContainer");
+
+    note.style.display = "none";
+    progresBarDone.style.display = "none";
+    progresBar.style.display = "none";
+    achievement.style.display = "none";
+
+    const menu = k.add([k.sprite("msg"), k.pos(10, 0), k.scale(SCALE_FACTOR), k.z()]);
+    const menu2 = k.add([k.sprite("msg2"), k.pos(800, 0), k.scale(SCALE_FACTOR), k.z()]);
+    const menu3 = k.add([k.sprite("msg3"), k.pos(573, 80), k.scale(1), k.z()]);
+
+    const backgroundTitle = k.add([
+        k.text("background", {
+            size: 64,
+            width: 470,
+            font: "myFont",
+        }),
+        k.pos(k.width() / 13, k.height() / 5 - 16),
+        k.color(k.rgb(0, 255, 255)),
+    ]);
+    const backgroundIntro = k.add([
+        k.text(introBackground, {
+            size: 28,
+            width: 470,
+            font: "myFont",
+        }),
+        k.pos(k.width() / 13, k.height() / 3),
+        k.color(k.rgb(57, 255, 20)),
+        k.opacity(0),
+    ]);
+
+    const portfolioProjectsTitle = k.add([
+        k.text("Portfolio", {
+            size: 64,
+            width: 470,
+            font: "myFont",
+        }),
+        k.pos(k.width() / 2 + 192, k.height() / 5 - 16),
+        k.color(k.rgb(255, 20, 147)),
+    ]);
+    const portfolioProjectsIntro = k.add([
+        k.text(portfolioProjects, {
+            size: 28,
+            width: 470,
+            font: "myFont",
+        }),
+        k.pos(k.width() / 2 + 192, k.height() / 3),
+        k.color(k.rgb(57, 255, 20)),
+        k.opacity(0),
+    ]);
+
+    const futurePlansTitle = k.add([
+        k.text("Future Plans", {
+            size: 64,
+            width: 190,
+            font: "myFont",
+        }),
+        k.pos(k.width() / 2 - 80, k.height() / 5 - 16),
+        k.color(k.rgb(255, 0, 0)),
+    ]);
+
+    const futurePlansIntro = k.add([
+        k.text(futurePlans, {
+            size: 28,
+            width: 250,
+            font: "myFont",
+        }),
+        k.pos(k.width() / 2 - 96, k.height() / 3 + 16),
+        k.color(k.rgb(57, 255, 20)),
+        k.opacity(0),
+    ]);
+
+    let play = k.add([
+        k.text("press space to dive in !", {
+            size: 48,
+            width: 1000,
+            font: "myFont",
+        }),
+        k.pos(k.width() / 3, k.height() / 2 + 256),
+        k.color(k.rgb(255, 255, 0)),
+        k.opacity(0),
+    ]);
+
+    let blinkPlay = false;
+    let skip = false;
+    k.wait(1, () => {
+        backgroundIntro.opacity = 0.1;
+    });
+    k.wait(1.1, () => {
+        backgroundIntro.opacity = 0.5;
+    });
+    k.wait(1.2, () => {
+        backgroundIntro.opacity = 1;
+    });
+
+    k.wait(4, () => {
+        portfolioProjectsIntro.opacity = 0.1;
+    });
+    k.wait(4.1, () => {
+        portfolioProjectsIntro.opacity = 0.5;
+    });
+    k.wait(4.2, () => {
+        portfolioProjectsIntro.opacity = 1;
+    });
+
+    k.wait(7, () => {
+        futurePlansIntro.opacity = 0.1;
+    });
+    k.wait(7.1, () => {
+        futurePlansIntro.opacity = 0.5;
+    });
+    k.wait(7.2, () => {
+        futurePlansIntro.opacity = 1;
+    });
+
+    k.wait(9.2, () => {
+        blinkPlay = true;
+        skip = true;
+    });
+
+    k.onUpdate(() => {
+        if (Math.floor(k.time() / 0.5) % 2.5 === 0 && blinkPlay) {
+            play.opacity = 1;
+        } else {
+            play.opacity = 0;
+        }
+    });
+
+    k.onKeyPress("space", () => {
+        if (!skip) {
+            return;
+        }
+        k.go("main");
+        note.style.display = "block";
+        progresBarDone.style.display = "flex";
+        progresBar.style.display = "block";
+        achievement.style.display = "flex";
+    });
+});
 
 loadAllResources(k);
 
@@ -253,6 +400,7 @@ k.scene("main", async () => {
                             if (discovered <= projects.length) {
                                 updateProgress(projects, discovered);
                             }
+
                             animationBanner = true;
                             setTimeout(() => {
                                 animationBanner = false;
@@ -394,8 +542,9 @@ k.scene("main", async () => {
     });
 });
 
-k.go("main");
+k.go("menu");
 
-// TODO: Correct the parallax effect to stop when a collision occurs, preventing the background from moving.
-// TODO: Implement a feedback loop mechanism for user interactions.
-// TODO: Develop an interactive resume feature within the game.
+// TODO: Add real time background changes.
+// TODO: Implement a button to clear local storage if needed.
+// TODO: Add links to the menu, such as a resume or GitHub profile.
+// TODO: Fix parallax issue: Background should not move when scrolling on the Y axis without X axis movement.

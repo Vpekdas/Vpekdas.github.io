@@ -159,3 +159,16 @@ export const PROJECT_DESCRIPTIONS = {
         icon: `/achievement/minishell.png`,
     },
 };
+
+export const introBackground =
+    "Welcome to my portfolio! I am Volkan Pekdas, a dedicated student at 42, on a journey to become a proficient developer. " +
+    "Before diving into the world of coding, I graduated with a master's degree in Accounting and Management (DSCG in French) " +
+    "and gained valuable experience working at AXA France for three years, two of which were in an apprenticeship.";
+
+export const portfolioProjects =
+    "This portfolio primarily showcases my projects at 42, serving as a testament to my learning and growth in web development. " +
+    "I have a passion for creativity in coding, whether it's tackling a project at 42 or embarking on a new venture. ";
+
+export const futurePlans =
+    "This portfolio not only highlights my projects but also represents my journey in learning JavaScript, HTML, and CSS. " +
+    "Thank you for visiting, and I hope you enjoy exploring my work!";
