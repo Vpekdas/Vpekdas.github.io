@@ -123,7 +123,7 @@ k.scene("menu", async () => {
     ]);
 
     let play = k.add([
-        k.text("press space to dive in !", {
+        k.text("press space to dive in ! 🤿", {
             size: 48,
             width: 1000,
             font: "myFont",

@@ -166,4 +166,4 @@ export const aboutMe =
 export const mission =
     "I have hidden my projects in this virtual world. Find them all and explore the wonders of coding!";
 
-export const link = "[insert social media link]";
+export const link = "[add github icon]";
