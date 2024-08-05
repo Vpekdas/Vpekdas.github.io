@@ -214,6 +214,7 @@ export function createBackground(k, backgroundNumber, spriteName) {
     destroy(tempSprite);
     return backgroundArray;
 }
+
 export function updateBackground(k, backgroundLayer, speed, camY, playerX, prevX, isColliding) {
     let deltaX = playerX - prevX;
     for (let i = 0; i < backgroundLayer.length; i++) {
