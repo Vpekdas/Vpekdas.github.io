@@ -146,6 +146,9 @@ export function loadAllResources(k) {
             { name: "msg", path: "menu/Msg01.png" },
             { name: "msg2", path: "menu/Msg03.png" },
             { name: "msg3", path: "menu/Msg10.png" },
+            { name: "github-logo", path: "Github_logo_icon.svg" },
+            { name: "discord-logo", path: "Discord_icon.svg" },
+            { name: "linkedin-logo", path: "LinkedIn_logo_icon.svg" },
         ],
     };
 
@@ -215,7 +218,7 @@ export function createBackground(k, backgroundNumber, spriteName) {
     return backgroundArray;
 }
 
-export function updateBackground(k, backgroundLayer, speed, camY, playerX, prevX, isColliding) {
+export function updateBackground(k, backgroundLayer, speed, camY, playerX, prevX) {
     let deltaX = playerX - prevX;
     for (let i = 0; i < backgroundLayer.length; i++) {
         if (speed === 0) {
@@ -223,7 +226,9 @@ export function updateBackground(k, backgroundLayer, speed, camY, playerX, prevX
             if (backgroundLayer[i].pos.x <= i * backgroundLayer[i].width - k.width() * SCALE_FACTOR)
                 backgroundLayer[i].pos.x = i * backgroundLayer[i].width * 2;
         } else {
-            if (!isColliding) backgroundLayer[i].pos.x = backgroundLayer[i].pos.x + deltaX * speed;
+            if (deltaX) {
+                backgroundLayer[i].pos.x += deltaX * speed;
+            }
             backgroundLayer[i].pos.y = camY;
         }
     }
