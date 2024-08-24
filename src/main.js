@@ -11,9 +11,9 @@ import {
     BOOKS,
     HOVER_EVENTS,
     PROJECT_DESCRIPTIONS,
-    introBackground,
-    portfolioProjects,
-    futurePlans,
+    aboutMe,
+    mission,
+
 } from "./constants.js";
 import {
     createHoverEvents,
@@ -43,6 +43,8 @@ import {
 } from "./utils.js";
 
 k.scene("menu", async () => {
+    const mapData = await (await fetch("./map/map.json")).json();
+
     const note = document.querySelector(".note");
     const progresBarDone = document.querySelector(".progress-done ");
     const progresBar = document.querySelector(".progress");
@@ -53,117 +55,155 @@ k.scene("menu", async () => {
     progresBar.style.display = "none";
     achievement.style.display = "none";
 
-    const menu = k.add([k.sprite("msg"), k.pos(10, 0), k.scale(SCALE_FACTOR), k.z()]);
-    const menu2 = k.add([k.sprite("msg2"), k.pos(800, 0), k.scale(SCALE_FACTOR), k.z()]);
-    const menu3 = k.add([k.sprite("msg3"), k.pos(573, 80), k.scale(1), k.z()]);
+    const aboutMeObj = k.add([k.sprite("msg"), k.pos(0, 0), k.scale(SCALE_FACTOR)]);
+    const missionObj = k.add([k.sprite("msg2"), k.pos(0, 0), k.scale(SCALE_FACTOR)]);
+    const socialsObj = k.add([k.sprite("msg3"), k.pos(0, 0), k.scale(1)]);
 
-    const backgroundTitle = k.add([
-        k.text("background", {
+    const githubLogo = k.add([
+        k.sprite("github-logo"),
+        k.pos(k.width() / 2 - socialsObj.width / 3 - 10, k.height() / 3),
+        k.area(),
+    ]);
+
+    const discordLogo = k.add([
+        k.sprite("discord-logo"),
+        k.pos(k.width() / 2 - socialsObj.width / 3, k.height() / 2.2),
+        k.scale(0.3),
+        k.area(),
+    ]);
+
+    const linkedinLogo = k.add([
+        k.sprite("linkedin-logo"),
+        k.pos(k.width() / 2 - socialsObj.width / 3, k.height() / 1.8),
+        k.area(),
+    ]);
+
+    missionObj.pos = k.vec2(k.width() - missionObj.width * SCALE_FACTOR, 0);
+    socialsObj.pos = k.vec2(k.width() / 2 - socialsObj.width / 2, k.height() / 10);
+
+    githubLogo.onHover(() => {
+        githubLogo.scale = vec2(1.3);
+    });
+    githubLogo.onHoverEnd(() => {
+        githubLogo.scale = vec2(1);
+    });
+    githubLogo.onClick(() => {
+        window.open("https://github.com/vpekdas", "_blank");
+    });
+
+    discordLogo.onHover(() => {
+        discordLogo.scale = vec2(0.4);
+    });
+    discordLogo.onHoverEnd(() => {
+        discordLogo.scale = vec2(0.3);
+    });
+    discordLogo.onClick(() => {
+        window.open("https://discordapp.com/users/415118435174055947/", "_blank");
+    });
+
+    linkedinLogo.onHover(() => {
+        linkedinLogo.scale = vec2(1.3);
+    });
+    linkedinLogo.onHoverEnd(() => {
+        linkedinLogo.scale = vec2(1);
+    });
+    linkedinLogo.onClick(() => {
+        window.open("https://www.linkedin.com/in/volkan-pekdas/", "_blank");
+    });
+
+    const aboutMeMenu = k.add([
+        k.text("About Me", {
+
             size: 64,
             width: 470,
             font: "myFont",
         }),
-        k.pos(k.width() / 13, k.height() / 5 - 16),
+        k.pos(aboutMeObj.width / 3, k.height() / 6),
         k.color(k.rgb(0, 255, 255)),
     ]);
-    const backgroundIntro = k.add([
-        k.text(introBackground, {
+    const aboutMeText = k.add([
+        k.text(aboutMe, {
+
             size: 28,
             width: 470,
             font: "myFont",
         }),
-        k.pos(k.width() / 13, k.height() / 3),
+        k.pos(aboutMeObj.width / 3, k.height() / 3),
+
         k.color(k.rgb(57, 255, 20)),
         k.opacity(0),
     ]);
 
-    const portfolioProjectsTitle = k.add([
-        k.text("Portfolio", {
+    const missionMenu = k.add([
+        k.text("Mission", {
+
             size: 64,
             width: 470,
             font: "myFont",
         }),
-        k.pos(k.width() / 2 + 192, k.height() / 5 - 16),
+        k.pos(k.width() - missionObj.width * (SCALE_FACTOR - 0.3), k.height() / 6),
         k.color(k.rgb(255, 20, 147)),
     ]);
-    const portfolioProjectsIntro = k.add([
-        k.text(portfolioProjects, {
+    const missionText = k.add([
+        k.text(mission, {
+
             size: 28,
             width: 470,
             font: "myFont",
         }),
-        k.pos(k.width() / 2 + 192, k.height() / 3),
+        k.pos(k.width() - missionObj.width * (SCALE_FACTOR - 0.3), k.height() / 3),
+
         k.color(k.rgb(57, 255, 20)),
         k.opacity(0),
     ]);
 
-    const futurePlansTitle = k.add([
-        k.text("Future Plans", {
+    const socialsMenu = k.add([
+        k.text("Connect with Me", {
             size: 64,
-            width: 190,
+            width: 230,
             font: "myFont",
         }),
-        k.pos(k.width() / 2 - 80, k.height() / 5 - 16),
+        k.pos(k.width() / 2 - socialsObj.width / 3, k.height() / 6),
         k.color(k.rgb(255, 0, 0)),
     ]);
 
-    const futurePlansIntro = k.add([
-        k.text(futurePlans, {
-            size: 28,
-            width: 250,
-            font: "myFont",
-        }),
-        k.pos(k.width() / 2 - 96, k.height() / 3 + 16),
-        k.color(k.rgb(57, 255, 20)),
-        k.opacity(0),
-    ]);
-
     let play = k.add([
-        k.text("press space to dive in !", {
+        k.text("press space to dive in ! 🤿", {
+
             size: 48,
             width: 1000,
             font: "myFont",
         }),
-        k.pos(k.width() / 3, k.height() / 2 + 256),
+        k.pos(k.width() / 3, k.height() * 0.9),
+
         k.color(k.rgb(255, 255, 0)),
         k.opacity(0),
     ]);
 
     let blinkPlay = false;
-    let skip = false;
     k.wait(1, () => {
-        backgroundIntro.opacity = 0.1;
+        aboutMeText.opacity = 0.1;
     });
     k.wait(1.1, () => {
-        backgroundIntro.opacity = 0.5;
+        aboutMeText.opacity = 0.5;
     });
     k.wait(1.2, () => {
-        backgroundIntro.opacity = 1;
+        aboutMeText.opacity = 1;
     });
 
     k.wait(4, () => {
-        portfolioProjectsIntro.opacity = 0.1;
+        missionText.opacity = 0.1;
     });
     k.wait(4.1, () => {
-        portfolioProjectsIntro.opacity = 0.5;
+        missionText.opacity = 0.5;
     });
     k.wait(4.2, () => {
-        portfolioProjectsIntro.opacity = 1;
-    });
+        missionText.opacity = 1;
 
-    k.wait(7, () => {
-        futurePlansIntro.opacity = 0.1;
-    });
-    k.wait(7.1, () => {
-        futurePlansIntro.opacity = 0.5;
-    });
-    k.wait(7.2, () => {
-        futurePlansIntro.opacity = 1;
     });
 
     k.wait(9.2, () => {
         blinkPlay = true;
-        skip = true;
     });
 
     k.onUpdate(() => {
@@ -175,9 +215,7 @@ k.scene("menu", async () => {
     });
 
     k.onKeyPress("space", () => {
-        if (!skip) {
-            return;
-        }
+
         k.go("main");
         note.style.display = "block";
         progresBarDone.style.display = "flex";
@@ -196,7 +234,6 @@ k.scene("main", async () => {
     const interactables = [];
     const backgrounds = [];
     const projects = [];
-    let isColliding = false;
     let animationBanner = false;
     for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds.push(createBackground(k, 4, `background_${i + 1}`));
 
@@ -372,12 +409,6 @@ k.scene("main", async () => {
                         interactables.push(createInteractable(k, "tiles", boundary, 50, 46, 1));
                         addProject(boundary, projects);
                     }
-                    player.onCollide(() => {
-                        isColliding = true;
-                    });
-                    player.onCollideEnd(() => {
-                        isColliding = false;
-                    });
                     player.onCollide(boundary.name, () => {
                         player.isInDialogue = true;
                         displayDialogue(PROJECT_DESCRIPTIONS[boundary.name].story, () => (player.isInDialogue = false));
@@ -445,10 +476,11 @@ k.scene("main", async () => {
         const backgroundCamY = player.pos.y - 200;
         let speed = 0;
         for (let i = 0; i < backgrounds.length; i++) {
-            updateBackground(k, backgrounds[i], speed, backgroundCamY, player.pos.x, player.prevPosX, isColliding);
+            updateBackground(k, backgrounds[i], speed, backgroundCamY, player.pos.x, player.prevPosX);
             speed += 0.2;
         }
         player.prevPosX = player.pos.x;
+        player.prevPosY = player.pos.y;
 
         for (const interactable of interactables) {
             interactable.blink = Math.floor(k.time() / 0.5) % 2 === 0;
@@ -468,7 +500,7 @@ k.scene("main", async () => {
     });
 
     k.onMouseDown((mouseBtn) => {
-        if (mouseBtn !== "left") {
+        if (mouseBtn !== "left" || player.isInDialogue) {
             return;
         }
         if (isMousePressed(mouseBtn) && player.isInDialogue) {
@@ -476,8 +508,6 @@ k.scene("main", async () => {
             closeDialogue();
         }
 
-        player.prevPosX = player.pos.x;
-        player.prevPosY = player.pos.y;
         const worldMousepos = k.toWorld(k.mousePos());
         player.moveTo(worldMousepos, PLAYER_SPEED);
 
@@ -546,5 +576,5 @@ k.go("menu");
 
 // TODO: Add real time background changes.
 // TODO: Implement a button to clear local storage if needed.
-// TODO: Add links to the menu, such as a resume or GitHub profile.
-// TODO: Fix parallax issue: Background should not move when scrolling on the Y axis without X axis movement.
+// TODO: Refactor the entire codebase for better readability, maintainability, and performance.
+
