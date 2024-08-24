@@ -13,6 +13,7 @@ import {
     PROJECT_DESCRIPTIONS,
     aboutMe,
     mission,
+
 } from "./constants.js";
 import {
     createHoverEvents,
@@ -43,6 +44,7 @@ import {
 
 k.scene("menu", async () => {
     const mapData = await (await fetch("./map/map.json")).json();
+
     const note = document.querySelector(".note");
     const progresBarDone = document.querySelector(".progress-done ");
     const progresBar = document.querySelector(".progress");
@@ -111,6 +113,7 @@ k.scene("menu", async () => {
 
     const aboutMeMenu = k.add([
         k.text("About Me", {
+
             size: 64,
             width: 470,
             font: "myFont",
@@ -120,17 +123,20 @@ k.scene("menu", async () => {
     ]);
     const aboutMeText = k.add([
         k.text(aboutMe, {
+
             size: 28,
             width: 470,
             font: "myFont",
         }),
         k.pos(aboutMeObj.width / 3, k.height() / 3),
+
         k.color(k.rgb(57, 255, 20)),
         k.opacity(0),
     ]);
 
     const missionMenu = k.add([
         k.text("Mission", {
+
             size: 64,
             width: 470,
             font: "myFont",
@@ -140,11 +146,13 @@ k.scene("menu", async () => {
     ]);
     const missionText = k.add([
         k.text(mission, {
+
             size: 28,
             width: 470,
             font: "myFont",
         }),
         k.pos(k.width() - missionObj.width * (SCALE_FACTOR - 0.3), k.height() / 3),
+
         k.color(k.rgb(57, 255, 20)),
         k.opacity(0),
     ]);
@@ -161,11 +169,13 @@ k.scene("menu", async () => {
 
     let play = k.add([
         k.text("press space to dive in ! 🤿", {
+
             size: 48,
             width: 1000,
             font: "myFont",
         }),
         k.pos(k.width() / 3, k.height() * 0.9),
+
         k.color(k.rgb(255, 255, 0)),
         k.opacity(0),
     ]);
@@ -189,6 +199,7 @@ k.scene("menu", async () => {
     });
     k.wait(4.2, () => {
         missionText.opacity = 1;
+
     });
 
     k.wait(9.2, () => {
@@ -204,6 +215,7 @@ k.scene("menu", async () => {
     });
 
     k.onKeyPress("space", () => {
+
         k.go("main");
         note.style.display = "block";
         progresBarDone.style.display = "flex";
@@ -565,3 +577,4 @@ k.go("menu");
 // TODO: Add real time background changes.
 // TODO: Implement a button to clear local storage if needed.
 // TODO: Refactor the entire codebase for better readability, maintainability, and performance.
+
