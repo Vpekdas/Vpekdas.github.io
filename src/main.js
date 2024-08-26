@@ -604,3 +604,5 @@ k.go("menu");
 
 // TODO: Implement a button to clear local storage if needed.
 // TODO: Refactor the entire codebase for better readability, maintainability, and performance.
+// TODO: Change Kaboom.js to Kaplay (a maintained fork of Kaboom.js, which is deprecated)
+// TODO: Migrate the codebase from JavaScript to TypeScript for improved type safety and maintainability.
