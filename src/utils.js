@@ -137,11 +137,31 @@ export function loadAllResources(k) {
             },
             { name: "book", path: "./books/1.png" },
             { name: "book2", path: "./books/2.png" },
-            { name: "background_1", path: "./background/1.png" },
-            { name: "background_2", path: "./background/2.png" },
-            { name: "background_3", path: "./background/3.png" },
-            { name: "background_4", path: "./background/4.png" },
-            { name: "background_5", path: "./background/5.png" },
+            { name: "early-morning-1", path: "./background/early-morning/1.png" },
+            { name: "early-morning-2", path: "./background/early-morning/2.png" },
+            { name: "early-morning-3", path: "./background/early-morning/3.png" },
+            { name: "early-morning-4", path: "./background/early-morning/4.png" },
+            { name: "early-morning-5", path: "./background/early-morning/5.png" },
+            { name: "morning-1", path: "./background/morning/1.png" },
+            { name: "morning-2", path: "./background/morning/2.png" },
+            { name: "morning-3", path: "./background/morning/3.png" },
+            { name: "morning-4", path: "./background/morning/4.png" },
+            { name: "morning-5", path: "./background/morning/5.png" },
+            { name: "afternoon-1", path: "./background/afternoon/1.png" },
+            { name: "afternoon-2", path: "./background/afternoon/2.png" },
+            { name: "afternoon-3", path: "./background/afternoon/3.png" },
+            { name: "afternoon-4", path: "./background/afternoon/4.png" },
+            { name: "afternoon-5", path: "./background/afternoon/5.png" },
+            { name: "evening-1", path: "./background/evening/1.png" },
+            { name: "evening-2", path: "./background/evening/2.png" },
+            { name: "evening-3", path: "./background/evening/3.png" },
+            { name: "evening-4", path: "./background/evening/4.png" },
+            { name: "evening-5", path: "./background/evening/5.png" },
+            { name: "night-1", path: "./background/night/1.png" },
+            { name: "night-2", path: "./background/night/2.png" },
+            { name: "night-3", path: "./background/night/3.png" },
+            { name: "night-4", path: "./background/night/4.png" },
+            { name: "night-5", path: "./background/night/5.png" },
             { name: "map", path: "./map/map.png" },
             { name: "msg", path: "menu/Msg01.png" },
             { name: "msg2", path: "menu/Msg03.png" },
@@ -212,7 +232,9 @@ export function createBackground(k, backgroundNumber, spriteName) {
     const spriteWidth = tempSprite.width;
 
     for (let i = 0; i < backgroundNumber; i++) {
-        backgroundArray.push(k.add([k.sprite(spriteName), k.pos(i * spriteWidth, 0), k.scale(SCALE_FACTOR)]));
+        backgroundArray.push(
+            k.add([k.sprite(spriteName), k.pos(i * spriteWidth - spriteWidth, 0), k.scale(SCALE_FACTOR)])
+        );
     }
     destroy(tempSprite);
     return backgroundArray;
@@ -222,15 +244,16 @@ export function updateBackground(k, backgroundLayer, speed, camY, playerX, prevX
     let deltaX = playerX - prevX;
     for (let i = 0; i < backgroundLayer.length; i++) {
         if (speed === 0) {
-            backgroundLayer[i].pos.x -= SCALE_FACTOR;
-            if (backgroundLayer[i].pos.x <= i * backgroundLayer[i].width - k.width() * SCALE_FACTOR)
-                backgroundLayer[i].pos.x = i * backgroundLayer[i].width * 2;
+            backgroundLayer[i].pos.x -= 2;
+            if (backgroundLayer[i].pos.x <= i * backgroundLayer[i].width - backgroundLayer[i].width * 2) {
+                backgroundLayer[i].pos.x = i * backgroundLayer[i].width - backgroundLayer[i].width;
+            }
         } else {
             if (deltaX) {
                 backgroundLayer[i].pos.x += deltaX * speed;
             }
-            backgroundLayer[i].pos.y = camY;
         }
+        backgroundLayer[i].pos.y = camY;
     }
 }
 
@@ -404,4 +427,9 @@ export function loadLocalStorage(projects) {
             projects[i].discovered = true;
         }
     }
+}
+
+export function getCurrentHour() {
+    const now = new Date();
+    return now.getHours();
 }
