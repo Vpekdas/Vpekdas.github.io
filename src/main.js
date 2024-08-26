@@ -13,7 +13,6 @@ import {
     PROJECT_DESCRIPTIONS,
     aboutMe,
     mission,
-
 } from "./constants.js";
 import {
     createHoverEvents,
@@ -40,11 +39,11 @@ import {
     showAchievement,
     saveToLocalStorage,
     loadLocalStorage,
+    getCurrentHour,
 } from "./utils.js";
 
 k.scene("menu", async () => {
     const mapData = await (await fetch("./map/map.json")).json();
-
     const note = document.querySelector(".note");
     const progresBarDone = document.querySelector(".progress-done ");
     const progresBar = document.querySelector(".progress");
@@ -113,7 +112,6 @@ k.scene("menu", async () => {
 
     const aboutMeMenu = k.add([
         k.text("About Me", {
-
             size: 64,
             width: 470,
             font: "myFont",
@@ -123,7 +121,6 @@ k.scene("menu", async () => {
     ]);
     const aboutMeText = k.add([
         k.text(aboutMe, {
-
             size: 28,
             width: 470,
             font: "myFont",
@@ -136,7 +133,6 @@ k.scene("menu", async () => {
 
     const missionMenu = k.add([
         k.text("Mission", {
-
             size: 64,
             width: 470,
             font: "myFont",
@@ -146,7 +142,6 @@ k.scene("menu", async () => {
     ]);
     const missionText = k.add([
         k.text(mission, {
-
             size: 28,
             width: 470,
             font: "myFont",
@@ -169,7 +164,6 @@ k.scene("menu", async () => {
 
     let play = k.add([
         k.text("press space to dive in ! 🤿", {
-
             size: 48,
             width: 1000,
             font: "myFont",
@@ -199,7 +193,6 @@ k.scene("menu", async () => {
     });
     k.wait(4.2, () => {
         missionText.opacity = 1;
-
     });
 
     k.wait(9.2, () => {
@@ -215,7 +208,6 @@ k.scene("menu", async () => {
     });
 
     k.onKeyPress("space", () => {
-
         k.go("main");
         note.style.display = "block";
         progresBarDone.style.display = "flex";
@@ -226,16 +218,34 @@ k.scene("menu", async () => {
 
 loadAllResources(k);
 
-k.setBackground(k.Color.fromHex("#2e51b2"));
+// k.setBackground(k.Color.fromHex("#2e51b2"));
 
 k.scene("main", async () => {
     const mapData = await (await fetch("./map/map.json")).json();
     const layers = mapData.layers;
     const interactables = [];
-    const backgrounds = [];
+    const backgrounds_early_morning = [];
+    const backgrounds_morning = [];
+    const backgrounds_afternoon = [];
+    const backgrounds_evening = [];
+    const backgrounds_night = [];
+
     const projects = [];
     let animationBanner = false;
-    for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds.push(createBackground(k, 4, `background_${i + 1}`));
+    for (let i = 0; i < BACKGROUND_COUNT; i++)
+        backgrounds_early_morning.push(createBackground(k, 4, `early-morning-${i + 1}`));
+    for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds_morning.push(createBackground(k, 4, `morning-${i + 1}`));
+    for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds_afternoon.push(createBackground(k, 4, `afternoon-${i + 1}`));
+    for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds_evening.push(createBackground(k, 4, `evening-${i + 1}`));
+    for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds_night.push(createBackground(k, 4, `night-${i + 1}`));
+
+    for (let i = 0; i < BACKGROUND_COUNT; i++) {
+        backgrounds_early_morning[i].forEach((component) => (component.hidden = true));
+        backgrounds_morning[i].forEach((component) => (component.hidden = true));
+        backgrounds_afternoon[i].forEach((component) => (component.hidden = true));
+        backgrounds_evening[i].forEach((component) => (component.hidden = true));
+        backgrounds_night[i].forEach((component) => (component.hidden = true));
+    }
 
     const map = k.add([k.sprite("map"), k.pos(0), k.scale(SCALE_FACTOR)]);
 
@@ -474,9 +484,27 @@ k.scene("main", async () => {
         k.camPos(player.pos.x, player.pos.y + 100);
 
         const backgroundCamY = player.pos.y - 200;
+        const currentHour = getCurrentHour();
+
         let speed = 0;
-        for (let i = 0; i < backgrounds.length; i++) {
-            updateBackground(k, backgrounds[i], speed, backgroundCamY, player.pos.x, player.prevPosX);
+
+        for (let i = 0; i < BACKGROUND_COUNT; i++) {
+            if (currentHour >= 0 && currentHour < 6) {
+                backgrounds_early_morning[i].forEach((component) => (component.hidden = false));
+                updateBackground(k, backgrounds_early_morning[i], speed, backgroundCamY, player.pos.x, player.prevPosX);
+            } else if (currentHour >= 6 && currentHour < 12) {
+                backgrounds_morning[i].forEach((component) => (component.hidden = false));
+                updateBackground(k, backgrounds_morning[i], speed, backgroundCamY, player.pos.x, player.prevPosX);
+            } else if (currentHour >= 12 && currentHour < 18) {
+                backgrounds_afternoon[i].forEach((component) => (component.hidden = false));
+                updateBackground(k, backgrounds_afternoon[i], speed, backgroundCamY, player.pos.x, player.prevPosX);
+            } else if (currentHour >= 18 && currentHour < 21) {
+                backgrounds_evening[i].forEach((component) => (component.hidden = false));
+                updateBackground(k, backgrounds_evening[i], speed, backgroundCamY, player.pos.x, player.prevPosX);
+            } else {
+                backgrounds_night[i].forEach((component) => (component.hidden = false));
+                updateBackground(k, backgrounds_night[i], speed, backgroundCamY, player.pos.x, player.prevPosX);
+            }
             speed += 0.2;
         }
         player.prevPosX = player.pos.x;
@@ -574,7 +602,5 @@ k.scene("main", async () => {
 
 k.go("menu");
 
-// TODO: Add real time background changes.
 // TODO: Implement a button to clear local storage if needed.
 // TODO: Refactor the entire codebase for better readability, maintainability, and performance.
-
