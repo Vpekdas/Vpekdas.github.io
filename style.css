@@ -305,6 +305,40 @@ body {
         0 0 20px 10px #0ff;
 }
 
+.clear-storage-button {
+    background-color: #1a1a2e;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 20px;
+    display: none;
+    position: fixed;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: scaleUp 1s ease-out forwards;
+    font-family: "monogram";
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-bin {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.clear-storage-button:hover {
+    background-color: #0d0d1a;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 @keyframes slideInFromBottom {
     0% {
         transform: translateY(100%);
