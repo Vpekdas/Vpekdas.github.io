@@ -120,6 +120,20 @@
             <img src="./trash-bin.png" alt="Bin Icon" class="icon-bin" />
             <span class="button-text">Clear Storage</span>
         </button>
+        <div id="modal-overlay" class="modal-overlay">
+            <div id="confirmation-modal" class="modal-container">
+                <div class="modal-header">
+                    <h2>Confirm Action</h2>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to clear the local storage?</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="confirm-button" class="modal-button">Confirm</button>
+                    <button id="cancel-button" class="modal-button">Cancel</button>
+                </div>
+            </div>
+        </div>
         <script type="module" src="src/main.js"></script>
     </body>
 </html>

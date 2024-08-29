@@ -425,6 +425,8 @@ export function loadLocalStorage(projects) {
     for (let i = 0; i < projects.length; i++) {
         if (localStorage.getItem(projects[i].name) === "1") {
             projects[i].discovered = true;
+        } else {
+            projects[i].discovered = false;
         }
     }
 }
@@ -432,4 +434,29 @@ export function loadLocalStorage(projects) {
 export function getCurrentHour() {
     const now = new Date();
     return now.getHours();
+}
+
+function clearLocalStorage(modalOverlay) {
+    localStorage.clear();
+    modalOverlay.style.display = "none";
+}
+
+function closePopup(modalOverlay) {
+    modalOverlay.style.display = "none";
+}
+
+function openPopup() {
+    const modalOverlay = document.getElementById("modal-overlay");
+    const confirmButton = document.getElementById("confirm-button");
+    const cancelButton = document.getElementById("cancel-button");
+
+    modalOverlay.style.display = "flex";
+    confirmButton.addEventListener("click", () => clearLocalStorage(modalOverlay));
+    cancelButton.addEventListener("click", () => closePopup(modalOverlay));
+}
+
+export function clearPopup() {
+    const clearButton = document.querySelector(".clear-storage-button");
+
+    clearButton.addEventListener("click", () => openPopup());
 }
