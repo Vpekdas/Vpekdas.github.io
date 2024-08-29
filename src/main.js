@@ -40,6 +40,7 @@ import {
     saveToLocalStorage,
     loadLocalStorage,
     getCurrentHour,
+    clearPopup,
 } from "./utils.js";
 
 k.scene("menu", async () => {
@@ -60,22 +61,26 @@ k.scene("menu", async () => {
 
     const githubLogo = k.add([
         k.sprite("github-logo"),
-        k.pos(k.width() / 2 - socialsObj.width / 3 - 10, k.height() / 3),
+        k.pos(k.width() / 2 - socialsObj.width / 3 - 10, k.height() / 3 - 16),
         k.area(),
     ]);
 
     const discordLogo = k.add([
         k.sprite("discord-logo"),
-        k.pos(k.width() / 2 - socialsObj.width / 3, k.height() / 2.2),
+        k.pos(k.width() / 2 - socialsObj.width / 3, k.height() / 3 + githubLogo.height),
         k.scale(0.3),
         k.area(),
     ]);
 
     const linkedinLogo = k.add([
         k.sprite("linkedin-logo"),
-        k.pos(k.width() / 2 - socialsObj.width / 3, k.height() / 1.8),
+        k.pos(k.width() / 2 - socialsObj.width / 3, k.height() / 3 + githubLogo.height * 2),
         k.area(),
     ]);
+
+    console.log(githubLogo.height);
+    console.log(discordLogo.height);
+    console.log(linkedinLogo.height);
 
     missionObj.pos = k.vec2(k.width() - missionObj.width * SCALE_FACTOR, 0);
     socialsObj.pos = k.vec2(k.width() / 2 - socialsObj.width / 2, k.height() / 10);
@@ -119,6 +124,7 @@ k.scene("menu", async () => {
         k.pos(aboutMeObj.width / 3, k.height() / 6),
         k.color(k.rgb(0, 255, 255)),
     ]);
+
     const aboutMeText = k.add([
         k.text(aboutMe, {
             size: 28,
@@ -140,6 +146,7 @@ k.scene("menu", async () => {
         k.pos(k.width() - missionObj.width * (SCALE_FACTOR - 0.3), k.height() / 6),
         k.color(k.rgb(255, 20, 147)),
     ]);
+
     const missionText = k.add([
         k.text(mission, {
             size: 28,
@@ -147,7 +154,6 @@ k.scene("menu", async () => {
             font: "myFont",
         }),
         k.pos(k.width() - missionObj.width * (SCALE_FACTOR - 0.3), k.height() / 3),
-
         k.color(k.rgb(57, 255, 20)),
         k.opacity(0),
     ]);
@@ -169,7 +175,6 @@ k.scene("menu", async () => {
             font: "myFont",
         }),
         k.pos(k.width() / 3, k.height() * 0.9),
-
         k.color(k.rgb(255, 255, 0)),
         k.opacity(0),
     ]);
@@ -184,7 +189,6 @@ k.scene("menu", async () => {
     k.wait(1.2, () => {
         aboutMeText.opacity = 1;
     });
-
     k.wait(4, () => {
         missionText.opacity = 0.1;
     });
@@ -194,7 +198,6 @@ k.scene("menu", async () => {
     k.wait(4.2, () => {
         missionText.opacity = 1;
     });
-
     k.wait(9.2, () => {
         blinkPlay = true;
     });
@@ -464,15 +467,15 @@ k.scene("main", async () => {
                     player.prevPosY = player.pos.y;
                     continue;
                 }
+                window.addEventListener("DOMContentLoaded", updateProgress);
             }
         }
-
-        window.addEventListener("DOMContentLoaded", updateProgress);
     }
 
     loadLocalStorage(projects);
     updateProgress(projects, false);
     showAchievement(projects);
+    clearPopup();
 
     setCamScale(k);
 
@@ -489,7 +492,7 @@ k.scene("main", async () => {
         let speed = 0;
 
         for (let i = 0; i < BACKGROUND_COUNT; i++) {
-            if (currentHour >= 0 && currentHour < 6) {
+            if (currentHour >= 3 && currentHour < 6) {
                 backgrounds_early_morning[i].forEach((component) => (component.hidden = false));
                 updateBackground(k, backgrounds_early_morning[i], speed, backgroundCamY, player.pos.x, player.prevPosX);
             } else if (currentHour >= 6 && currentHour < 12) {
@@ -581,12 +584,17 @@ k.scene("main", async () => {
 
     k.onKeyPress("m", () => {
         const menu = document.getElementById("hexagon-menu");
+        const resetButton = document.querySelector(".clear-storage-button");
         menu.style.display = "flex";
+        resetButton.style.display = "inline-flex";
     });
 
     k.onKeyPress("e", () => {
         const menu = document.getElementById("hexagon-menu");
+        const resetButton = document.querySelector(".clear-storage-button");
+
         menu.style.display = "none";
+        resetButton.style.display = "none";
     });
 
     k.onKeyPress("c", () => {
@@ -602,7 +610,7 @@ k.scene("main", async () => {
 
 k.go("menu");
 
-// TODO: Implement a button to clear local storage if needed.
 // TODO: Refactor the entire codebase for better readability, maintainability, and performance.
 // TODO: Change Kaboom.js to Kaplay (a maintained fork of Kaboom.js, which is deprecated)
 // TODO: Migrate the codebase from JavaScript to TypeScript for improved type safety and maintainability.
+// TODO: Add a background. Currently, it is transparent and visible in the menu.
