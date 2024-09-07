@@ -44,6 +44,12 @@ import {
 } from "./utils.js";
 
 k.scene("menu", async () => {
+    const bg = k.add([
+        k.sprite("menu-background"),
+        k.pos(k.width() / 2, k.height() / 2),
+        k.anchor("center"),
+        k.scale(1),
+    ]);
     const mapData = await (await fetch("./map/map.json")).json();
     const note = document.querySelector(".note");
     const progresBarDone = document.querySelector(".progress-done ");
@@ -77,10 +83,6 @@ k.scene("menu", async () => {
         k.pos(k.width() / 2 - socialsObj.width / 3, k.height() / 3 + githubLogo.height * 2),
         k.area(),
     ]);
-
-    console.log(githubLogo.height);
-    console.log(discordLogo.height);
-    console.log(linkedinLogo.height);
 
     missionObj.pos = k.vec2(k.width() - missionObj.width * SCALE_FACTOR, 0);
     socialsObj.pos = k.vec2(k.width() / 2 - socialsObj.width / 2, k.height() / 10);
@@ -169,17 +171,25 @@ k.scene("menu", async () => {
     ]);
 
     let play = k.add([
-        k.text("press space to dive in ! 🤿", {
+        k.text("press           to dive in !", {
             size: 48,
             width: 1000,
             font: "myFont",
         }),
         k.pos(k.width() / 3, k.height() * 0.9),
         k.color(k.rgb(255, 255, 0)),
-        k.opacity(0),
+        k.opacity(1),
+    ]);
+    // FIXME:
+    const space = k.add([
+        k.sprite("space", { anim: "pressed off" }),
+        k.pos(k.width() / 3, k.height() * 0.9),
+        k.scale(2),
     ]);
 
-    let blinkPlay = false;
+    space.pos = k.vec2(k.width() / 3 + space.width * SCALE_FACTOR, k.height() * 0.9 + 6);
+    // FIXME:
+
     k.wait(1, () => {
         aboutMeText.opacity = 0.1;
     });
@@ -198,17 +208,6 @@ k.scene("menu", async () => {
     k.wait(4.2, () => {
         missionText.opacity = 1;
     });
-    k.wait(9.2, () => {
-        blinkPlay = true;
-    });
-
-    k.onUpdate(() => {
-        if (Math.floor(k.time() / 0.5) % 2.5 === 0 && blinkPlay) {
-            play.opacity = 1;
-        } else {
-            play.opacity = 0;
-        }
-    });
 
     k.onKeyPress("space", () => {
         k.go("main");
@@ -216,6 +215,14 @@ k.scene("menu", async () => {
         progresBarDone.style.display = "flex";
         progresBar.style.display = "block";
         achievement.style.display = "flex";
+    });
+
+    k.onUpdate(() => {
+        if (Math.floor(k.time() / 0.5) % 2.5 === 0) {
+            space.play("pressed on");
+        } else {
+            space.play("pressed off");
+        }
     });
 });
 
@@ -493,18 +500,23 @@ k.scene("main", async () => {
 
         for (let i = 0; i < BACKGROUND_COUNT; i++) {
             if (currentHour >= 3 && currentHour < 6) {
+                backgrounds_night[i].forEach((component) => (component.hidden = true));
                 backgrounds_early_morning[i].forEach((component) => (component.hidden = false));
                 updateBackground(k, backgrounds_early_morning[i], speed, backgroundCamY, player.pos.x, player.prevPosX);
             } else if (currentHour >= 6 && currentHour < 12) {
+                backgrounds_early_morning[i].forEach((component) => (component.hidden = true));
                 backgrounds_morning[i].forEach((component) => (component.hidden = false));
                 updateBackground(k, backgrounds_morning[i], speed, backgroundCamY, player.pos.x, player.prevPosX);
             } else if (currentHour >= 12 && currentHour < 18) {
+                backgrounds_morning[i].forEach((component) => (component.hidden = true));
                 backgrounds_afternoon[i].forEach((component) => (component.hidden = false));
                 updateBackground(k, backgrounds_afternoon[i], speed, backgroundCamY, player.pos.x, player.prevPosX);
             } else if (currentHour >= 18 && currentHour < 21) {
+                backgrounds_afternoon[i].forEach((component) => (component.hidden = true));
                 backgrounds_evening[i].forEach((component) => (component.hidden = false));
                 updateBackground(k, backgrounds_evening[i], speed, backgroundCamY, player.pos.x, player.prevPosX);
             } else {
+                backgrounds_evening[i].forEach((component) => (component.hidden = true));
                 backgrounds_night[i].forEach((component) => (component.hidden = false));
                 updateBackground(k, backgrounds_night[i], speed, backgroundCamY, player.pos.x, player.prevPosX);
             }
@@ -613,4 +625,4 @@ k.go("menu");
 // TODO: Refactor the entire codebase for better readability, maintainability, and performance.
 // TODO: Change Kaboom.js to Kaplay (a maintained fork of Kaboom.js, which is deprecated)
 // TODO: Migrate the codebase from JavaScript to TypeScript for improved type safety and maintainability.
-// TODO: Add a background. Currently, it is transparent and visible in the menu.
+// TODO: Implement player movement using keyboard controls.

@@ -129,6 +129,18 @@ export function loadAllResources(k) {
                 path: "./tiles/spritesheet.png",
                 config: { sliceX: 21, sliceY: 11 },
             },
+            {
+                name: "space",
+                path: "./SPACE.png",
+                config: {
+                    sliceX: 2,
+                    sliceY: 1,
+                    anims: {
+                        "pressed off": 0,
+                        "pressed on": 1,
+                    },
+                },
+            },
             { name: "pipe", path: "./pipe/1.png" },
             {
                 name: "furniture",
@@ -163,12 +175,13 @@ export function loadAllResources(k) {
             { name: "night-4", path: "./background/night/4.png" },
             { name: "night-5", path: "./background/night/5.png" },
             { name: "map", path: "./map/map.png" },
-            { name: "msg", path: "menu/Msg01.png" },
-            { name: "msg2", path: "menu/Msg03.png" },
-            { name: "msg3", path: "menu/Msg10.png" },
-            { name: "github-logo", path: "Github_logo_icon.svg" },
-            { name: "discord-logo", path: "Discord_icon.svg" },
-            { name: "linkedin-logo", path: "LinkedIn_logo_icon.svg" },
+            { name: "msg", path: "./menu/Msg01.png" },
+            { name: "msg2", path: "./menu/Msg03.png" },
+            { name: "msg3", path: "./menu/Msg10.png" },
+            { name: "github-logo", path: "./logo/Github_logo_icon.svg" },
+            { name: "discord-logo", path: "./logo/Discord_icon.svg" },
+            { name: "linkedin-logo", path: "./logo/LinkedIn_logo_icon.svg" },
+            { name: "menu-background", path: "./Cyberpunk_city_street.gif" },
         ],
     };
 
