@@ -392,7 +392,7 @@ body {
     display: inline-block;
     width: 32px;
     height: 32px;
-    background-image: url("./M.png");
+    background-image: url("/M.png");
     background-size: 64px 32px;
     background-repeat: no-repeat;
     vertical-align: middle;
@@ -403,7 +403,7 @@ body {
     display: inline-block;
     width: 32px;
     height: 32px;
-    background-image: url("./E.png");
+    background-image: url("/E.png");
     background-size: 64px 32px;
     background-repeat: no-repeat;
     vertical-align: middle;
@@ -414,7 +414,7 @@ body {
     display: inline-block;
     width: 32px;
     height: 32px;
-    background-image: url("./H.png");
+    background-image: url("/H.png");
     background-size: 64px 32px;
     background-repeat: no-repeat;
     vertical-align: middle;
@@ -425,7 +425,7 @@ body {
     display: inline-block;
     width: 32px;
     height: 32px;
-    background-image: url("./C.png");
+    background-image: url("/C.png");
     background-size: 64px 32px;
     background-repeat: no-repeat;
     vertical-align: middle;
