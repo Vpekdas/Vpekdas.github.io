@@ -22,3 +22,19 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+# image
+SimpleKeys
+
+
+feat: add background and key image to replace letter, improve space button visibility
+
+- Removed node_modules folder from version control.
+- Added a background image for the menu.
+- Ensured the space button is easily visible by removing the blink effect.
+- Added key images with a pressed effect.
+- Need to verify if the background scales properly on larger screens.
+
+Following modifications are based on @https://github.com/Tsurea's suggestion, thanks to him!
+

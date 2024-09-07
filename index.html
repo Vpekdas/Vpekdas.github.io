@@ -5,19 +5,23 @@
         <link rel="icon" type="image/svg+xml" href="/vite.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Vite App</title>
-        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="/style.css" />
     </head>
     <body>
         <div id="app">
             <div>
-                <ul class="note">
-                    <li onselectstart="return false;">Tap/Click around to move.</li>
-                    <li onselectstart="return false;">Press "m" to open the menu and "e" to close it.</li>
-                    <li onselectstart="return false;">Press "h" to open the hint and "c" to close it.</li>
-                    <li class="highlight" onselectstart="return false;">
-                        Explore and find all my projects hidden around !
-                    </li>
-                </ul>
+				<ul class="note">
+					<li onselectstart="return false;">Tap/Click around to move.</li>
+					<li onselectstart="return false;">
+						Press <span class="m-key"></span> to open the menu and <span class="e-key"></span> to close it.
+					</li>
+					<li onselectstart="return false;">
+						Press <span class="h-key"></span> to open the hint and <span class="c-key"></span> to close it.
+					</li>
+					<li class="highlight" onselectstart="return false;">
+						Explore and find all my projects hidden around!
+					</li>
+				</ul>
                 <div id="textbox-container" style="display: none">
                     <div id="textbox">
                         <p id="dialogue" class="ui-text"></p>
@@ -117,7 +121,7 @@
             </div>
         </div>
         <button class="clear-storage-button">
-            <img src="./trash-bin.png" alt="Bin Icon" class="icon-bin" />
+            <img src="./menu/trash-bin.png" alt="Bin Icon" class="icon-bin" />
             <span class="button-text">Clear Storage</span>
         </button>
         <div id="modal-overlay" class="modal-overlay">
@@ -134,6 +138,6 @@
                 </div>
             </div>
         </div>
-        <script type="module" src="src/main.js"></script>
+        <script type="module" src="/src/main.js"></script>
     </body>
 </html>

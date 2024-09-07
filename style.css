@@ -388,6 +388,50 @@ body {
     transition: background-color 0.3s;
 }
 
+.m-key {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-image: url("./M.png");
+    background-size: 64px 32px;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+    animation: keyPressAnimation 1s infinite;
+}
+
+.e-key {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-image: url("./E.png");
+    background-size: 64px 32px;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+    animation: keyPressAnimation 1s infinite;
+}
+
+.h-key {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-image: url("./H.png");
+    background-size: 64px 32px;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+    animation: keyPressAnimation 1s infinite;
+}
+
+.c-key {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-image: url("./C.png");
+    background-size: 64px 32px;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+    animation: keyPressAnimation 1s infinite;
+}
+
 #confirm-button {
     background-color: #d9534f;
     color: #fff;
@@ -475,5 +519,16 @@ body {
             0 0 30px #ff00ff,
             0 0 60px #ff00ff;
         opacity: 1;
+    }
+}
+
+@keyframes keyPressAnimation {
+    0%,
+    50% {
+        background-position: 0 0;
+    }
+    50.01%,
+    100% {
+        background-position: -32px 0;
     }
 }
