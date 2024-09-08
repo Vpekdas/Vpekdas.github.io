@@ -491,6 +491,64 @@ k.scene("main", async () => {
     });
 
     k.onUpdate(() => {
+        if (keysPressed.w && keysPressed.a) {
+            player.move(-PLAYER_SPEED / 2, -PLAYER_SPEED / 2);
+            if (player.curAnim() !== "walk-up" && player.curAnim() !== "walk-side") {
+                player.play("walk-up");
+                player.direction = "up";
+            }
+        } else if (keysPressed.w && keysPressed.d) {
+            player.move(+PLAYER_SPEED / 2, -PLAYER_SPEED / 2);
+            if (player.curAnim() !== "walk-up" && player.curAnim() !== "walk-side") {
+                player.play("walk-up");
+                player.direction = "up";
+            }
+        } else if (keysPressed.w) {
+            player.move(0, -PLAYER_SPEED);
+            if (player.curAnim() !== "walk-up") {
+                player.play("walk-up");
+                player.direction = "up";
+            }
+        }
+
+        if (keysPressed.a) {
+            player.move(-PLAYER_SPEED, 0);
+            if (player.curAnim() !== "walk-side" || player.direction !== "left") {
+                player.flipX = true;
+                player.play("walk-side");
+                player.direction = "left";
+            }
+        }
+
+        if (keysPressed.s && keysPressed.a) {
+            player.move(-PLAYER_SPEED / 2, +PLAYER_SPEED / 2);
+            if (player.curAnim() !== "walk-down" && player.curAnim() !== "walk-side") {
+                player.play("walk-down");
+                player.direction = "down";
+            }
+        } else if (keysPressed.s && keysPressed.d) {
+            player.move(+PLAYER_SPEED / 2, +PLAYER_SPEED / 2);
+            if (player.curAnim() !== "walk-down" && player.curAnim() !== "walk-side") {
+                player.play("walk-down");
+                player.direction = "down";
+            }
+        } else if (keysPressed.s) {
+            player.move(0, PLAYER_SPEED);
+            if (player.curAnim() !== "walk-down") {
+                player.play("walk-down");
+                player.direction = "down";
+            }
+        }
+
+        if (keysPressed.d) {
+            player.move(PLAYER_SPEED, 0);
+            if (player.curAnim() !== "walk-side" || player.direction !== "right") {
+                player.flipX = false;
+                player.play("walk-side");
+                player.direction = "right";
+            }
+        }
+
         k.camPos(player.pos.x, player.pos.y + 100);
 
         const backgroundCamY = player.pos.y - 200;
@@ -618,6 +676,37 @@ k.scene("main", async () => {
         const note = document.querySelector(".note");
         note.style.display = "block";
     });
+
+    const keysPressed = {
+        w: false,
+        a: false,
+        s: false,
+        d: false,
+    };
+
+    function handleKeyEvents(key, isPressed) {
+        k.onKeyDown(key, () => {
+            keysPressed[key] = isPressed;
+        });
+
+        k.onKeyRelease(key, () => {
+            keysPressed[key] = !isPressed;
+            if (key === "w") {
+                player.play("idle-up");
+                return;
+            } else if (key === "s") {
+                player.play("idle-down");
+                return;
+            }
+            player.play("idle-side");
+            return;
+        });
+    }
+
+    handleKeyEvents("w", true);
+    handleKeyEvents("a", true);
+    handleKeyEvents("s", true);
+    handleKeyEvents("d", true);
 });
 
 k.go("menu");
@@ -625,4 +714,5 @@ k.go("menu");
 // TODO: Refactor the entire codebase for better readability, maintainability, and performance.
 // TODO: Change Kaboom.js to Kaplay (a maintained fork of Kaboom.js, which is deprecated)
 // TODO: Migrate the codebase from JavaScript to TypeScript for improved type safety and maintainability.
-// TODO: Implement player movement using keyboard controls.
+// TODO: Normalize the movement vector for consistent speed in all directions, including diagonals.
+// TODO: Remove the interactable animation when a project is found to improve user experience and avoid unnecessary animations.
