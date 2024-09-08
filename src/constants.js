@@ -161,7 +161,6 @@ export const PROJECT_DESCRIPTIONS = {
 };
 
 export const aboutMe =
-    "Hello everyone, my name is Volkan and I'm a student at 42. Before that, I graduated in accounting but I have decided to change careers :)";
-
+    "Hello everyone, my name is Volkan and I'm a student at 42. Before that, I graduated in accounting but I have decided to change careers to become a game developer :)";
 export const mission =
     "I have hidden my projects in this virtual world. Find them all and explore the wonders of coding!";

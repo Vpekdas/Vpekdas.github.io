@@ -131,7 +131,7 @@ export function loadAllResources(k) {
             },
             {
                 name: "space",
-                path: "/SPACE.png",
+                path: "/keys/SPACE.png",
                 config: {
                     sliceX: 2,
                     sliceY: 1,
@@ -237,6 +237,7 @@ export function createIndicator(x, y, animation, k) {
         k.scale(SCALE_FACTOR),
     ]);
     indicator.play(animation);
+    return indicator;
 }
 
 export function createBackground(k, backgroundNumber, spriteName) {
@@ -472,4 +473,14 @@ export function clearPopup() {
     const clearButton = document.querySelector(".clear-storage-button");
 
     clearButton.addEventListener("click", () => openPopup());
+}
+
+export function destroyIndicators(k, indicators, projects) {
+    for (let i = 0; i < projects.length; i++) {
+        if (projects[i].discovered === true) {
+            indicators[projects[i].name].forEach((indicator) => {
+                k.destroy(indicator);
+            });
+        }
+    }
 }
