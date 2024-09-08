@@ -392,7 +392,7 @@ body {
     display: inline-block;
     width: 32px;
     height: 32px;
-    background-image: url("/M.png");
+    background-image: url("/keys/M.png");
     background-size: 64px 32px;
     background-repeat: no-repeat;
     vertical-align: middle;
@@ -403,7 +403,7 @@ body {
     display: inline-block;
     width: 32px;
     height: 32px;
-    background-image: url("/E.png");
+    background-image: url("/keys/E.png");
     background-size: 64px 32px;
     background-repeat: no-repeat;
     vertical-align: middle;
@@ -414,7 +414,7 @@ body {
     display: inline-block;
     width: 32px;
     height: 32px;
-    background-image: url("/H.png");
+    background-image: url("/keys/H.png");
     background-size: 64px 32px;
     background-repeat: no-repeat;
     vertical-align: middle;
@@ -425,7 +425,51 @@ body {
     display: inline-block;
     width: 32px;
     height: 32px;
-    background-image: url("/C.png");
+    background-image: url("/keys/C.png");
+    background-size: 64px 32px;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+    animation: keyPressAnimation 1s infinite;
+}
+
+.w-key {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-image: url("/keys/W.png");
+    background-size: 64px 32px;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+    animation: keyPressAnimation 1s infinite;
+}
+
+.s-key {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-image: url("/keys/S.png");
+    background-size: 64px 32px;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+    animation: keyPressAnimation 1s infinite;
+}
+
+.a-key {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-image: url("/keys/A.png");
+    background-size: 64px 32px;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+    animation: keyPressAnimation 1s infinite;
+}
+
+.d-key {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-image: url("/keys/D.png");
     background-size: 64px 32px;
     background-repeat: no-repeat;
     vertical-align: middle;
