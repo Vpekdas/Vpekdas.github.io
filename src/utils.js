@@ -181,7 +181,7 @@ export function loadAllResources(k) {
             { name: "github-logo", path: "/logo/Github_logo_icon.svg" },
             { name: "discord-logo", path: "/logo/Discord_icon.svg" },
             { name: "linkedin-logo", path: "/logo/LinkedIn_logo_icon.svg" },
-            { name: "menu-background", path: "/Cyberpunk_city_street.gif" },
+            { name: "menu-background", path: "background/Cyberpunk_city_street.gif" },
         ],
     };
 
