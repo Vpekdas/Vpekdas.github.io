@@ -27,6 +27,7 @@ export function displayDialogue(text, onDisplayEnd) {
         clearInterval(intervalRef);
         closeBtn.removeEventListener("click", onCloseClick);
     }
+
     closeBtn.addEventListener("click", onCloseClick);
 }
 
@@ -215,17 +216,9 @@ export function createInteractable(k, tiles, boundary, frame, modifX, modifY) {
         k.pos((boundary.x + OFFSET_X + modifX) * SCALE_FACTOR, (boundary.y + OFFSET_Y + modifY) * SCALE_FACTOR),
         k.scale(SCALE_FACTOR),
     ]);
-    const blinkSprite = k.add([
-        k.sprite(tiles, { frame }),
-        k.pos((boundary.x + OFFSET_X + modifX) * SCALE_FACTOR, (boundary.y + OFFSET_Y + modifY) * SCALE_FACTOR),
-        k.color(255, 255, 255),
-        k.opacity(0.75),
-        k.scale(SCALE_FACTOR),
-    ]);
 
     return {
         originalSprite,
-        blinkSprite,
         blink: false,
     };
 }
@@ -482,5 +475,30 @@ export function destroyIndicators(k, indicators, projects) {
                 k.destroy(indicator);
             });
         }
+    }
+}
+
+export function handleKeyEvents(key, isPressed, keysPressed, k, player) {
+    k.onKeyDown(key, () => {
+        keysPressed[key] = isPressed;
+    });
+
+    k.onKeyRelease(key, () => {
+        keysPressed[key] = !isPressed;
+        if (key === "w" || key === "up") {
+            player.play("idle-up");
+            return;
+        } else if (key === "s" || key === "down") {
+            player.play("idle-down");
+            return;
+        }
+        player.play("idle-side");
+    });
+}
+
+export function ensureCanvasFocus() {
+    const canvas = document.querySelector("canvas");
+    if (canvas) {
+        canvas.focus();
     }
 }

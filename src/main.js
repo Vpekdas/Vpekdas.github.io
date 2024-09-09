@@ -42,6 +42,8 @@ import {
     getCurrentHour,
     clearPopup,
     destroyIndicators,
+    handleKeyEvents,
+    ensureCanvasFocus,
 } from "./utils.js";
 
 k.scene("menu", async () => {
@@ -181,7 +183,6 @@ k.scene("menu", async () => {
         k.color(k.rgb(255, 255, 0)),
         k.opacity(1),
     ]);
-    // FIXME:
     const space = k.add([
         k.sprite("space", { anim: "pressed off" }),
         k.pos(k.width() / 3, k.height() * 0.9),
@@ -189,7 +190,6 @@ k.scene("menu", async () => {
     ]);
 
     space.pos = k.vec2(k.width() / 3 + space.width * SCALE_FACTOR, k.height() * 0.9 + 6);
-    // FIXME:
 
     k.wait(1, () => {
         aboutMeText.opacity = 0.1;
@@ -229,21 +229,31 @@ k.scene("menu", async () => {
 
 loadAllResources(k);
 
-// k.setBackground(k.Color.fromHex("#2e51b2"));
-
 k.scene("main", async () => {
     const mapData = await (await fetch("./map/map.json")).json();
     const layers = mapData.layers;
     const interactables = [];
-    let indicators = new Map();
     const backgrounds_early_morning = [];
     const backgrounds_morning = [];
     const backgrounds_afternoon = [];
     const backgrounds_evening = [];
     const backgrounds_night = [];
-
     const projects = [];
+
     let animationBanner = false;
+    let indicators = new Map();
+
+    const keysPressed = {
+        w: false,
+        a: false,
+        s: false,
+        d: false,
+        up: false,
+        down: false,
+        left: false,
+        right: false,
+    };
+
     for (let i = 0; i < BACKGROUND_COUNT; i++)
         backgrounds_early_morning.push(createBackground(k, 4, `early-morning-${i + 1}`));
     for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds_morning.push(createBackground(k, 4, `morning-${i + 1}`));
@@ -280,6 +290,15 @@ k.scene("main", async () => {
         },
         "player",
     ]);
+
+    handleKeyEvents("w", true, keysPressed, k, player);
+    handleKeyEvents("a", true, keysPressed, k, player);
+    handleKeyEvents("s", true, keysPressed, k, player);
+    handleKeyEvents("d", true, keysPressed, k, player);
+    handleKeyEvents("up", true, keysPressed, k, player);
+    handleKeyEvents("down", true, keysPressed, k, player);
+    handleKeyEvents("left", true, keysPressed, k, player);
+    handleKeyEvents("right", true, keysPressed, k, player);
 
     createTile(k, "tiles", 2, 114 - 32 * 1, 151);
     createTile(k, "tiles", 2, 114 - 32 * 2, 151);
@@ -515,119 +534,64 @@ k.scene("main", async () => {
     });
 
     k.onUpdate(() => {
-        if (keysPressed.w && keysPressed.a) {
-            player.move(-PLAYER_SPEED / 2, -PLAYER_SPEED / 2);
-            if (player.curAnim() !== "walk-up" && player.curAnim() !== "walk-side") {
-                player.play("walk-up");
-                player.direction = "up";
+        ensureCanvasFocus();
+        if (!player.isInDialogue) {
+            if ((keysPressed.w && keysPressed.a) || (keysPressed.up && keysPressed.left)) {
+                player.move(-PLAYER_SPEED / Math.sqrt(2), -PLAYER_SPEED / Math.sqrt(2));
+                if (player.curAnim() !== "walk-up" && player.curAnim() !== "walk-side") {
+                    player.play("walk-up");
+                    player.direction = "up";
+                }
+            } else if ((keysPressed.w && keysPressed.d) || (keysPressed.up && keysPressed.right)) {
+                player.move(+PLAYER_SPEED / Math.sqrt(2), -PLAYER_SPEED / Math.sqrt(2));
+                if (player.curAnim() !== "walk-up" && player.curAnim() !== "walk-side") {
+                    player.play("walk-up");
+                    player.direction = "up";
+                }
+            } else if (keysPressed.w || keysPressed.up) {
+                player.move(0, -PLAYER_SPEED);
+                if (player.curAnim() !== "walk-up") {
+                    player.play("walk-up");
+                    player.direction = "up";
+                }
             }
-        } else if (keysPressed.w && keysPressed.d) {
-            player.move(+PLAYER_SPEED / 2, -PLAYER_SPEED / 2);
-            if (player.curAnim() !== "walk-up" && player.curAnim() !== "walk-side") {
-                player.play("walk-up");
-                player.direction = "up";
-            }
-        } else if (keysPressed.w) {
-            player.move(0, -PLAYER_SPEED);
-            if (player.curAnim() !== "walk-up") {
-                player.play("walk-up");
-                player.direction = "up";
-            }
-        }
 
-        if (keysPressed.a) {
-            player.move(-PLAYER_SPEED, 0);
-            if (player.curAnim() !== "walk-side" || player.direction !== "left") {
-                player.flipX = true;
-                player.play("walk-side");
-                player.direction = "left";
+            if ((keysPressed.s && keysPressed.a) || (keysPressed.down && keysPressed.left)) {
+                player.move(-PLAYER_SPEED / Math.sqrt(2), +PLAYER_SPEED / Math.sqrt(2));
+                if (player.curAnim() !== "walk-down" && player.curAnim() !== "walk-side") {
+                    player.play("walk-down");
+                    player.direction = "down";
+                }
+            } else if ((keysPressed.s && keysPressed.d) || (keysPressed.down && keysPressed.right)) {
+                player.move(+PLAYER_SPEED / Math.sqrt(2), +PLAYER_SPEED / Math.sqrt(2));
+                if (player.curAnim() !== "walk-down" && player.curAnim() !== "walk-side") {
+                    player.play("walk-down");
+                    player.direction = "down";
+                }
+            } else if (keysPressed.s || keysPressed.down) {
+                player.move(0, PLAYER_SPEED);
+                if (player.curAnim() !== "walk-down") {
+                    player.play("walk-down");
+                    player.direction = "down";
+                }
             }
-        }
 
-        if (keysPressed.s && keysPressed.a) {
-            player.move(-PLAYER_SPEED / 2, +PLAYER_SPEED / 2);
-            if (player.curAnim() !== "walk-down" && player.curAnim() !== "walk-side") {
-                player.play("walk-down");
-                player.direction = "down";
+            if (keysPressed.d || keysPressed.right) {
+                player.move(PLAYER_SPEED, 0);
+                if (player.curAnim() !== "walk-side" || player.direction !== "right") {
+                    player.flipX = false;
+                    player.play("walk-side");
+                    player.direction = "right";
+                }
             }
-        } else if (keysPressed.s && keysPressed.d) {
-            player.move(+PLAYER_SPEED / 2, +PLAYER_SPEED / 2);
-            if (player.curAnim() !== "walk-down" && player.curAnim() !== "walk-side") {
-                player.play("walk-down");
-                player.direction = "down";
-            }
-        } else if (keysPressed.s) {
-            player.move(0, PLAYER_SPEED);
-            if (player.curAnim() !== "walk-down") {
-                player.play("walk-down");
-                player.direction = "down";
-            }
-        }
 
-        if (keysPressed.d) {
-            player.move(PLAYER_SPEED, 0);
-            if (player.curAnim() !== "walk-side" || player.direction !== "right") {
-                player.flipX = false;
-                player.play("walk-side");
-                player.direction = "right";
-            }
-        }
-
-        if (keysPressed.w && keysPressed.a) {
-            player.move(-PLAYER_SPEED / 2, -PLAYER_SPEED / 2);
-            if (player.curAnim() !== "walk-up" && player.curAnim() !== "walk-side") {
-                player.play("walk-up");
-                player.direction = "up";
-            }
-        } else if (keysPressed.w && keysPressed.d) {
-            player.move(+PLAYER_SPEED / 2, -PLAYER_SPEED / 2);
-            if (player.curAnim() !== "walk-up" && player.curAnim() !== "walk-side") {
-                player.play("walk-up");
-                player.direction = "up";
-            }
-        } else if (keysPressed.w) {
-            player.move(0, -PLAYER_SPEED);
-            if (player.curAnim() !== "walk-up") {
-                player.play("walk-up");
-                player.direction = "up";
-            }
-        }
-
-        if (keysPressed.a) {
-            player.move(-PLAYER_SPEED, 0);
-            if (player.curAnim() !== "walk-side" || player.direction !== "left") {
-                player.flipX = true;
-                player.play("walk-side");
-                player.direction = "left";
-            }
-        }
-
-        if (keysPressed.s && keysPressed.a) {
-            player.move(-PLAYER_SPEED / 2, +PLAYER_SPEED / 2);
-            if (player.curAnim() !== "walk-down" && player.curAnim() !== "walk-side") {
-                player.play("walk-down");
-                player.direction = "down";
-            }
-        } else if (keysPressed.s && keysPressed.d) {
-            player.move(+PLAYER_SPEED / 2, +PLAYER_SPEED / 2);
-            if (player.curAnim() !== "walk-down" && player.curAnim() !== "walk-side") {
-                player.play("walk-down");
-                player.direction = "down";
-            }
-        } else if (keysPressed.s) {
-            player.move(0, PLAYER_SPEED);
-            if (player.curAnim() !== "walk-down") {
-                player.play("walk-down");
-                player.direction = "down";
-            }
-        }
-
-        if (keysPressed.d) {
-            player.move(PLAYER_SPEED, 0);
-            if (player.curAnim() !== "walk-side" || player.direction !== "right") {
-                player.flipX = false;
-                player.play("walk-side");
-                player.direction = "right";
+            if (keysPressed.a || keysPressed.left) {
+                player.move(-PLAYER_SPEED, 0);
+                if (player.curAnim() !== "walk-side" || player.direction !== "left") {
+                    player.flipX = true;
+                    player.play("walk-side");
+                    player.direction = "left";
+                }
             }
         }
 
@@ -669,11 +633,9 @@ k.scene("main", async () => {
             interactable.blink = Math.floor(k.time() / 0.5) % 2 === 0;
 
             if (interactable.blink) {
-                interactable.originalSprite.hidden = true;
-                interactable.blinkSprite.hidden = false;
+                interactable.originalSprite.opacity = 0.75;
             } else {
-                interactable.originalSprite.hidden = false;
-                interactable.blinkSprite.hidden = true;
+                interactable.originalSprite.opacity = 1;
             }
         }
     });
@@ -759,36 +721,16 @@ k.scene("main", async () => {
         note.style.display = "block";
     });
 
-    const keysPressed = {
-        w: false,
-        a: false,
-        s: false,
-        d: false,
-    };
+    k.onKeyPress("space", () => {
+        if (player.isInDialogue) {
+            const dialogueUI = document.getElementById("textbox-container");
+            const dialogue = document.getElementById("dialogue");
 
-    function handleKeyEvents(key, isPressed) {
-        k.onKeyDown(key, () => {
-            keysPressed[key] = isPressed;
-        });
-
-        k.onKeyRelease(key, () => {
-            keysPressed[key] = !isPressed;
-            if (key === "w") {
-                player.play("idle-up");
-                return;
-            } else if (key === "s") {
-                player.play("idle-down");
-                return;
-            }
-            player.play("idle-side");
-            return;
-        });
-    }
-
-    handleKeyEvents("w", true);
-    handleKeyEvents("a", true);
-    handleKeyEvents("s", true);
-    handleKeyEvents("d", true);
+            dialogueUI.style.display = "none";
+            dialogue.innerHTML = "";
+            player.isInDialogue = false;
+        }
+    });
 });
 
 k.go("menu");
@@ -798,5 +740,5 @@ k.go("menu");
 // TODO: Migrate the codebase from JavaScript to TypeScript for improved type safety and maintainability.
 // TODO: Normalize the movement vector for consistent speed in all directions, including diagonals.
 // TODO: Add an animation and possibly a popup notification when all projects have been discovered.
-// TODO: Add support for arrow keys (↑, ↓, ←, →) for movement in addition to WASD keys.
 // TODO: Add cub3d and cpp modules projects.
+// TODO: Optimize the menu layout and functionality for mobile devices.
