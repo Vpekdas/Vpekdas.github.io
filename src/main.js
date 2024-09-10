@@ -44,6 +44,7 @@ import {
     destroyIndicators,
     handleKeyEvents,
     ensureCanvasFocus,
+    isTouchDevice,
 } from "./utils.js";
 
 k.scene("menu", async () => {
@@ -210,6 +211,15 @@ k.scene("menu", async () => {
         missionText.opacity = 1;
     });
 
+    var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    if (isMobile || isTouchDevice()) {
+        k.go("main");
+        progresBarDone.style.display = "flex";
+        progresBar.style.display = "block";
+        achievement.style.display = "flex";
+    }
+
     k.onKeyPress("space", () => {
         k.go("main");
         note.style.display = "block";
@@ -231,6 +241,7 @@ loadAllResources(k);
 
 k.scene("main", async () => {
     const mapData = await (await fetch("./map/map.json")).json();
+
     const layers = mapData.layers;
     const interactables = [];
     const backgrounds_early_morning = [];
@@ -624,7 +635,7 @@ k.scene("main", async () => {
                 backgrounds_night[i].forEach((component) => (component.hidden = false));
                 updateBackground(k, backgrounds_night[i], speed, backgroundCamY, player.pos.x, player.prevPosX);
             }
-            speed += 0.2;
+            speed += 0.35;
         }
         player.prevPosX = player.pos.x;
         player.prevPosY = player.pos.y;
@@ -741,4 +752,4 @@ k.go("menu");
 // TODO: Normalize the movement vector for consistent speed in all directions, including diagonals.
 // TODO: Add an animation and possibly a popup notification when all projects have been discovered.
 // TODO: Add cub3d and cpp modules projects.
-// TODO: Optimize the menu layout and functionality for mobile devices.
+// TODO: Display the number of remaining projects to be discovered in the notification.
