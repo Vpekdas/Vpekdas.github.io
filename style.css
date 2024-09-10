@@ -63,7 +63,7 @@ body {
     background-color: rgba(0, 0, 0, 0.7);
     padding: 10px;
     border-radius: 5px;
-    max-width: 80%;
+    max-width: 1000%;
     animation: fadeIn 2s ease-out;
 }
 
@@ -470,6 +470,50 @@ body {
     width: 32px;
     height: 32px;
     background-image: url("/keys/D.png");
+    background-size: 64px 32px;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+    animation: keyPressAnimation 1s infinite;
+}
+
+.up-key {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-image: url("/keys/ARROWUP.png");
+    background-size: 64px 32px;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+    animation: keyPressAnimation 1s infinite;
+}
+
+.down-key {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-image: url("/keys/ARROWDOWN.png");
+    background-size: 64px 32px;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+    animation: keyPressAnimation 1s infinite;
+}
+
+.left-key {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-image: url("/keys/ARROWLEFT.png");
+    background-size: 64px 32px;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+    animation: keyPressAnimation 1s infinite;
+}
+
+.right-key {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-image: url("/keys/ARROWRIGHT.png");
     background-size: 64px 32px;
     background-repeat: no-repeat;
     vertical-align: middle;
