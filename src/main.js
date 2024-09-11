@@ -45,6 +45,7 @@ import {
     handleKeyEvents,
     ensureCanvasFocus,
     isTouchDevice,
+    createFireworks,
 } from "./utils.js";
 
 k.scene("menu", async () => {
@@ -252,6 +253,7 @@ k.scene("main", async () => {
     const projects = [];
 
     let animationBanner = false;
+    let hasDiscoveredAll = false;
     let indicators = new Map();
 
     const keysPressed = {
@@ -482,9 +484,16 @@ k.scene("main", async () => {
                     player.onCollide(boundary.name, () => {
                         player.isInDialogue = true;
                         displayDialogue(PROJECT_DESCRIPTIONS[boundary.name].story, () => (player.isInDialogue = false));
+
                         if (animationBanner === false) {
                             const discovered = countAchievemenDiscovered(projects);
                             const projectIndex = projects.findIndex((project) => project.name === boundary.name);
+
+                            if (discovered == countAchievemenDiscovered(projects) && !hasDiscoveredAll) {
+                                createFireworks(100);
+                                hasDiscoveredAll = true;
+                                localStorage.setItem("hasDiscoveredAll", 1);
+                            }
 
                             if (projectIndex != -1) {
                                 if (projects[projectIndex].discovered) return;
@@ -526,7 +535,6 @@ k.scene("main", async () => {
                     player.prevPosY = player.pos.y;
                     continue;
                 }
-                window.addEventListener("DOMContentLoaded", updateProgress);
             }
         }
     }
@@ -534,9 +542,11 @@ k.scene("main", async () => {
     loadLocalStorage(projects);
     updateProgress(projects, false);
     showAchievement(projects);
+
     clearPopup();
     // Adding a second destroy ensures discovered projects from previous refreshes are properly removed.
     destroyIndicators(k, indicators, projects);
+    window.addEventListener("DOMContentLoaded", updateProgress);
 
     setCamScale(k);
 

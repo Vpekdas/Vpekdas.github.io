@@ -9,6 +9,10 @@ body {
     overflow: hidden;
 }
 
+a:link {
+    text-decoration: none;
+}
+
 #app {
     width: 100%;
     height: 100%;
@@ -325,6 +329,12 @@ body {
     justify-content: center;
 }
 
+.clear-storage-button:hover {
+    background-color: #0d0d1a;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 .icon-bin {
     width: 20px;
     height: 20px;
@@ -333,13 +343,7 @@ body {
     vertical-align: middle;
 }
 
-.clear-storage-button:hover {
-    background-color: #0d0d1a;
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.modal-overlay {
+.storage-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -352,7 +356,7 @@ body {
     z-index: 1000;
 }
 
-.modal-container {
+.storage-modal-container {
     background: #fff;
     padding: 20px;
     border-radius: 8px;
@@ -362,19 +366,19 @@ body {
     text-align: center;
 }
 
-.modal-header h2 {
+.storage-modal-header h2 {
     margin: 0;
     font-size: 24px;
     color: #333;
 }
 
-.modal-body p {
+.storage-modal-body p {
     font-size: 16px;
     color: #666;
     margin: 20px 0;
 }
 
-.modal-footer {
+.storage-modal-footer {
     display: flex;
     justify-content: space-around;
 }
@@ -520,6 +524,99 @@ body {
     animation: keyPressAnimation 1s infinite;
 }
 
+.firework,
+.firework::before,
+.firework::after {
+    --color: "";
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0.5vmin;
+    aspect-ratio: 1;
+    background:
+        radial-gradient(circle, var(--color) 0.2vmin, #0000 0) 50% 0%,
+        radial-gradient(circle, var(--color) 0.3vmin, #0000 0) 0% 50%,
+        radial-gradient(circle, var(--color) 0.5vmin, #0000 0) 50% 100%,
+        radial-gradient(circle, var(--color) 0.2vmin, #0000 0) 100% 50%,
+        radial-gradient(circle, var(--color) 0.3vmin, #0000 0) 80% 90%,
+        radial-gradient(circle, var(--color) 0.5vmin, #0000 0) 95% 90%,
+        radial-gradient(circle, var(--color) 0.5vmin, #0000 0) 10% 60%,
+        radial-gradient(circle, var(--color) 0.2vmin, #0000 0) 31% 80%,
+        radial-gradient(circle, var(--color) 0.3vmin, #0000 0) 80% 10%,
+        radial-gradient(circle, var(--color) 0.2vmin, #0000 0) 90% 23%,
+        radial-gradient(circle, var(--color) 0.3vmin, #0000 0) 45% 20%,
+        radial-gradient(circle, var(--color) 0.5vmin, #0000 0) 13% 24%;
+    background-size: 0.5vmin 0.5vmin;
+    background-repeat: no-repeat;
+    animation: firework 2s infinite;
+    /* Ensures the fireworks do not block interactions with the map */
+    pointer-events: none;
+}
+
+.firework::before {
+    transform: translate(-50%, -50%) rotate(25deg) !important;
+}
+
+.firework::after {
+    transform: translate(-50%, -50%) rotate(-37deg) !important;
+}
+
+.completing-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.completing-modal-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.completing-modal-header h2 {
+    margin: 0;
+    font-size: 36px;
+    color: #333;
+}
+
+.completing-modal-body p {
+    font-size: 24px;
+    color: #666;
+    margin: 20px 0;
+}
+
+.completing-modal-footer {
+    display: flex;
+    justify-content: space-around;
+}
+
+.star-icon {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.reset-icon {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
 #confirm-button {
     background-color: #d9534f;
     color: #fff;
@@ -618,5 +715,21 @@ body {
     50.01%,
     100% {
         background-position: -32px 0;
+    }
+}
+
+@keyframes firework {
+    0% {
+        transform: translate(-50%, 60vh);
+        width: 0.5vmin;
+        opacity: 1;
+    }
+    50% {
+        width: 0.5vmin;
+        opacity: 1;
+    }
+    100% {
+        width: 45vmin;
+        opacity: 0;
     }
 }
