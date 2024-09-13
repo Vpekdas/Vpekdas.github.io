@@ -45,6 +45,9 @@ import {
     handleKeyEvents,
     ensureCanvasFocus,
     isTouchDevice,
+    createFireworks,
+    toggleFullscreen,
+    resetAdventure,
 } from "./utils.js";
 
 k.scene("menu", async () => {
@@ -253,6 +256,7 @@ k.scene("main", async () => {
 
     let animationBanner = false;
     let indicators = new Map();
+    let hasCompleted = false;
 
     const keysPressed = {
         w: false,
@@ -482,12 +486,12 @@ k.scene("main", async () => {
                     player.onCollide(boundary.name, () => {
                         player.isInDialogue = true;
                         displayDialogue(PROJECT_DESCRIPTIONS[boundary.name].story, () => (player.isInDialogue = false));
+
                         if (animationBanner === false) {
                             const discovered = countAchievemenDiscovered(projects);
                             const projectIndex = projects.findIndex((project) => project.name === boundary.name);
-
-                            if (projectIndex != -1) {
-                                if (projects[projectIndex].discovered) return;
+                            if (projectIndex != -1 && projects[projectIndex].discovered) {
+                                return;
                             }
                             saveToLocalStorage(boundary.name);
                             setProjectAsDiscovered(projects, boundary);
@@ -508,6 +512,12 @@ k.scene("main", async () => {
                             setTimeout(() => {
                                 animationBanner = false;
                             }, 7000);
+
+                            if (countAchievemenDiscovered(projects) === projects.length) {
+                                createFireworks(100);
+                                document.querySelector(".completing-modal-overlay").style.display = "flex";
+                                hasCompleted = true;
+                            }
                         }
                     });
                 }
@@ -526,7 +536,6 @@ k.scene("main", async () => {
                     player.prevPosY = player.pos.y;
                     continue;
                 }
-                window.addEventListener("DOMContentLoaded", updateProgress);
             }
         }
     }
@@ -537,6 +546,14 @@ k.scene("main", async () => {
     clearPopup();
     // Adding a second destroy ensures discovered projects from previous refreshes are properly removed.
     destroyIndicators(k, indicators, projects);
+    if (countAchievemenDiscovered(projects) === projects.length) {
+        createFireworks(100);
+        document.querySelector(".completing-modal-overlay").style.display = "flex";
+        hasCompleted = true;
+    }
+
+    window.addEventListener("DOMContentLoaded", updateProgress);
+    resetAdventure();
 
     setCamScale(k);
 
@@ -546,7 +563,7 @@ k.scene("main", async () => {
 
     k.onUpdate(() => {
         ensureCanvasFocus();
-        if (!player.isInDialogue) {
+        if (!player.isInDialogue && !hasCompleted) {
             if ((keysPressed.w && keysPressed.a) || (keysPressed.up && keysPressed.left)) {
                 player.move(-PLAYER_SPEED / Math.sqrt(2), -PLAYER_SPEED / Math.sqrt(2));
                 if (player.curAnim() !== "walk-up" && player.curAnim() !== "walk-side") {
@@ -656,7 +673,7 @@ k.scene("main", async () => {
     });
 
     k.onMouseDown((mouseBtn) => {
-        if (mouseBtn !== "left" || player.isInDialogue) {
+        if (mouseBtn !== "left" || player.isInDialogue || hasCompleted) {
             return;
         }
         if (isMousePressed(mouseBtn) && player.isInDialogue) {
@@ -707,6 +724,8 @@ k.scene("main", async () => {
         player.play("idle-side");
     });
 
+    k.isTouchscreen;
+
     k.onKeyPress("m", () => {
         const menu = document.getElementById("hexagon-menu");
         const resetButton = document.querySelector(".clear-storage-button");
@@ -741,6 +760,10 @@ k.scene("main", async () => {
             dialogue.innerHTML = "";
             player.isInDialogue = false;
         }
+    });
+
+    k.onKeyPress("f", () => {
+        toggleFullscreen();
     });
 });
 
