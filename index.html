@@ -129,17 +129,39 @@
             <img src="./menu/trash-bin.png" alt="Bin Icon" class="icon-bin" />
             <span class="button-text">Clear Storage</span>
         </button>
-        <div id="modal-overlay" class="modal-overlay">
-            <div id="confirmation-modal" class="modal-container">
-                <div class="modal-header">
+        <div class="storage-modal-overlay">
+            <div class="storage-modal-container">
+                <div class="storage-modal-header">
                     <h2>Confirm Action</h2>
                 </div>
-                <div class="modal-body">
+                <div class="storage-modal-body">
                     <p>Are you sure you want to clear the local storage?</p>
                 </div>
-                <div class="modal-footer">
+                <div class="storage-modal-footer">
                     <button id="confirm-button" class="modal-button">Confirm</button>
                     <button id="cancel-button" class="modal-button">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div class="completing-modal-overlay">
+            <div class="completing-modal-container">
+                <div class="completing-modal-header">
+                    <h2>Congratulations ! You have discovered all projects.</h2>
+                </div>
+                <div class="completing-modal-body">
+                    <p>
+                        If you enjoyed exploring the projects, please consider leaving a
+                        <a href="https://github.com/Vpekdas/Vpekdas.github.io" target="_blank">
+                            <img src="./Star_Sharp_Solid.svg" alt="Star Icon" class="star-icon" />
+                        </a>
+                        on GitHub.
+                    </p>
+                    <p>
+                        Ready for another round? Click the button below to restart your adventure:
+                        <button id="reset-button">
+                            <img src="./Star_Classic_Solid.svg" alt="Reset Icon" class="reset-icon" />
+                        </button>
+                    </p>
                 </div>
             </div>
         </div>

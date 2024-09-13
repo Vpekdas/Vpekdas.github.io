@@ -443,23 +443,24 @@ export function getCurrentHour() {
     return now.getHours();
 }
 
-function clearLocalStorage(modalOverlay) {
+function clearLocalStorage(storageModalOverlay) {
     localStorage.clear();
-    modalOverlay.style.display = "none";
+    storageModalOverlay.style.display = "none";
+    location.reload();
 }
 
-function closePopup(modalOverlay) {
-    modalOverlay.style.display = "none";
+function closePopup(storageModalOverlay) {
+    storageModalOverlay.style.display = "none";
 }
 
 function openPopup() {
-    const modalOverlay = document.getElementById("modal-overlay");
+    const storageModalOverlay = document.querySelector(".storage-modal-overlay");
     const confirmButton = document.getElementById("confirm-button");
     const cancelButton = document.getElementById("cancel-button");
 
-    modalOverlay.style.display = "flex";
-    confirmButton.addEventListener("click", () => clearLocalStorage(modalOverlay));
-    cancelButton.addEventListener("click", () => closePopup(modalOverlay));
+    storageModalOverlay.style.display = "flex";
+    confirmButton.addEventListener("click", () => clearLocalStorage(storageModalOverlay));
+    cancelButton.addEventListener("click", () => closePopup(storageModalOverlay));
 }
 
 export function clearPopup() {
@@ -504,5 +505,52 @@ export function ensureCanvasFocus() {
 }
 
 export function isTouchDevice() {
-	return "ontouchstart" in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+    return "ontouchstart" in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+}
+
+function getRandomColor() {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+export function createFireworks(number) {
+    for (let i = 0; i < number; i++) {
+        setTimeout(() => {
+            const firework = document.createElement("div");
+            let randomColor = getRandomColor();
+            firework.classList.add("firework");
+            firework.style.top = `${Math.random() * 100}%`;
+            firework.style.left = `${Math.random() * 100}%`;
+            firework.style.setProperty("--color", randomColor);
+            document.body.appendChild(firework);
+
+            firework.addEventListener("animationend", () => {
+                firework.remove();
+            });
+        }, i * 100);
+    }
+}
+
+export function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch((err) => {
+            console.error(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+        });
+    } else {
+        document.exitFullscreen().catch((err) => {
+            console.error(`Error attempting to exit fullscreen mode: ${err.message} (${err.name})`);
+        });
+    }
+}
+
+export function resetAdventure() {
+    const resetButton = document.getElementById("reset-button");
+    resetButton.addEventListener("click", () => {
+        localStorage.clear();
+        location.reload();
+    });
 }
