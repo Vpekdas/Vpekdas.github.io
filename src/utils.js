@@ -436,9 +436,6 @@ export function loadLocalStorage(projects) {
             projects[i].discovered = false;
         }
     }
-    if (localStorage.getItem("hasDiscoveredAll") === "1") {
-        createFireworks(100);
-    }
 }
 
 export function getCurrentHour() {
@@ -449,6 +446,7 @@ export function getCurrentHour() {
 function clearLocalStorage(storageModalOverlay) {
     localStorage.clear();
     storageModalOverlay.style.display = "none";
+    location.reload();
 }
 
 function closePopup(storageModalOverlay) {
@@ -535,4 +533,24 @@ export function createFireworks(number) {
             });
         }, i * 100);
     }
+}
+
+export function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch((err) => {
+            console.error(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+        });
+    } else {
+        document.exitFullscreen().catch((err) => {
+            console.error(`Error attempting to exit fullscreen mode: ${err.message} (${err.name})`);
+        });
+    }
+}
+
+export function resetAdventure() {
+    const resetButton = document.getElementById("reset-button");
+    resetButton.addEventListener("click", () => {
+        localStorage.clear();
+        location.reload();
+    });
 }
