@@ -148,6 +148,39 @@ export function loadAllResources(k) {
                 },
             },
             {
+                name: "first",
+                path: "/first.png",
+                config: {
+                    sliceX: 4,
+                    sliceY: 3,
+                    anims: {
+                        idle: { from: 0, to: 11, loop: true, speed: 8 },
+                    },
+                },
+            },
+            {
+                name: "lightning",
+                path: "lightning/4.png",
+                config: {
+                    sliceX: 3,
+                    sliceY: 3,
+                    anims: {
+                        shock: { from: 0, to: 6, loop: true, speed: 18 },
+                    },
+                },
+            },
+            {
+                name: "lightning2",
+                path: "lightning/3.png",
+                config: {
+                    sliceX: 3,
+                    sliceY: 3,
+                    anims: {
+                        shock: { from: 0, to: 6, loop: true, speed: 18 },
+                    },
+                },
+            },
+            {
                 name: "tiles",
                 path: "/tiles/spritesheet.png",
                 config: { sliceX: 21, sliceY: 11 },
@@ -205,6 +238,8 @@ export function loadAllResources(k) {
             { name: "discord-logo", path: "/logo/Discord_icon.svg" },
             { name: "linkedin-logo", path: "/logo/LinkedIn_logo_icon.svg" },
             { name: "menu-background", path: "background/Cyberpunk_city_street.gif" },
+            { name: "phonewawe", path: "Sprite-0005.png" },
+            { name: "sg-001", path: "Sprite-0003.png" },
         ],
     };
 
@@ -265,7 +300,7 @@ export function createBackground(k, backgroundNumber, spriteName) {
             k.add([k.sprite(spriteName), k.pos(i * spriteWidth - spriteWidth, 0), k.scale(SCALE_FACTOR)])
         );
     }
-    destroy(tempSprite);
+    k.destroy(tempSprite);
     return backgroundArray;
 }
 
