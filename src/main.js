@@ -482,6 +482,10 @@ k.scene("main", async () => {
                         interactables.push(createInteractable(k, "tiles", boundary, 50, 46, 1));
                         addProject(boundary, projects);
                         indicators[boundary.name] = minishellIndicators;
+                        const okabe = k.add([k.sprite("okabe"), k.pos(722, 380), k.scale(0.7)]);
+                        okabe.play("idle");
+                        const kurisu = k.add([k.sprite("kurisu"), k.pos(600, 380), k.scale(0.7)]);
+                        kurisu.play("idle");
                     }
                     player.onCollide(boundary.name, () => {
                         player.isInDialogue = true;

@@ -126,6 +126,28 @@ export function loadAllResources(k) {
                 },
             },
             {
+                name: "okabe",
+                path: "/Okabe.png",
+                config: {
+                    sliceX: 5,
+                    sliceY: 1,
+                    anims: {
+                        idle: { from: 0, to: 2, loop: true, speed: 8 },
+                    },
+                },
+            },
+            {
+                name: "kurisu",
+                path: "/Kurisu.png",
+                config: {
+                    sliceX: 5,
+                    sliceY: 3,
+                    anims: {
+                        idle: { from: 0, to: 11, loop: true, speed: 8 },
+                    },
+                },
+            },
+            {
                 name: "tiles",
                 path: "/tiles/spritesheet.png",
                 config: { sliceX: 21, sliceY: 11 },
