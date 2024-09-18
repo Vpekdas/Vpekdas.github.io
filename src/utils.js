@@ -592,22 +592,27 @@ export function createFireworks(number) {
     }
 }
 
-export function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch((err) => {
-            console.error(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
-        });
-    } else {
-        document.exitFullscreen().catch((err) => {
-            console.error(`Error attempting to exit fullscreen mode: ${err.message} (${err.name})`);
-        });
-    }
-}
-
 export function resetAdventure() {
     const resetButton = document.getElementById("reset-button");
     resetButton.addEventListener("click", () => {
         localStorage.clear();
         location.reload();
     });
+}
+
+loadSound("opening-1", "opening-1.mp3");
+loadSound("opening-2", "opening-2.mp3");
+
+let currentTrack = "opening-1";
+
+export function playMusic() {
+    const music = play(currentTrack, {
+        loop: true,
+        volume: 1,
+    });
+    if (currentTrack === "opening-1") {
+        currentTrack = "opening-2";
+    } else {
+        currentTrack = "opening-1";
+    }
 }
