@@ -126,6 +126,61 @@ export function loadAllResources(k) {
                 },
             },
             {
+                name: "okabe",
+                path: "/Okabe.png",
+                config: {
+                    sliceX: 5,
+                    sliceY: 1,
+                    anims: {
+                        idle: { from: 0, to: 2, loop: true, speed: 8 },
+                    },
+                },
+            },
+            {
+                name: "kurisu",
+                path: "/Kurisu.png",
+                config: {
+                    sliceX: 5,
+                    sliceY: 3,
+                    anims: {
+                        idle: { from: 0, to: 11, loop: true, speed: 8 },
+                    },
+                },
+            },
+            {
+                name: "first",
+                path: "/first.png",
+                config: {
+                    sliceX: 4,
+                    sliceY: 3,
+                    anims: {
+                        idle: { from: 0, to: 11, loop: true, speed: 8 },
+                    },
+                },
+            },
+            {
+                name: "lightning",
+                path: "lightning/4.png",
+                config: {
+                    sliceX: 3,
+                    sliceY: 3,
+                    anims: {
+                        shock: { from: 0, to: 6, loop: true, speed: 18 },
+                    },
+                },
+            },
+            {
+                name: "lightning2",
+                path: "lightning/3.png",
+                config: {
+                    sliceX: 3,
+                    sliceY: 3,
+                    anims: {
+                        shock: { from: 0, to: 6, loop: true, speed: 18 },
+                    },
+                },
+            },
+            {
                 name: "tiles",
                 path: "/tiles/spritesheet.png",
                 config: { sliceX: 21, sliceY: 11 },
@@ -183,6 +238,8 @@ export function loadAllResources(k) {
             { name: "discord-logo", path: "/logo/Discord_icon.svg" },
             { name: "linkedin-logo", path: "/logo/LinkedIn_logo_icon.svg" },
             { name: "menu-background", path: "background/Cyberpunk_city_street.gif" },
+            { name: "phonewawe", path: "Sprite-0005.png" },
+            { name: "sg-001", path: "Sprite-0003.png" },
         ],
     };
 
@@ -243,7 +300,7 @@ export function createBackground(k, backgroundNumber, spriteName) {
             k.add([k.sprite(spriteName), k.pos(i * spriteWidth - spriteWidth, 0), k.scale(SCALE_FACTOR)])
         );
     }
-    destroy(tempSprite);
+    k.destroy(tempSprite);
     return backgroundArray;
 }
 
@@ -251,16 +308,17 @@ export function updateBackground(k, backgroundLayer, speed, camY, playerX, prevX
     let deltaX = playerX - prevX;
     for (let i = 0; i < backgroundLayer.length; i++) {
         if (speed === 0) {
+            backgroundLayer[i].pos.y = camY - 100;
             backgroundLayer[i].pos.x -= 2;
             if (backgroundLayer[i].pos.x <= i * backgroundLayer[i].width - backgroundLayer[i].width * 2) {
                 backgroundLayer[i].pos.x = i * backgroundLayer[i].width - backgroundLayer[i].width;
             }
         } else {
             if (deltaX) {
-                backgroundLayer[i].pos.x += deltaX * speed;
+                backgroundLayer[i].pos.x -= (deltaX * speed) / 2;
             }
+            backgroundLayer[i].pos.y = camY;
         }
-        backgroundLayer[i].pos.y = camY;
     }
 }
 
@@ -535,22 +593,55 @@ export function createFireworks(number) {
     }
 }
 
-export function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch((err) => {
-            console.error(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
-        });
-    } else {
-        document.exitFullscreen().catch((err) => {
-            console.error(`Error attempting to exit fullscreen mode: ${err.message} (${err.name})`);
-        });
-    }
-}
-
 export function resetAdventure() {
     const resetButton = document.getElementById("reset-button");
     resetButton.addEventListener("click", () => {
         localStorage.clear();
         location.reload();
+    });
+}
+
+loadSound("opening", "opening.mp3");
+
+export function playMusic() {
+    const music = play("opening", {
+        loop: true,
+        volume: 1,
+    });
+}
+
+const maxDivergence = 1.048596;
+const initialDivergence = 0.337187;
+let currentDivergence = initialDivergence;
+
+export function regenerateNumber(projects) {
+    if (currentDivergence >= maxDivergence) {
+        return;
+    }
+
+    const discoveredProjects = countAchievemenDiscovered(projects);
+
+    if (discoveredProjects === projects.length) {
+        currentDivergence = maxDivergence;
+    } else if (discoveredProjects > 0) {
+        const increment = (maxDivergence - initialDivergence) / projects.length;
+        currentDivergence += increment;
+        if (currentDivergence > maxDivergence) {
+            currentDivergence = maxDivergence;
+        }
+    }
+
+    const divergenceString = currentDivergence.toFixed(6).toString();
+    const digits = divergenceString.split("");
+
+    const glitchContainer = document.querySelector(".glitch");
+    glitchContainer.innerHTML = "";
+
+    digits.forEach((char) => {
+        const img = document.createElement("img");
+        img.src = `img/${char === "." ? "dot" : char}.jpg`;
+        img.alt = `Digit ${char}`;
+        img.classList.add("glitch-digit");
+        glitchContainer.appendChild(img);
     });
 }

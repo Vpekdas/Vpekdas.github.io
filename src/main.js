@@ -13,6 +13,8 @@ import {
     PROJECT_DESCRIPTIONS,
     aboutMe,
     mission,
+    OkabeDialogue,
+    KurisuDialogue,
 } from "./constants.js";
 import {
     createHoverEvents,
@@ -46,17 +48,14 @@ import {
     ensureCanvasFocus,
     isTouchDevice,
     createFireworks,
-    toggleFullscreen,
     resetAdventure,
+    playMusic,
+    regenerateNumber,
 } from "./utils.js";
 
 k.scene("menu", async () => {
-    const bg = k.add([
-        k.sprite("menu-background"),
-        k.pos(k.width() / 2, k.height() / 2),
-        k.anchor("center"),
-        k.scale(1),
-    ]);
+    const bg = k.add([k.sprite("menu-background"), k.pos(k.width() / 2, k.height() / 2), k.anchor("center")]);
+
     const mapData = await (await fetch("./map/map.json")).json();
     const note = document.querySelector(".note");
     const progresBarDone = document.querySelector(".progress-done ");
@@ -241,6 +240,7 @@ k.scene("menu", async () => {
 });
 
 loadAllResources(k);
+k.setBackground(k.Color.fromHex("#FFFFFF"));
 
 k.scene("main", async () => {
     const mapData = await (await fetch("./map/map.json")).json();
@@ -253,11 +253,23 @@ k.scene("main", async () => {
     const backgrounds_evening = [];
     const backgrounds_night = [];
     const projects = [];
+    let steinsGate = false;
+    let timeTravelTimeout = false;
 
     let animationBanner = false;
     let indicators = new Map();
-    let hasCompleted = false;
-
+    let timerId = 0;
+    let seconds = 0;
+    let startX = 0;
+    let startY = 0;
+    let lightning, lightning2;
+    const backgroundArrays = [
+        backgrounds_early_morning,
+        backgrounds_morning,
+        backgrounds_afternoon,
+        backgrounds_evening,
+        backgrounds_night,
+    ];
     const keysPressed = {
         w: false,
         a: false,
@@ -267,6 +279,7 @@ k.scene("main", async () => {
         down: false,
         left: false,
         right: false,
+        enter: false,
     };
 
     for (let i = 0; i < BACKGROUND_COUNT; i++)
@@ -275,6 +288,8 @@ k.scene("main", async () => {
     for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds_afternoon.push(createBackground(k, 4, `afternoon-${i + 1}`));
     for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds_evening.push(createBackground(k, 4, `evening-${i + 1}`));
     for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds_night.push(createBackground(k, 4, `night-${i + 1}`));
+
+    console.log(backgrounds_afternoon[0]);
 
     for (let i = 0; i < BACKGROUND_COUNT; i++) {
         backgrounds_early_morning[i].forEach((component) => (component.hidden = true));
@@ -314,6 +329,7 @@ k.scene("main", async () => {
     handleKeyEvents("down", true, keysPressed, k, player);
     handleKeyEvents("left", true, keysPressed, k, player);
     handleKeyEvents("right", true, keysPressed, k, player);
+    handleKeyEvents("escape", true, keysPressed, k, player);
 
     createTile(k, "tiles", 2, 114 - 32 * 1, 151);
     createTile(k, "tiles", 2, 114 - 32 * 2, 151);
@@ -483,8 +499,197 @@ k.scene("main", async () => {
                         addProject(boundary, projects);
                         indicators[boundary.name] = minishellIndicators;
                     }
+                    if (boundary.name === "PhoneWawe") {
+                        const phonewawe = k.add([
+                            k.sprite("phonewawe"),
+                            k.pos((boundary.x + 22) * SCALE_FACTOR, (boundary.y + 32) * SCALE_FACTOR),
+                            k.scale(0.1),
+                        ]);
+                    }
+                    if (boundary.name === "SG-001") {
+                        const phonewawe = k.add([
+                            k.sprite("sg-001"),
+                            k.pos((boundary.x + 24) * SCALE_FACTOR, (boundary.y + 18) * SCALE_FACTOR),
+                            k.scale(0.1),
+                        ]);
+                    }
+                    if (boundary.name === "Okabe") {
+                        const okabe = k.add([
+                            k.sprite("okabe"),
+                            k.pos((boundary.x + 16) * SCALE_FACTOR, (boundary.y + 12) * SCALE_FACTOR),
+                            k.scale(0.7),
+                        ]);
+                        okabe.play("idle");
+                    }
+                    if (boundary.name === "Kurisu") {
+                        const kurisu = k.add([
+                            k.sprite("kurisu"),
+                            k.pos((boundary.x + 22) * SCALE_FACTOR, (boundary.y + 12) * SCALE_FACTOR),
+                            k.scale(0.7),
+                        ]);
+                        kurisu.play("idle");
+                    }
+
                     player.onCollide(boundary.name, () => {
+                        if (boundary.name === "PhoneWawe") {
+                            timeTravelTimeout = true;
+                            if (!timerId) {
+                                timerId = setInterval(() => {
+                                    seconds++;
+                                }, 1000);
+                            }
+                            if (countAchievemenDiscovered(projects) === projects.length && timeTravelTimeout) {
+                                lightning = k.add([
+                                    k.sprite("lightning"),
+                                    k.pos(boundary.x * SCALE_FACTOR, (boundary.y + 6) * SCALE_FACTOR),
+                                    k.scale(1),
+                                ]);
+                                lightning.play("shock");
+
+                                lightning2 = k.add([
+                                    k.sprite("lightning2"),
+                                    k.pos(boundary.x * SCALE_FACTOR, (boundary.y + 18) * SCALE_FACTOR),
+                                    k.scale(1),
+                                ]);
+                                lightning2.play("shock");
+                            }
+                            return;
+                        }
                         player.isInDialogue = true;
+                        if (boundary.name === "SG-001") {
+                            if (
+                                !timeTravelTimeout ||
+                                countAchievemenDiscovered(projects) != projects.length ||
+                                steinsGate
+                            ) {
+                                player.isInDialogue = false;
+                                return;
+                            }
+                            const dMailInterface = document.getElementById("d-mail-interface");
+                            dMailInterface.style.display = "flex";
+                            document.getElementById("send-d-mail").addEventListener("click", function () {
+                                const message = document.getElementById("d-mail-message").value.trim();
+                                const correctMessage = "42";
+
+                                if (message === correctMessage) {
+                                    const first = k.add([k.sprite("first"), k.pos(0, 0), k.scale(SCALE_FACTOR)]);
+                                    const first2 = k.add([
+                                        k.sprite("first"),
+                                        k.pos(-first.width, 0),
+                                        k.scale(SCALE_FACTOR),
+                                    ]);
+                                    const first3 = k.add([
+                                        k.sprite("first"),
+                                        k.pos(first.width, 0),
+                                        k.scale(SCALE_FACTOR),
+                                    ]);
+                                    const first4 = k.add([
+                                        k.sprite("first"),
+                                        k.pos(first.width * 2, 0),
+                                        k.scale(SCALE_FACTOR),
+                                    ]);
+
+                                    first.play("idle");
+                                    first2.play("idle");
+                                    first3.play("idle");
+                                    first4.play("idle");
+
+                                    const first5 = k.add([
+                                        k.sprite("first"),
+                                        k.pos(0, first.height * 2),
+                                        k.scale(SCALE_FACTOR),
+                                    ]);
+                                    const first6 = k.add([
+                                        k.sprite("first"),
+                                        k.pos(-first.width, first.height * 2),
+                                        k.scale(SCALE_FACTOR),
+                                    ]);
+                                    const first7 = k.add([
+                                        k.sprite("first"),
+                                        k.pos(first.width, first.height * 2),
+                                        k.scale(SCALE_FACTOR),
+                                    ]);
+                                    const first8 = k.add([
+                                        k.sprite("first"),
+                                        k.pos(first.width * 2, first.height * 2),
+                                        k.scale(SCALE_FACTOR),
+                                    ]);
+
+                                    first5.play("idle");
+                                    first6.play("idle");
+                                    first7.play("idle");
+                                    first8.play("idle");
+
+                                    const first9 = k.add([
+                                        k.sprite("first"),
+                                        k.pos(0, first.height * 4),
+                                        k.scale(SCALE_FACTOR),
+                                    ]);
+                                    const first10 = k.add([
+                                        k.sprite("first"),
+                                        k.pos(-first.width, first.height * 4),
+                                        k.scale(SCALE_FACTOR),
+                                    ]);
+                                    const first11 = k.add([
+                                        k.sprite("first"),
+                                        k.pos(first.width, first.height * 4),
+                                        k.scale(SCALE_FACTOR),
+                                    ]);
+                                    const first12 = k.add([
+                                        k.sprite("first"),
+                                        k.pos(first.width * 2, first.height * 4),
+                                        k.scale(SCALE_FACTOR),
+                                    ]);
+
+                                    first9.play("idle");
+                                    first10.play("idle");
+                                    first11.play("idle");
+                                    first12.play("idle");
+
+                                    playMusic();
+                                    player.pos.x = 2300;
+                                    player.pos.y = 350;
+                                    steinsGate = true;
+                                    const dMailInterface = document.getElementById("d-mail-interface");
+                                    if (dMailInterface.style.display === "flex") {
+                                        dMailInterface.style.display = "none";
+                                        player.isInDialogue = false;
+                                        ensureCanvasFocus();
+                                    }
+                                    alert(
+                                        "Congratulations! You have successfully entered the Steins;Gate worldline. The future is now in your hands. El Psy Kongroo!"
+                                    );
+
+                                    backgroundArrays.forEach((backgroundArray) => {
+                                        backgroundArray.forEach((subArray) => {
+                                            subArray.forEach((background) => {
+                                                if (background) {
+                                                    k.destroy(background);
+                                                }
+                                            });
+                                        });
+                                    });
+                                }
+                            });
+                            return;
+                        }
+
+                        if (boundary.name === "Okabe") {
+                            displayDialogue(OkabeDialogue, () => (player.isInDialogue = false));
+                            return;
+                        }
+
+                        if (boundary.name === "Kurisu") {
+                            displayDialogue(KurisuDialogue, () => (player.isInDialogue = false));
+                            return;
+                        }
+                        if (boundary.name === "ibn-5100") {
+                            player.pos.x = startX;
+                            player.pos.y = startY;
+                            player.isInDialogue = false;
+                            return;
+                        }
+
                         displayDialogue(PROJECT_DESCRIPTIONS[boundary.name].story, () => (player.isInDialogue = false));
 
                         if (animationBanner === false) {
@@ -503,6 +708,7 @@ k.scene("main", async () => {
                             showAchievementDescription(3000, PROJECT_DESCRIPTIONS[boundary.name].achievement);
                             growBanner();
                             destroyIndicators(k, indicators, projects);
+                            regenerateNumber(projects);
 
                             if (discovered <= projects.length) {
                                 updateProgress(projects, discovered);
@@ -514,9 +720,8 @@ k.scene("main", async () => {
                             }, 7000);
 
                             if (countAchievemenDiscovered(projects) === projects.length) {
-                                createFireworks(100);
+                                createFireworks(50);
                                 document.querySelector(".completing-modal-overlay").style.display = "flex";
-                                hasCompleted = true;
                             }
                         }
                     });
@@ -532,6 +737,8 @@ k.scene("main", async () => {
                         (map.pos.x + entity.x + OFFSET_X) * SCALE_FACTOR,
                         (map.pos.y + entity.y + OFFSET_Y) * SCALE_FACTOR
                     );
+                    startX = (map.pos.x + entity.x + OFFSET_X) * SCALE_FACTOR;
+                    startY = (map.pos.y + entity.y + OFFSET_Y) * SCALE_FACTOR;
                     player.prevPosX = player.pos.x;
                     player.prevPosY = player.pos.y;
                     continue;
@@ -543,16 +750,38 @@ k.scene("main", async () => {
     loadLocalStorage(projects);
     updateProgress(projects, false);
     showAchievement(projects);
+    setTimeout(() => {
+        const note = document.querySelector(".note");
+        note.style.display = "none";
+        regenerateNumber(projects);
+    }, 4000);
     clearPopup();
     // Adding a second destroy ensures discovered projects from previous refreshes are properly removed.
     destroyIndicators(k, indicators, projects);
     if (countAchievemenDiscovered(projects) === projects.length) {
-        createFireworks(100);
+        createFireworks(50);
         document.querySelector(".completing-modal-overlay").style.display = "flex";
-        hasCompleted = true;
     }
 
     window.addEventListener("DOMContentLoaded", updateProgress);
+
+    window.addEventListener("keydown", (event) => {
+        const dMailInterface = document.getElementById("d-mail-interface");
+        const completingModalOverlay = document.querySelector(".completing-modal-overlay");
+        if (event.key === "Escape") {
+            if (dMailInterface.style.display === "flex") {
+                dMailInterface.style.display = "none";
+                player.isInDialogue = false;
+                ensureCanvasFocus();
+            }
+            if (completingModalOverlay.style.display === "flex") {
+                completingModalOverlay.style.display = "none";
+                player.isInDialogue = false;
+                ensureCanvasFocus();
+            }
+        }
+    });
+
     resetAdventure();
 
     setCamScale(k);
@@ -562,8 +791,17 @@ k.scene("main", async () => {
     });
 
     k.onUpdate(() => {
-        ensureCanvasFocus();
-        if (!player.isInDialogue && !hasCompleted) {
+        if (seconds >= 15) {
+            clearInterval(timerId);
+            timerId = 0;
+            seconds = 0;
+            timeTravelTimeout = false;
+            if (countAchievemenDiscovered(projects) === projects.length && !timeTravelTimeout) {
+                k.destroy(lightning);
+                k.destroy(lightning2);
+            }
+        }
+        if (!player.isInDialogue) {
             if ((keysPressed.w && keysPressed.a) || (keysPressed.up && keysPressed.left)) {
                 player.move(-PLAYER_SPEED / Math.sqrt(2), -PLAYER_SPEED / Math.sqrt(2));
                 if (player.curAnim() !== "walk-up" && player.curAnim() !== "walk-side") {
@@ -630,7 +868,7 @@ k.scene("main", async () => {
 
         let speed = 0;
 
-        for (let i = 0; i < BACKGROUND_COUNT; i++) {
+        for (let i = 0; i < BACKGROUND_COUNT && !steinsGate; i++) {
             if (currentHour >= 3 && currentHour < 6) {
                 backgrounds_night[i].forEach((component) => (component.hidden = true));
                 backgrounds_early_morning[i].forEach((component) => (component.hidden = false));
@@ -654,6 +892,7 @@ k.scene("main", async () => {
             }
             speed += 0.35;
         }
+
         player.prevPosX = player.pos.x;
         player.prevPosY = player.pos.y;
 
@@ -673,7 +912,7 @@ k.scene("main", async () => {
     });
 
     k.onMouseDown((mouseBtn) => {
-        if (mouseBtn !== "left" || player.isInDialogue || hasCompleted) {
+        if (mouseBtn !== "left" || player.isInDialogue) {
             return;
         }
         if (isMousePressed(mouseBtn) && player.isInDialogue) {
@@ -761,10 +1000,6 @@ k.scene("main", async () => {
             player.isInDialogue = false;
         }
     });
-
-    k.onKeyPress("f", () => {
-        toggleFullscreen();
-    });
 });
 
 k.go("menu");
@@ -773,6 +1008,4 @@ k.go("menu");
 // TODO: Change Kaboom.js to Kaplay (a maintained fork of Kaboom.js, which is deprecated)
 // TODO: Migrate the codebase from JavaScript to TypeScript for improved type safety and maintainability.
 // TODO: Normalize the movement vector for consistent speed in all directions, including diagonals.
-// TODO: Add an animation and possibly a popup notification when all projects have been discovered.
 // TODO: Add cub3d and cpp modules projects.
-// TODO: Display the number of remaining projects to be discovered in the notification.
