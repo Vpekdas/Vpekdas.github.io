@@ -308,16 +308,17 @@ export function updateBackground(k, backgroundLayer, speed, camY, playerX, prevX
     let deltaX = playerX - prevX;
     for (let i = 0; i < backgroundLayer.length; i++) {
         if (speed === 0) {
+            backgroundLayer[i].pos.y = camY - 100;
             backgroundLayer[i].pos.x -= 2;
             if (backgroundLayer[i].pos.x <= i * backgroundLayer[i].width - backgroundLayer[i].width * 2) {
                 backgroundLayer[i].pos.x = i * backgroundLayer[i].width - backgroundLayer[i].width;
             }
         } else {
             if (deltaX) {
-                backgroundLayer[i].pos.x += deltaX * speed;
+                backgroundLayer[i].pos.x -= (deltaX * speed) / 2;
             }
+            backgroundLayer[i].pos.y = camY;
         }
-        backgroundLayer[i].pos.y = camY;
     }
 }
 
@@ -600,19 +601,47 @@ export function resetAdventure() {
     });
 }
 
-loadSound("opening-1", "opening-1.mp3");
-loadSound("opening-2", "opening-2.mp3");
-
-let currentTrack = "opening-1";
+loadSound("opening", "opening.mp3");
 
 export function playMusic() {
-    const music = play(currentTrack, {
+    const music = play("opening", {
         loop: true,
         volume: 1,
     });
-    if (currentTrack === "opening-1") {
-        currentTrack = "opening-2";
-    } else {
-        currentTrack = "opening-1";
+}
+
+const maxDivergence = 1.048596;
+const initialDivergence = 0.337187;
+let currentDivergence = initialDivergence;
+
+export function regenerateNumber(projects) {
+    if (currentDivergence >= maxDivergence) {
+        return;
     }
+
+    const discoveredProjects = countAchievemenDiscovered(projects);
+
+    if (discoveredProjects === projects.length) {
+        currentDivergence = maxDivergence;
+    } else if (discoveredProjects > 0) {
+        const increment = (maxDivergence - initialDivergence) / projects.length;
+        currentDivergence += increment;
+        if (currentDivergence > maxDivergence) {
+            currentDivergence = maxDivergence;
+        }
+    }
+
+    const divergenceString = currentDivergence.toFixed(6).toString();
+    const digits = divergenceString.split("");
+
+    const glitchContainer = document.querySelector(".glitch");
+    glitchContainer.innerHTML = "";
+
+    digits.forEach((char) => {
+        const img = document.createElement("img");
+        img.src = `img/${char === "." ? "dot" : char}.jpg`;
+        img.alt = `Digit ${char}`;
+        img.classList.add("glitch-digit");
+        glitchContainer.appendChild(img);
+    });
 }

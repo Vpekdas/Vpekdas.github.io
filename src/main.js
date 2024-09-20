@@ -50,15 +50,12 @@ import {
     createFireworks,
     resetAdventure,
     playMusic,
+    regenerateNumber,
 } from "./utils.js";
 
 k.scene("menu", async () => {
-    const bg = k.add([
-        k.sprite("menu-background"),
-        k.pos(k.width() / 2, k.height() / 2),
-        k.anchor("center"),
-        k.scale(1),
-    ]);
+    const bg = k.add([k.sprite("menu-background"), k.pos(k.width() / 2, k.height() / 2), k.anchor("center")]);
+
     const mapData = await (await fetch("./map/map.json")).json();
     const note = document.querySelector(".note");
     const progresBarDone = document.querySelector(".progress-done ");
@@ -261,13 +258,18 @@ k.scene("main", async () => {
 
     let animationBanner = false;
     let indicators = new Map();
-    let hasCompleted = false;
     let timerId = 0;
     let seconds = 0;
     let startX = 0;
     let startY = 0;
     let lightning, lightning2;
-
+    const backgroundArrays = [
+        backgrounds_early_morning,
+        backgrounds_morning,
+        backgrounds_afternoon,
+        backgrounds_evening,
+        backgrounds_night,
+    ];
     const keysPressed = {
         w: false,
         a: false,
@@ -279,36 +281,6 @@ k.scene("main", async () => {
         right: false,
         enter: false,
     };
-
-    const first = k.add([k.sprite("first"), k.pos(0, 0), k.scale(SCALE_FACTOR)]);
-    const first2 = k.add([k.sprite("first"), k.pos(-first.width, 0), k.scale(SCALE_FACTOR)]);
-    const first3 = k.add([k.sprite("first"), k.pos(first.width, 0), k.scale(SCALE_FACTOR)]);
-    const first4 = k.add([k.sprite("first"), k.pos(first.width * 2, 0), k.scale(SCALE_FACTOR)]);
-
-    first.play("idle");
-    first2.play("idle");
-    first3.play("idle");
-    first4.play("idle");
-
-    const first5 = k.add([k.sprite("first"), k.pos(0, first.height * 2), k.scale(SCALE_FACTOR)]);
-    const first6 = k.add([k.sprite("first"), k.pos(-first.width, first.height * 2), k.scale(SCALE_FACTOR)]);
-    const first7 = k.add([k.sprite("first"), k.pos(first.width, first.height * 2), k.scale(SCALE_FACTOR)]);
-    const first8 = k.add([k.sprite("first"), k.pos(first.width * 2, first.height * 2), k.scale(SCALE_FACTOR)]);
-
-    first5.play("idle");
-    first6.play("idle");
-    first7.play("idle");
-    first8.play("idle");
-
-    const first9 = k.add([k.sprite("first"), k.pos(0, first.height * 4), k.scale(SCALE_FACTOR)]);
-    const first10 = k.add([k.sprite("first"), k.pos(-first.width, first.height * 4), k.scale(SCALE_FACTOR)]);
-    const first11 = k.add([k.sprite("first"), k.pos(first.width, first.height * 4), k.scale(SCALE_FACTOR)]);
-    const first12 = k.add([k.sprite("first"), k.pos(first.width * 2, first.height * 4), k.scale(SCALE_FACTOR)]);
-
-    first9.play("idle");
-    first10.play("idle");
-    first11.play("idle");
-    first12.play("idle");
 
     for (let i = 0; i < BACKGROUND_COUNT; i++)
         backgrounds_early_morning.push(createBackground(k, 4, `early-morning-${i + 1}`));
@@ -600,20 +572,93 @@ k.scene("main", async () => {
                                 const correctMessage = "42";
 
                                 if (message === correctMessage) {
+                                    const first = k.add([k.sprite("first"), k.pos(0, 0), k.scale(SCALE_FACTOR)]);
+                                    const first2 = k.add([
+                                        k.sprite("first"),
+                                        k.pos(-first.width, 0),
+                                        k.scale(SCALE_FACTOR),
+                                    ]);
+                                    const first3 = k.add([
+                                        k.sprite("first"),
+                                        k.pos(first.width, 0),
+                                        k.scale(SCALE_FACTOR),
+                                    ]);
+                                    const first4 = k.add([
+                                        k.sprite("first"),
+                                        k.pos(first.width * 2, 0),
+                                        k.scale(SCALE_FACTOR),
+                                    ]);
+
+                                    first.play("idle");
+                                    first2.play("idle");
+                                    first3.play("idle");
+                                    first4.play("idle");
+
+                                    const first5 = k.add([
+                                        k.sprite("first"),
+                                        k.pos(0, first.height * 2),
+                                        k.scale(SCALE_FACTOR),
+                                    ]);
+                                    const first6 = k.add([
+                                        k.sprite("first"),
+                                        k.pos(-first.width, first.height * 2),
+                                        k.scale(SCALE_FACTOR),
+                                    ]);
+                                    const first7 = k.add([
+                                        k.sprite("first"),
+                                        k.pos(first.width, first.height * 2),
+                                        k.scale(SCALE_FACTOR),
+                                    ]);
+                                    const first8 = k.add([
+                                        k.sprite("first"),
+                                        k.pos(first.width * 2, first.height * 2),
+                                        k.scale(SCALE_FACTOR),
+                                    ]);
+
+                                    first5.play("idle");
+                                    first6.play("idle");
+                                    first7.play("idle");
+                                    first8.play("idle");
+
+                                    const first9 = k.add([
+                                        k.sprite("first"),
+                                        k.pos(0, first.height * 4),
+                                        k.scale(SCALE_FACTOR),
+                                    ]);
+                                    const first10 = k.add([
+                                        k.sprite("first"),
+                                        k.pos(-first.width, first.height * 4),
+                                        k.scale(SCALE_FACTOR),
+                                    ]);
+                                    const first11 = k.add([
+                                        k.sprite("first"),
+                                        k.pos(first.width, first.height * 4),
+                                        k.scale(SCALE_FACTOR),
+                                    ]);
+                                    const first12 = k.add([
+                                        k.sprite("first"),
+                                        k.pos(first.width * 2, first.height * 4),
+                                        k.scale(SCALE_FACTOR),
+                                    ]);
+
+                                    first9.play("idle");
+                                    first10.play("idle");
+                                    first11.play("idle");
+                                    first12.play("idle");
+
                                     playMusic();
                                     player.pos.x = 2300;
                                     player.pos.y = 350;
                                     steinsGate = true;
+                                    const dMailInterface = document.getElementById("d-mail-interface");
+                                    if (dMailInterface.style.display === "flex") {
+                                        dMailInterface.style.display = "none";
+                                        player.isInDialogue = false;
+                                        ensureCanvasFocus();
+                                    }
                                     alert(
                                         "Congratulations! You have successfully entered the Steins;Gate worldline. The future is now in your hands. El Psy Kongroo!"
                                     );
-                                    const backgroundArrays = [
-                                        backgrounds_early_morning,
-                                        backgrounds_morning,
-                                        backgrounds_afternoon,
-                                        backgrounds_evening,
-                                        backgrounds_night,
-                                    ];
 
                                     backgroundArrays.forEach((backgroundArray) => {
                                         backgroundArray.forEach((subArray) => {
@@ -663,6 +708,7 @@ k.scene("main", async () => {
                             showAchievementDescription(3000, PROJECT_DESCRIPTIONS[boundary.name].achievement);
                             growBanner();
                             destroyIndicators(k, indicators, projects);
+                            regenerateNumber(projects);
 
                             if (discovered <= projects.length) {
                                 updateProgress(projects, discovered);
@@ -676,7 +722,6 @@ k.scene("main", async () => {
                             if (countAchievemenDiscovered(projects) === projects.length) {
                                 createFireworks(50);
                                 document.querySelector(".completing-modal-overlay").style.display = "flex";
-                                hasCompleted = true;
                             }
                         }
                     });
@@ -705,16 +750,21 @@ k.scene("main", async () => {
     loadLocalStorage(projects);
     updateProgress(projects, false);
     showAchievement(projects);
+    setTimeout(() => {
+        const note = document.querySelector(".note");
+        note.style.display = "none";
+        regenerateNumber(projects);
+    }, 4000);
     clearPopup();
     // Adding a second destroy ensures discovered projects from previous refreshes are properly removed.
     destroyIndicators(k, indicators, projects);
     if (countAchievemenDiscovered(projects) === projects.length) {
         createFireworks(50);
         document.querySelector(".completing-modal-overlay").style.display = "flex";
-        hasCompleted = true;
     }
 
     window.addEventListener("DOMContentLoaded", updateProgress);
+
     window.addEventListener("keydown", (event) => {
         const dMailInterface = document.getElementById("d-mail-interface");
         const completingModalOverlay = document.querySelector(".completing-modal-overlay");
@@ -742,6 +792,7 @@ k.scene("main", async () => {
 
     k.onUpdate(() => {
         if (seconds >= 15) {
+            clearInterval(timerId);
             timerId = 0;
             seconds = 0;
             timeTravelTimeout = false;
@@ -958,4 +1009,3 @@ k.go("menu");
 // TODO: Migrate the codebase from JavaScript to TypeScript for improved type safety and maintainability.
 // TODO: Normalize the movement vector for consistent speed in all directions, including diagonals.
 // TODO: Add cub3d and cpp modules projects.
-// TODO: Improve parallax effect on larger screens to eliminate visible transparent background.
