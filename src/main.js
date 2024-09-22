@@ -53,191 +53,31 @@ import {
     regenerateNumber,
 } from "./utils.js";
 
-k.scene("menu", async () => {
-    const bg = k.add([k.sprite("menu-background"), k.pos(k.width() / 2, k.height() / 2), k.anchor("center")]);
+// var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-    const mapData = await (await fetch("./map/map.json")).json();
-    const note = document.querySelector(".note");
-    const progresBarDone = document.querySelector(".progress-done ");
-    const progresBar = document.querySelector(".progress");
-    const achievement = document.getElementById("iconContainer");
+// if (isMobile || isTouchDevice()) {
+//     k.go("main");
+//     progresBarDone.style.display = "flex";
+//     progresBar.style.display = "block";
+//     achievement.style.display = "flex";
+// }
 
-    note.style.display = "none";
-    progresBarDone.style.display = "none";
-    progresBar.style.display = "none";
-    achievement.style.display = "none";
+// k.onKeyPress("space", () => {
+//     k.go("main");
+//     note.style.display = "block";
+//     progresBarDone.style.display = "flex";
+//     progresBar.style.display = "block";
+//     achievement.style.display = "flex";
+// });
 
-    const aboutMeObj = k.add([k.sprite("msg"), k.pos(0, 0), k.scale(SCALE_FACTOR)]);
-    const missionObj = k.add([k.sprite("msg2"), k.pos(0, 0), k.scale(SCALE_FACTOR)]);
-    const socialsObj = k.add([k.sprite("msg3"), k.pos(0, 0), k.scale(1)]);
-
-    const githubLogo = k.add([
-        k.sprite("github-logo"),
-        k.pos(k.width() / 2 - socialsObj.width / 3 - 10, k.height() / 3 - 16),
-        k.area(),
-    ]);
-
-    const discordLogo = k.add([
-        k.sprite("discord-logo"),
-        k.pos(k.width() / 2 - socialsObj.width / 3, k.height() / 3 + githubLogo.height),
-        k.scale(0.3),
-        k.area(),
-    ]);
-
-    const linkedinLogo = k.add([
-        k.sprite("linkedin-logo"),
-        k.pos(k.width() / 2 - socialsObj.width / 3, k.height() / 3 + githubLogo.height * 2),
-        k.area(),
-    ]);
-
-    missionObj.pos = k.vec2(k.width() - missionObj.width * SCALE_FACTOR, 0);
-    socialsObj.pos = k.vec2(k.width() / 2 - socialsObj.width / 2, k.height() / 10);
-
-    githubLogo.onHover(() => {
-        githubLogo.scale = vec2(1.3);
-    });
-    githubLogo.onHoverEnd(() => {
-        githubLogo.scale = vec2(1);
-    });
-    githubLogo.onClick(() => {
-        window.open("https://github.com/vpekdas", "_blank");
-    });
-
-    discordLogo.onHover(() => {
-        discordLogo.scale = vec2(0.4);
-    });
-    discordLogo.onHoverEnd(() => {
-        discordLogo.scale = vec2(0.3);
-    });
-    discordLogo.onClick(() => {
-        window.open("https://discordapp.com/users/415118435174055947/", "_blank");
-    });
-
-    linkedinLogo.onHover(() => {
-        linkedinLogo.scale = vec2(1.3);
-    });
-    linkedinLogo.onHoverEnd(() => {
-        linkedinLogo.scale = vec2(1);
-    });
-    linkedinLogo.onClick(() => {
-        window.open("https://www.linkedin.com/in/volkan-pekdas/", "_blank");
-    });
-
-    const aboutMeMenu = k.add([
-        k.text("About Me", {
-            size: 64,
-            width: 470,
-            font: "myFont",
-        }),
-        k.pos(aboutMeObj.width / 3, k.height() / 6),
-        k.color(k.rgb(0, 255, 255)),
-    ]);
-
-    const aboutMeText = k.add([
-        k.text(aboutMe, {
-            size: 28,
-            width: 470,
-            font: "myFont",
-        }),
-        k.pos(aboutMeObj.width / 3, k.height() / 3),
-
-        k.color(k.rgb(57, 255, 20)),
-        k.opacity(0),
-    ]);
-
-    const missionMenu = k.add([
-        k.text("Mission", {
-            size: 64,
-            width: 470,
-            font: "myFont",
-        }),
-        k.pos(k.width() - missionObj.width * (SCALE_FACTOR - 0.3), k.height() / 6),
-        k.color(k.rgb(255, 20, 147)),
-    ]);
-
-    const missionText = k.add([
-        k.text(mission, {
-            size: 28,
-            width: 470,
-            font: "myFont",
-        }),
-        k.pos(k.width() - missionObj.width * (SCALE_FACTOR - 0.3), k.height() / 3),
-        k.color(k.rgb(57, 255, 20)),
-        k.opacity(0),
-    ]);
-
-    const socialsMenu = k.add([
-        k.text("Connect with Me", {
-            size: 64,
-            width: 230,
-            font: "myFont",
-        }),
-        k.pos(k.width() / 2 - socialsObj.width / 3, k.height() / 6),
-        k.color(k.rgb(255, 0, 0)),
-    ]);
-
-    let play = k.add([
-        k.text("press           to dive in !", {
-            size: 48,
-            width: 1000,
-            font: "myFont",
-        }),
-        k.pos(k.width() / 3, k.height() * 0.9),
-        k.color(k.rgb(255, 255, 0)),
-        k.opacity(1),
-    ]);
-    const space = k.add([
-        k.sprite("space", { anim: "pressed off" }),
-        k.pos(k.width() / 3, k.height() * 0.9),
-        k.scale(2),
-    ]);
-
-    space.pos = k.vec2(k.width() / 3 + space.width * SCALE_FACTOR, k.height() * 0.9 + 6);
-
-    k.wait(1, () => {
-        aboutMeText.opacity = 0.1;
-    });
-    k.wait(1.1, () => {
-        aboutMeText.opacity = 0.5;
-    });
-    k.wait(1.2, () => {
-        aboutMeText.opacity = 1;
-    });
-    k.wait(4, () => {
-        missionText.opacity = 0.1;
-    });
-    k.wait(4.1, () => {
-        missionText.opacity = 0.5;
-    });
-    k.wait(4.2, () => {
-        missionText.opacity = 1;
-    });
-
-    var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-    if (isMobile || isTouchDevice()) {
-        k.go("main");
-        progresBarDone.style.display = "flex";
-        progresBar.style.display = "block";
-        achievement.style.display = "flex";
-    }
-
-    k.onKeyPress("space", () => {
-        k.go("main");
-        note.style.display = "block";
-        progresBarDone.style.display = "flex";
-        progresBar.style.display = "block";
-        achievement.style.display = "flex";
-    });
-
-    k.onUpdate(() => {
-        if (Math.floor(k.time() / 0.5) % 2.5 === 0) {
-            space.play("pressed on");
-        } else {
-            space.play("pressed off");
-        }
-    });
-});
+//     k.onUpdate(() => {
+//         if (Math.floor(k.time() / 0.5) % 2.5 === 0) {
+//             space.play("pressed on");
+//         } else {
+//             space.play("pressed off");
+//         }
+//     });
+// });
 
 loadAllResources(k);
 k.setBackground(k.Color.fromHex("#FFFFFF"));
@@ -1002,7 +842,7 @@ k.scene("main", async () => {
     });
 });
 
-k.go("menu");
+k.go("main");
 
 // TODO: Refactor the entire codebase for better readability, maintainability, and performance.
 // TODO: Change Kaboom.js to Kaplay (a maintained fork of Kaboom.js, which is deprecated)
