@@ -26,6 +26,7 @@ export function displayDialogue(text, onDisplayEnd) {
         dialogue.innerHTML = "";
         clearInterval(intervalRef);
         closeBtn.removeEventListener("click", onCloseClick);
+        ensureCanvasFocus();
     }
 
     closeBtn.addEventListener("click", onCloseClick);
@@ -184,18 +185,6 @@ export function loadAllResources(k) {
                 name: "tiles",
                 path: "/tiles/spritesheet.png",
                 config: { sliceX: 21, sliceY: 11 },
-            },
-            {
-                name: "space",
-                path: "/keys/SPACE.png",
-                config: {
-                    sliceX: 2,
-                    sliceY: 1,
-                    anims: {
-                        "pressed off": 0,
-                        "pressed on": 1,
-                    },
-                },
             },
             { name: "pipe", path: "/pipe/1.png" },
             {
@@ -603,7 +592,7 @@ loadSound("opening", "opening.mp3");
 export function playMusic() {
     const music = play("opening", {
         loop: true,
-        volume: 1,
+        volume: 0.5,
     });
 }
 
