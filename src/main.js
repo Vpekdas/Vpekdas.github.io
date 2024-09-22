@@ -11,8 +11,6 @@ import {
     BOOKS,
     HOVER_EVENTS,
     PROJECT_DESCRIPTIONS,
-    aboutMe,
-    mission,
     OkabeDialogue,
     KurisuDialogue,
 } from "./constants.js";
@@ -46,205 +44,46 @@ import {
     destroyIndicators,
     handleKeyEvents,
     ensureCanvasFocus,
-    isTouchDevice,
     createFireworks,
     resetAdventure,
     playMusic,
     regenerateNumber,
 } from "./utils.js";
 
-k.scene("menu", async () => {
-    const bg = k.add([k.sprite("menu-background"), k.pos(k.width() / 2, k.height() / 2), k.anchor("center")]);
-
-    const mapData = await (await fetch("./map/map.json")).json();
-    const note = document.querySelector(".note");
-    const progresBarDone = document.querySelector(".progress-done ");
-    const progresBar = document.querySelector(".progress");
-    const achievement = document.getElementById("iconContainer");
-
-    note.style.display = "none";
-    progresBarDone.style.display = "none";
-    progresBar.style.display = "none";
-    achievement.style.display = "none";
-
-    const aboutMeObj = k.add([k.sprite("msg"), k.pos(0, 0), k.scale(SCALE_FACTOR)]);
-    const missionObj = k.add([k.sprite("msg2"), k.pos(0, 0), k.scale(SCALE_FACTOR)]);
-    const socialsObj = k.add([k.sprite("msg3"), k.pos(0, 0), k.scale(1)]);
-
-    const githubLogo = k.add([
-        k.sprite("github-logo"),
-        k.pos(k.width() / 2 - socialsObj.width / 3 - 10, k.height() / 3 - 16),
-        k.area(),
-    ]);
-
-    const discordLogo = k.add([
-        k.sprite("discord-logo"),
-        k.pos(k.width() / 2 - socialsObj.width / 3, k.height() / 3 + githubLogo.height),
-        k.scale(0.3),
-        k.area(),
-    ]);
-
-    const linkedinLogo = k.add([
-        k.sprite("linkedin-logo"),
-        k.pos(k.width() / 2 - socialsObj.width / 3, k.height() / 3 + githubLogo.height * 2),
-        k.area(),
-    ]);
-
-    missionObj.pos = k.vec2(k.width() - missionObj.width * SCALE_FACTOR, 0);
-    socialsObj.pos = k.vec2(k.width() / 2 - socialsObj.width / 2, k.height() / 10);
-
-    githubLogo.onHover(() => {
-        githubLogo.scale = vec2(1.3);
-    });
-    githubLogo.onHoverEnd(() => {
-        githubLogo.scale = vec2(1);
-    });
-    githubLogo.onClick(() => {
-        window.open("https://github.com/vpekdas", "_blank");
-    });
-
-    discordLogo.onHover(() => {
-        discordLogo.scale = vec2(0.4);
-    });
-    discordLogo.onHoverEnd(() => {
-        discordLogo.scale = vec2(0.3);
-    });
-    discordLogo.onClick(() => {
-        window.open("https://discordapp.com/users/415118435174055947/", "_blank");
-    });
-
-    linkedinLogo.onHover(() => {
-        linkedinLogo.scale = vec2(1.3);
-    });
-    linkedinLogo.onHoverEnd(() => {
-        linkedinLogo.scale = vec2(1);
-    });
-    linkedinLogo.onClick(() => {
-        window.open("https://www.linkedin.com/in/volkan-pekdas/", "_blank");
-    });
-
-    const aboutMeMenu = k.add([
-        k.text("About Me", {
-            size: 64,
-            width: 470,
-            font: "myFont",
-        }),
-        k.pos(aboutMeObj.width / 3, k.height() / 6),
-        k.color(k.rgb(0, 255, 255)),
-    ]);
-
-    const aboutMeText = k.add([
-        k.text(aboutMe, {
-            size: 28,
-            width: 470,
-            font: "myFont",
-        }),
-        k.pos(aboutMeObj.width / 3, k.height() / 3),
-
-        k.color(k.rgb(57, 255, 20)),
-        k.opacity(0),
-    ]);
-
-    const missionMenu = k.add([
-        k.text("Mission", {
-            size: 64,
-            width: 470,
-            font: "myFont",
-        }),
-        k.pos(k.width() - missionObj.width * (SCALE_FACTOR - 0.3), k.height() / 6),
-        k.color(k.rgb(255, 20, 147)),
-    ]);
-
-    const missionText = k.add([
-        k.text(mission, {
-            size: 28,
-            width: 470,
-            font: "myFont",
-        }),
-        k.pos(k.width() - missionObj.width * (SCALE_FACTOR - 0.3), k.height() / 3),
-        k.color(k.rgb(57, 255, 20)),
-        k.opacity(0),
-    ]);
-
-    const socialsMenu = k.add([
-        k.text("Connect with Me", {
-            size: 64,
-            width: 230,
-            font: "myFont",
-        }),
-        k.pos(k.width() / 2 - socialsObj.width / 3, k.height() / 6),
-        k.color(k.rgb(255, 0, 0)),
-    ]);
-
-    let play = k.add([
-        k.text("press           to dive in !", {
-            size: 48,
-            width: 1000,
-            font: "myFont",
-        }),
-        k.pos(k.width() / 3, k.height() * 0.9),
-        k.color(k.rgb(255, 255, 0)),
-        k.opacity(1),
-    ]);
-    const space = k.add([
-        k.sprite("space", { anim: "pressed off" }),
-        k.pos(k.width() / 3, k.height() * 0.9),
-        k.scale(2),
-    ]);
-
-    space.pos = k.vec2(k.width() / 3 + space.width * SCALE_FACTOR, k.height() * 0.9 + 6);
-
-    k.wait(1, () => {
-        aboutMeText.opacity = 0.1;
-    });
-    k.wait(1.1, () => {
-        aboutMeText.opacity = 0.5;
-    });
-    k.wait(1.2, () => {
-        aboutMeText.opacity = 1;
-    });
-    k.wait(4, () => {
-        missionText.opacity = 0.1;
-    });
-    k.wait(4.1, () => {
-        missionText.opacity = 0.5;
-    });
-    k.wait(4.2, () => {
-        missionText.opacity = 1;
-    });
-
-    var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-    if (isMobile || isTouchDevice()) {
-        k.go("main");
-        progresBarDone.style.display = "flex";
-        progresBar.style.display = "block";
-        achievement.style.display = "flex";
-    }
-
-    k.onKeyPress("space", () => {
-        k.go("main");
-        note.style.display = "block";
-        progresBarDone.style.display = "flex";
-        progresBar.style.display = "block";
-        achievement.style.display = "flex";
-    });
-
-    k.onUpdate(() => {
-        if (Math.floor(k.time() / 0.5) % 2.5 === 0) {
-            space.play("pressed on");
-        } else {
-            space.play("pressed off");
-        }
-    });
-});
-
 loadAllResources(k);
 k.setBackground(k.Color.fromHex("#FFFFFF"));
 
 k.scene("main", async () => {
     const mapData = await (await fetch("./map/map.json")).json();
+    const first = k.add([k.sprite("first"), k.pos(0, 0), k.scale(SCALE_FACTOR)]);
+    const first2 = k.add([k.sprite("first"), k.pos(-first.width, 0), k.scale(SCALE_FACTOR)]);
+    const first3 = k.add([k.sprite("first"), k.pos(first.width, 0), k.scale(SCALE_FACTOR)]);
+    const first4 = k.add([k.sprite("first"), k.pos(first.width * 2, 0), k.scale(SCALE_FACTOR)]);
 
+    first.play("idle");
+    first2.play("idle");
+    first3.play("idle");
+    first4.play("idle");
+
+    const first5 = k.add([k.sprite("first"), k.pos(0, first.height * 2), k.scale(SCALE_FACTOR)]);
+    const first6 = k.add([k.sprite("first"), k.pos(-first.width, first.height * 2), k.scale(SCALE_FACTOR)]);
+    const first7 = k.add([k.sprite("first"), k.pos(first.width, first.height * 2), k.scale(SCALE_FACTOR)]);
+    const first8 = k.add([k.sprite("first"), k.pos(first.width * 2, first.height * 2), k.scale(SCALE_FACTOR)]);
+
+    first5.play("idle");
+    first6.play("idle");
+    first7.play("idle");
+    first8.play("idle");
+
+    const first9 = k.add([k.sprite("first"), k.pos(0, first.height * 4), k.scale(SCALE_FACTOR)]);
+    const first10 = k.add([k.sprite("first"), k.pos(-first.width, first.height * 4), k.scale(SCALE_FACTOR)]);
+    const first11 = k.add([k.sprite("first"), k.pos(first.width, first.height * 4), k.scale(SCALE_FACTOR)]);
+    const first12 = k.add([k.sprite("first"), k.pos(first.width * 2, first.height * 4), k.scale(SCALE_FACTOR)]);
+
+    first9.play("idle");
+    first10.play("idle");
+    first11.play("idle");
+    first12.play("idle");
     const layers = mapData.layers;
     const interactables = [];
     const backgrounds_early_morning = [];
@@ -288,8 +127,6 @@ k.scene("main", async () => {
     for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds_afternoon.push(createBackground(k, 4, `afternoon-${i + 1}`));
     for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds_evening.push(createBackground(k, 4, `evening-${i + 1}`));
     for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds_night.push(createBackground(k, 4, `night-${i + 1}`));
-
-    console.log(backgrounds_afternoon[0]);
 
     for (let i = 0; i < BACKGROUND_COUNT; i++) {
         backgrounds_early_morning[i].forEach((component) => (component.hidden = true));
@@ -572,80 +409,6 @@ k.scene("main", async () => {
                                 const correctMessage = "42";
 
                                 if (message === correctMessage) {
-                                    const first = k.add([k.sprite("first"), k.pos(0, 0), k.scale(SCALE_FACTOR)]);
-                                    const first2 = k.add([
-                                        k.sprite("first"),
-                                        k.pos(-first.width, 0),
-                                        k.scale(SCALE_FACTOR),
-                                    ]);
-                                    const first3 = k.add([
-                                        k.sprite("first"),
-                                        k.pos(first.width, 0),
-                                        k.scale(SCALE_FACTOR),
-                                    ]);
-                                    const first4 = k.add([
-                                        k.sprite("first"),
-                                        k.pos(first.width * 2, 0),
-                                        k.scale(SCALE_FACTOR),
-                                    ]);
-
-                                    first.play("idle");
-                                    first2.play("idle");
-                                    first3.play("idle");
-                                    first4.play("idle");
-
-                                    const first5 = k.add([
-                                        k.sprite("first"),
-                                        k.pos(0, first.height * 2),
-                                        k.scale(SCALE_FACTOR),
-                                    ]);
-                                    const first6 = k.add([
-                                        k.sprite("first"),
-                                        k.pos(-first.width, first.height * 2),
-                                        k.scale(SCALE_FACTOR),
-                                    ]);
-                                    const first7 = k.add([
-                                        k.sprite("first"),
-                                        k.pos(first.width, first.height * 2),
-                                        k.scale(SCALE_FACTOR),
-                                    ]);
-                                    const first8 = k.add([
-                                        k.sprite("first"),
-                                        k.pos(first.width * 2, first.height * 2),
-                                        k.scale(SCALE_FACTOR),
-                                    ]);
-
-                                    first5.play("idle");
-                                    first6.play("idle");
-                                    first7.play("idle");
-                                    first8.play("idle");
-
-                                    const first9 = k.add([
-                                        k.sprite("first"),
-                                        k.pos(0, first.height * 4),
-                                        k.scale(SCALE_FACTOR),
-                                    ]);
-                                    const first10 = k.add([
-                                        k.sprite("first"),
-                                        k.pos(-first.width, first.height * 4),
-                                        k.scale(SCALE_FACTOR),
-                                    ]);
-                                    const first11 = k.add([
-                                        k.sprite("first"),
-                                        k.pos(first.width, first.height * 4),
-                                        k.scale(SCALE_FACTOR),
-                                    ]);
-                                    const first12 = k.add([
-                                        k.sprite("first"),
-                                        k.pos(first.width * 2, first.height * 4),
-                                        k.scale(SCALE_FACTOR),
-                                    ]);
-
-                                    first9.play("idle");
-                                    first10.play("idle");
-                                    first11.play("idle");
-                                    first12.play("idle");
-
                                     playMusic();
                                     player.pos.x = 2300;
                                     player.pos.y = 350;
@@ -720,7 +483,7 @@ k.scene("main", async () => {
                             }, 7000);
 
                             if (countAchievemenDiscovered(projects) === projects.length) {
-                                createFireworks(50);
+                                createFireworks(20);
                                 document.querySelector(".completing-modal-overlay").style.display = "flex";
                             }
                         }
@@ -759,12 +522,11 @@ k.scene("main", async () => {
     // Adding a second destroy ensures discovered projects from previous refreshes are properly removed.
     destroyIndicators(k, indicators, projects);
     if (countAchievemenDiscovered(projects) === projects.length) {
-        createFireworks(50);
+        createFireworks(20);
         document.querySelector(".completing-modal-overlay").style.display = "flex";
     }
 
     window.addEventListener("DOMContentLoaded", updateProgress);
-
     window.addEventListener("keydown", (event) => {
         const dMailInterface = document.getElementById("d-mail-interface");
         const completingModalOverlay = document.querySelector(".completing-modal-overlay");
@@ -780,6 +542,61 @@ k.scene("main", async () => {
                 ensureCanvasFocus();
             }
         }
+        if (event.key === " ") {
+            const background = document.getElementById("background");
+            background.style.display = "none";
+            ensureCanvasFocus();
+        }
+        if (event.key === "m") {
+            const menu = document.getElementById("hexagon-menu");
+            const resetButton = document.querySelector(".clear-storage-button");
+            menu.style.display = "flex";
+            resetButton.style.display = "inline-flex";
+        }
+
+        if (event.key === "e") {
+            const menu = document.getElementById("hexagon-menu");
+            const resetButton = document.querySelector(".clear-storage-button");
+
+            menu.style.display = "none";
+            resetButton.style.display = "none";
+        }
+
+        if (event.key === "c") {
+            const note = document.querySelector(".note");
+            const divergenceMeter = document.querySelector(".glitch-wrapper");
+
+            note.style.display = "none";
+            if (divergenceMeter.style.display === "none") {
+                divergenceMeter.style.display = "flex";
+            }
+        }
+
+        if (event.key === "h") {
+            const note = document.querySelector(".note");
+            const divergenceMeter = document.querySelector(".glitch-wrapper");
+
+            note.style.display = "block";
+            divergenceMeter.style.display = "none";
+        }
+
+        k.onKeyPress("space", () => {
+            if (player.isInDialogue) {
+                const dialogueUI = document.getElementById("textbox-container");
+                const dialogue = document.getElementById("dialogue");
+
+                dialogueUI.style.display = "none";
+                dialogue.innerHTML = "";
+                player.isInDialogue = false;
+            }
+        });
+    });
+
+    const playButton = document.getElementById("play-button");
+    playButton.addEventListener("click", () => {
+        const background = document.getElementById("background");
+        background.style.display = "none";
+        ensureCanvasFocus();
     });
 
     resetAdventure();
@@ -962,50 +779,15 @@ k.scene("main", async () => {
         }
         player.play("idle-side");
     });
-
-    k.isTouchscreen;
-
-    k.onKeyPress("m", () => {
-        const menu = document.getElementById("hexagon-menu");
-        const resetButton = document.querySelector(".clear-storage-button");
-        menu.style.display = "flex";
-        resetButton.style.display = "inline-flex";
-    });
-
-    k.onKeyPress("e", () => {
-        const menu = document.getElementById("hexagon-menu");
-        const resetButton = document.querySelector(".clear-storage-button");
-
-        menu.style.display = "none";
-        resetButton.style.display = "none";
-    });
-
-    k.onKeyPress("c", () => {
-        const note = document.querySelector(".note");
-        note.style.display = "none";
-    });
-
-    k.onKeyPress("h", () => {
-        const note = document.querySelector(".note");
-        note.style.display = "block";
-    });
-
-    k.onKeyPress("space", () => {
-        if (player.isInDialogue) {
-            const dialogueUI = document.getElementById("textbox-container");
-            const dialogue = document.getElementById("dialogue");
-
-            dialogueUI.style.display = "none";
-            dialogue.innerHTML = "";
-            player.isInDialogue = false;
-        }
-    });
 });
 
-k.go("menu");
+k.go("main");
 
 // TODO: Refactor the entire codebase for better readability, maintainability, and performance.
 // TODO: Change Kaboom.js to Kaplay (a maintained fork of Kaboom.js, which is deprecated)
 // TODO: Migrate the codebase from JavaScript to TypeScript for improved type safety and maintainability.
 // TODO: Normalize the movement vector for consistent speed in all directions, including diagonals.
-// TODO: Add cub3d and cpp modules projects.
+// TODO: Add cub3d.
+// TODO: Implement a digit scroll animation effect for the divergence meter to enhance visual feedback and user experience.
+// TODO: Remove event listeners when they are no longer needed to prevent memory leaks and improve performance. (you can use  { once: true })
+// TODO: Reorganize assets in the public folders for better structure, accessibility, and maintainability.
