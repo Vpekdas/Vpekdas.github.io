@@ -160,13 +160,6 @@ export const PROJECT_DESCRIPTIONS = {
     },
 };
 
-export const aboutMe =
-    "Hello everyone, my name is Volkan and I'm a student at 42. Before that, I graduated in accounting but I have decided to change careers to become a game developer :)";
-export const mission =
-    "I have hidden my projects in this virtual world. Find them all and explore the wonders of coding!";
-
-export const dMail = "Retry piscine";
-
 export const OkabeDialogue = `
 "Ah, you've finally done it! Just as I, Hououin Kyouma, the mad scientist, predicted! Your journey through the labyrinth of code has reached its zenith. The digital realm bows to your prowess. Remember, this is not the end, but merely the beginning of your legend. Continue to defy the impossible and rewrite the rules of reality itself. El Psy Kongroo!"
 `;
