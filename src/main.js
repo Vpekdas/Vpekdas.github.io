@@ -55,35 +55,50 @@ k.setBackground(k.Color.fromHex("#FFFFFF"));
 
 k.scene("main", async () => {
     const mapData = await (await fetch("./map/map.json")).json();
+
     const first = k.add([k.sprite("first"), k.pos(0, 0), k.scale(SCALE_FACTOR)]);
     const first2 = k.add([k.sprite("first"), k.pos(-first.width, 0), k.scale(SCALE_FACTOR)]);
     const first3 = k.add([k.sprite("first"), k.pos(first.width, 0), k.scale(SCALE_FACTOR)]);
     const first4 = k.add([k.sprite("first"), k.pos(first.width * 2, 0), k.scale(SCALE_FACTOR)]);
-
-    first.play("idle");
-    first2.play("idle");
-    first3.play("idle");
-    first4.play("idle");
 
     const first5 = k.add([k.sprite("first"), k.pos(0, first.height * 2), k.scale(SCALE_FACTOR)]);
     const first6 = k.add([k.sprite("first"), k.pos(-first.width, first.height * 2), k.scale(SCALE_FACTOR)]);
     const first7 = k.add([k.sprite("first"), k.pos(first.width, first.height * 2), k.scale(SCALE_FACTOR)]);
     const first8 = k.add([k.sprite("first"), k.pos(first.width * 2, first.height * 2), k.scale(SCALE_FACTOR)]);
 
-    first5.play("idle");
-    first6.play("idle");
-    first7.play("idle");
-    first8.play("idle");
-
     const first9 = k.add([k.sprite("first"), k.pos(0, first.height * 4), k.scale(SCALE_FACTOR)]);
     const first10 = k.add([k.sprite("first"), k.pos(-first.width, first.height * 4), k.scale(SCALE_FACTOR)]);
     const first11 = k.add([k.sprite("first"), k.pos(first.width, first.height * 4), k.scale(SCALE_FACTOR)]);
     const first12 = k.add([k.sprite("first"), k.pos(first.width * 2, first.height * 4), k.scale(SCALE_FACTOR)]);
 
+    first.hidden = true;
+    first2.hidden = true;
+    first3.hidden = true;
+    first4.hidden = true;
+    first5.hidden = true;
+    first6.hidden = true;
+    first7.hidden = true;
+    first8.hidden = true;
+    first9.hidden = true;
+    first10.hidden = true;
+    first11.hidden = true;
+    first12.hidden = true;
+
+    first.play("idle");
+    first2.play("idle");
+    first3.play("idle");
+    first4.play("idle");
+
+    first5.play("idle");
+    first6.play("idle");
+    first7.play("idle");
+    first8.play("idle");
+
     first9.play("idle");
     first10.play("idle");
     first11.play("idle");
     first12.play("idle");
+
     const layers = mapData.layers;
     const interactables = [];
     const backgrounds_early_morning = [];
@@ -118,7 +133,6 @@ k.scene("main", async () => {
         down: false,
         left: false,
         right: false,
-        enter: false,
     };
 
     for (let i = 0; i < BACKGROUND_COUNT; i++)
@@ -413,6 +427,18 @@ k.scene("main", async () => {
                                     player.pos.x = 2300;
                                     player.pos.y = 350;
                                     steinsGate = true;
+                                    first.hidden = false;
+                                    first2.hidden = false;
+                                    first3.hidden = false;
+                                    first4.hidden = false;
+                                    first5.hidden = false;
+                                    first6.hidden = false;
+                                    first7.hidden = false;
+                                    first8.hidden = false;
+                                    first9.hidden = false;
+                                    first10.hidden = false;
+                                    first11.hidden = false;
+                                    first12.hidden = false;
                                     const dMailInterface = document.getElementById("d-mail-interface");
                                     if (dMailInterface.style.display === "flex") {
                                         dMailInterface.style.display = "none";
@@ -780,6 +806,25 @@ k.scene("main", async () => {
         player.play("idle-side");
     });
 });
+
+
+
+// TODO: Template function
+// document.addEventListener("DOMContentLoaded", (event) => {
+//     const testElement = document.getElementById("test");
+
+//     function stopAtDigit(digit) {
+//         const digitHeight = 460;
+//         const position = -digit * digitHeight;
+//         testElement.style.animation = "none";
+//         testElement.style.backgroundPosition = `0px ${position}px`;
+//         testElement.style.filter = "none";
+//     }
+
+//     setTimeout(() => {
+//         stopAtDigit(5);
+//     }, 5000);
+// });
 
 k.go("main");
 
