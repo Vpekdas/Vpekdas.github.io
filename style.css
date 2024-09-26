@@ -935,7 +935,11 @@ a:link {
 }
 
 .glitch-digit {
-    animation: glitch-animation 0.5s ease-in-out;
+    width: 30px;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    transition: 0.5s ease;
 }
 
 .glitch img {
@@ -1316,54 +1320,3 @@ a:link {
     transform: scale(0.95);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
-
-
-/* TODO: Template effect */
-/* #test {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 180px;
-    height: 460px;
-    background-image: url("merged.jpg");
-    background-size: 100% auto;
-    animation: scrollDigits 2s steps(10) infinite;
-    filter: blur(4px);
-}
-
-@keyframes scrollDigits {
-    0% {
-        background-position: 0 0;
-    }
-    10% {
-        background-position: 0 -460px;
-    }
-    20% {
-        background-position: 0 -920px;
-    }
-    30% {
-        background-position: 0 -1380px;
-    }
-    40% {
-        background-position: 0 -1840px;
-    }
-    50% {
-        background-position: 0 -2300px;
-    }
-    60% {
-        background-position: 0 -2760px;
-    }
-    70% {
-        background-position: 0 -3220px;
-    }
-    80% {
-        background-position: 0 -3680px;
-    }
-    90% {
-        background-position: 0 -4140px;
-    }
-    100% {
-        background-position: 0 -4600px;
-    }
-} */

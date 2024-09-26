@@ -598,7 +598,20 @@ export function playMusic() {
 
 const maxDivergence = 1.048596;
 const initialDivergence = 0.337187;
+const totalDigits = 10;
 let currentDivergence = initialDivergence;
+
+function spinDigit(element, correctChar, delay) {
+    const spinInterval = setInterval(() => {
+        const randomDigit = Math.floor(Math.random() * totalDigits);
+        element.src = `img/${randomDigit}.jpg`;
+    }, 100);
+
+    setTimeout(() => {
+        clearInterval(spinInterval);
+        element.src = `img/${correctChar === "." ? "dot" : correctChar}.jpg`;
+    }, 3000 + delay);
+}
 
 export function regenerateNumber(projects) {
     if (currentDivergence >= maxDivergence) {
@@ -623,11 +636,13 @@ export function regenerateNumber(projects) {
     const glitchContainer = document.querySelector(".glitch");
     glitchContainer.innerHTML = "";
 
-    digits.forEach((char) => {
+    digits.forEach((char, index) => {
         const img = document.createElement("img");
         img.src = `img/${char === "." ? "dot" : char}.jpg`;
         img.alt = `Digit ${char}`;
         img.classList.add("glitch-digit");
         glitchContainer.appendChild(img);
+
+        spinDigit(img, char, index * 100);
     });
 }
