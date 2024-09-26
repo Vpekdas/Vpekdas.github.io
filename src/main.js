@@ -137,10 +137,10 @@ k.scene("main", async () => {
 
     for (let i = 0; i < BACKGROUND_COUNT; i++)
         backgrounds_early_morning.push(createBackground(k, 4, `early-morning-${i + 1}`));
-    for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds_morning.push(createBackground(k, 4, `morning-${i + 1}`));
-    for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds_afternoon.push(createBackground(k, 4, `afternoon-${i + 1}`));
-    for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds_evening.push(createBackground(k, 4, `evening-${i + 1}`));
-    for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds_night.push(createBackground(k, 4, `night-${i + 1}`));
+    for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds_morning.push(createBackground(k, 5, `morning-${i + 1}`));
+    for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds_afternoon.push(createBackground(k, 5, `afternoon-${i + 1}`));
+    for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds_evening.push(createBackground(k, 5, `evening-${i + 1}`));
+    for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds_night.push(createBackground(k, 5, `night-${i + 1}`));
 
     for (let i = 0; i < BACKGROUND_COUNT; i++) {
         backgrounds_early_morning[i].forEach((component) => (component.hidden = true));
@@ -615,6 +615,7 @@ k.scene("main", async () => {
                 dialogue.innerHTML = "";
                 player.isInDialogue = false;
             }
+            // TODO: add here
         });
     });
 
@@ -807,25 +808,6 @@ k.scene("main", async () => {
     });
 });
 
-
-
-// TODO: Template function
-// document.addEventListener("DOMContentLoaded", (event) => {
-//     const testElement = document.getElementById("test");
-
-//     function stopAtDigit(digit) {
-//         const digitHeight = 460;
-//         const position = -digit * digitHeight;
-//         testElement.style.animation = "none";
-//         testElement.style.backgroundPosition = `0px ${position}px`;
-//         testElement.style.filter = "none";
-//     }
-
-//     setTimeout(() => {
-//         stopAtDigit(5);
-//     }, 5000);
-// });
-
 k.go("main");
 
 // TODO: Refactor the entire codebase for better readability, maintainability, and performance.
@@ -836,3 +818,4 @@ k.go("main");
 // TODO: Implement a digit scroll animation effect for the divergence meter to enhance visual feedback and user experience.
 // TODO: Remove event listeners when they are no longer needed to prevent memory leaks and improve performance. (you can use  { once: true })
 // TODO: Reorganize assets in the public folders for better structure, accessibility, and maintainability.
+// TODO: Store the divergence meter value in local storage to persist the state across sessions.
