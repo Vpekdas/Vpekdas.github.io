@@ -1,6 +1,5 @@
 import { k } from "./KaboomCtx.js";
 import {
-    BACKGROUND_COUNT,
     OFFSET_X,
     OFFSET_Y,
     PLAYER_SPEED,
@@ -22,8 +21,6 @@ import {
     setCamScale,
     createIndicator,
     createTile,
-    createBackground,
-    updateBackground,
     getIndicatorOffset,
     updateProgress,
     addProject,
@@ -42,7 +39,6 @@ import {
     getCurrentHour,
     clearPopup,
     destroyIndicators,
-    handleKeyEvents,
     ensureCanvasFocus,
     createFireworks,
     resetAdventure,
@@ -50,105 +46,41 @@ import {
     regenerateNumber,
 } from "./utils.js";
 
+import {
+    changeBackgroundHour,
+    destroyBackground,
+    createAllBackground,
+    createSteinsGateBackground,
+    displaySteinsGateBackground,
+} from "./background.js";
+import { handleKeyPressed, movePlayer, handleUIEvent } from "./keys.js";
+import { handleMouseEvents } from "./mouse.js";
+
 loadAllResources(k);
 k.setBackground(k.Color.fromHex("#FFFFFF"));
 
 k.scene("main", async () => {
     const mapData = await (await fetch("./map/map.json")).json();
-
-    const first = k.add([k.sprite("first"), k.pos(0, 0), k.scale(SCALE_FACTOR)]);
-    const first2 = k.add([k.sprite("first"), k.pos(-first.width, 0), k.scale(SCALE_FACTOR)]);
-    const first3 = k.add([k.sprite("first"), k.pos(first.width, 0), k.scale(SCALE_FACTOR)]);
-    const first4 = k.add([k.sprite("first"), k.pos(first.width * 2, 0), k.scale(SCALE_FACTOR)]);
-
-    const first5 = k.add([k.sprite("first"), k.pos(0, first.height * 2), k.scale(SCALE_FACTOR)]);
-    const first6 = k.add([k.sprite("first"), k.pos(-first.width, first.height * 2), k.scale(SCALE_FACTOR)]);
-    const first7 = k.add([k.sprite("first"), k.pos(first.width, first.height * 2), k.scale(SCALE_FACTOR)]);
-    const first8 = k.add([k.sprite("first"), k.pos(first.width * 2, first.height * 2), k.scale(SCALE_FACTOR)]);
-
-    const first9 = k.add([k.sprite("first"), k.pos(0, first.height * 4), k.scale(SCALE_FACTOR)]);
-    const first10 = k.add([k.sprite("first"), k.pos(-first.width, first.height * 4), k.scale(SCALE_FACTOR)]);
-    const first11 = k.add([k.sprite("first"), k.pos(first.width, first.height * 4), k.scale(SCALE_FACTOR)]);
-    const first12 = k.add([k.sprite("first"), k.pos(first.width * 2, first.height * 4), k.scale(SCALE_FACTOR)]);
-
-    first.hidden = true;
-    first2.hidden = true;
-    first3.hidden = true;
-    first4.hidden = true;
-    first5.hidden = true;
-    first6.hidden = true;
-    first7.hidden = true;
-    first8.hidden = true;
-    first9.hidden = true;
-    first10.hidden = true;
-    first11.hidden = true;
-    first12.hidden = true;
-
-    first.play("idle");
-    first2.play("idle");
-    first3.play("idle");
-    first4.play("idle");
-
-    first5.play("idle");
-    first6.play("idle");
-    first7.play("idle");
-    first8.play("idle");
-
-    first9.play("idle");
-    first10.play("idle");
-    first11.play("idle");
-    first12.play("idle");
+    createAllBackground(k);
+    createSteinsGateBackground(k);
 
     const layers = mapData.layers;
+
     const interactables = [];
-    const backgrounds_early_morning = [];
-    const backgrounds_morning = [];
-    const backgrounds_afternoon = [];
-    const backgrounds_evening = [];
-    const backgrounds_night = [];
     const projects = [];
+    let indicators = new Map();
+
     let steinsGate = false;
     let timeTravelTimeout = false;
-
     let animationBanner = false;
-    let indicators = new Map();
+
     let timerId = 0;
     let seconds = 0;
+
     let startX = 0;
     let startY = 0;
+
     let lightning, lightning2;
-    const backgroundArrays = [
-        backgrounds_early_morning,
-        backgrounds_morning,
-        backgrounds_afternoon,
-        backgrounds_evening,
-        backgrounds_night,
-    ];
-    const keysPressed = {
-        w: false,
-        a: false,
-        s: false,
-        d: false,
-        up: false,
-        down: false,
-        left: false,
-        right: false,
-    };
-
-    for (let i = 0; i < BACKGROUND_COUNT; i++)
-        backgrounds_early_morning.push(createBackground(k, 4, `early-morning-${i + 1}`));
-    for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds_morning.push(createBackground(k, 5, `morning-${i + 1}`));
-    for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds_afternoon.push(createBackground(k, 5, `afternoon-${i + 1}`));
-    for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds_evening.push(createBackground(k, 5, `evening-${i + 1}`));
-    for (let i = 0; i < BACKGROUND_COUNT; i++) backgrounds_night.push(createBackground(k, 5, `night-${i + 1}`));
-
-    for (let i = 0; i < BACKGROUND_COUNT; i++) {
-        backgrounds_early_morning[i].forEach((component) => (component.hidden = true));
-        backgrounds_morning[i].forEach((component) => (component.hidden = true));
-        backgrounds_afternoon[i].forEach((component) => (component.hidden = true));
-        backgrounds_evening[i].forEach((component) => (component.hidden = true));
-        backgrounds_night[i].forEach((component) => (component.hidden = true));
-    }
 
     const map = k.add([k.sprite("map"), k.pos(0), k.scale(SCALE_FACTOR)]);
 
@@ -171,16 +103,6 @@ k.scene("main", async () => {
         },
         "player",
     ]);
-
-    handleKeyEvents("w", true, keysPressed, k, player);
-    handleKeyEvents("a", true, keysPressed, k, player);
-    handleKeyEvents("s", true, keysPressed, k, player);
-    handleKeyEvents("d", true, keysPressed, k, player);
-    handleKeyEvents("up", true, keysPressed, k, player);
-    handleKeyEvents("down", true, keysPressed, k, player);
-    handleKeyEvents("left", true, keysPressed, k, player);
-    handleKeyEvents("right", true, keysPressed, k, player);
-    handleKeyEvents("escape", true, keysPressed, k, player);
 
     createTile(k, "tiles", 2, 114 - 32 * 1, 151);
     createTile(k, "tiles", 2, 114 - 32 * 2, 151);
@@ -358,7 +280,7 @@ k.scene("main", async () => {
                         ]);
                     }
                     if (boundary.name === "SG-001") {
-                        const phonewawe = k.add([
+                        const sg001 = k.add([
                             k.sprite("sg-001"),
                             k.pos((boundary.x + 24) * SCALE_FACTOR, (boundary.y + 18) * SCALE_FACTOR),
                             k.scale(0.1),
@@ -427,18 +349,8 @@ k.scene("main", async () => {
                                     player.pos.x = 2300;
                                     player.pos.y = 350;
                                     steinsGate = true;
-                                    first.hidden = false;
-                                    first2.hidden = false;
-                                    first3.hidden = false;
-                                    first4.hidden = false;
-                                    first5.hidden = false;
-                                    first6.hidden = false;
-                                    first7.hidden = false;
-                                    first8.hidden = false;
-                                    first9.hidden = false;
-                                    first10.hidden = false;
-                                    first11.hidden = false;
-                                    first12.hidden = false;
+                                    displaySteinsGateBackground();
+
                                     const dMailInterface = document.getElementById("d-mail-interface");
                                     if (dMailInterface.style.display === "flex") {
                                         dMailInterface.style.display = "none";
@@ -449,15 +361,7 @@ k.scene("main", async () => {
                                         "Congratulations! You have successfully entered the Steins;Gate worldline. The future is now in your hands. El Psy Kongroo!"
                                     );
 
-                                    backgroundArrays.forEach((backgroundArray) => {
-                                        backgroundArray.forEach((subArray) => {
-                                            subArray.forEach((background) => {
-                                                if (background) {
-                                                    k.destroy(background);
-                                                }
-                                            });
-                                        });
-                                    });
+                                    destroyBackground(k);
                                 }
                             });
                             return;
@@ -553,71 +457,6 @@ k.scene("main", async () => {
     }
 
     window.addEventListener("DOMContentLoaded", updateProgress);
-    window.addEventListener("keydown", (event) => {
-        const dMailInterface = document.getElementById("d-mail-interface");
-        const completingModalOverlay = document.querySelector(".completing-modal-overlay");
-        if (event.key === "Escape") {
-            if (dMailInterface.style.display === "flex") {
-                dMailInterface.style.display = "none";
-                player.isInDialogue = false;
-                ensureCanvasFocus();
-            }
-            if (completingModalOverlay.style.display === "flex") {
-                completingModalOverlay.style.display = "none";
-                player.isInDialogue = false;
-                ensureCanvasFocus();
-            }
-        }
-        if (event.key === " ") {
-            const background = document.getElementById("background");
-            background.style.display = "none";
-            ensureCanvasFocus();
-        }
-        if (event.key === "m") {
-            const menu = document.getElementById("hexagon-menu");
-            const resetButton = document.querySelector(".clear-storage-button");
-            menu.style.display = "flex";
-            resetButton.style.display = "inline-flex";
-        }
-
-        if (event.key === "e") {
-            const menu = document.getElementById("hexagon-menu");
-            const resetButton = document.querySelector(".clear-storage-button");
-
-            menu.style.display = "none";
-            resetButton.style.display = "none";
-        }
-
-        if (event.key === "c") {
-            const note = document.querySelector(".note");
-            const divergenceMeter = document.querySelector(".glitch-wrapper");
-
-            note.style.display = "none";
-            if (divergenceMeter.style.display === "none") {
-                divergenceMeter.style.display = "flex";
-            }
-        }
-
-        if (event.key === "h") {
-            const note = document.querySelector(".note");
-            const divergenceMeter = document.querySelector(".glitch-wrapper");
-
-            note.style.display = "block";
-            divergenceMeter.style.display = "none";
-        }
-
-        k.onKeyPress("space", () => {
-            if (player.isInDialogue) {
-                const dialogueUI = document.getElementById("textbox-container");
-                const dialogue = document.getElementById("dialogue");
-
-                dialogueUI.style.display = "none";
-                dialogue.innerHTML = "";
-                player.isInDialogue = false;
-            }
-            // TODO: add here
-        });
-    });
 
     const playButton = document.getElementById("play-button");
     playButton.addEventListener("click", () => {
@@ -634,7 +473,10 @@ k.scene("main", async () => {
         setCamScale(k);
     });
 
+    handleUIEvent(player);
     k.onUpdate(() => {
+        handleKeyPressed(k, player);
+        movePlayer(player);
         if (seconds >= 15) {
             clearInterval(timerId);
             timerId = 0;
@@ -645,100 +487,15 @@ k.scene("main", async () => {
                 k.destroy(lightning2);
             }
         }
-        if (!player.isInDialogue) {
-            if ((keysPressed.w && keysPressed.a) || (keysPressed.up && keysPressed.left)) {
-                player.move(-PLAYER_SPEED / Math.sqrt(2), -PLAYER_SPEED / Math.sqrt(2));
-                if (player.curAnim() !== "walk-up" && player.curAnim() !== "walk-side") {
-                    player.play("walk-up");
-                    player.direction = "up";
-                }
-            } else if ((keysPressed.w && keysPressed.d) || (keysPressed.up && keysPressed.right)) {
-                player.move(+PLAYER_SPEED / Math.sqrt(2), -PLAYER_SPEED / Math.sqrt(2));
-                if (player.curAnim() !== "walk-up" && player.curAnim() !== "walk-side") {
-                    player.play("walk-up");
-                    player.direction = "up";
-                }
-            } else if (keysPressed.w || keysPressed.up) {
-                player.move(0, -PLAYER_SPEED);
-                if (player.curAnim() !== "walk-up") {
-                    player.play("walk-up");
-                    player.direction = "up";
-                }
-            }
-
-            if ((keysPressed.s && keysPressed.a) || (keysPressed.down && keysPressed.left)) {
-                player.move(-PLAYER_SPEED / Math.sqrt(2), +PLAYER_SPEED / Math.sqrt(2));
-                if (player.curAnim() !== "walk-down" && player.curAnim() !== "walk-side") {
-                    player.play("walk-down");
-                    player.direction = "down";
-                }
-            } else if ((keysPressed.s && keysPressed.d) || (keysPressed.down && keysPressed.right)) {
-                player.move(+PLAYER_SPEED / Math.sqrt(2), +PLAYER_SPEED / Math.sqrt(2));
-                if (player.curAnim() !== "walk-down" && player.curAnim() !== "walk-side") {
-                    player.play("walk-down");
-                    player.direction = "down";
-                }
-            } else if (keysPressed.s || keysPressed.down) {
-                player.move(0, PLAYER_SPEED);
-                if (player.curAnim() !== "walk-down") {
-                    player.play("walk-down");
-                    player.direction = "down";
-                }
-            }
-
-            if (keysPressed.d || keysPressed.right) {
-                player.move(PLAYER_SPEED, 0);
-                if (player.curAnim() !== "walk-side" || player.direction !== "right") {
-                    player.flipX = false;
-                    player.play("walk-side");
-                    player.direction = "right";
-                }
-            }
-
-            if (keysPressed.a || keysPressed.left) {
-                player.move(-PLAYER_SPEED, 0);
-                if (player.curAnim() !== "walk-side" || player.direction !== "left") {
-                    player.flipX = true;
-                    player.play("walk-side");
-                    player.direction = "left";
-                }
-            }
-        }
+        player.prevPosX = player.pos.x;
+        player.prevPosY = player.pos.y;
 
         k.camPos(player.pos.x, player.pos.y + 100);
 
         const backgroundCamY = player.pos.y - 200;
         const currentHour = getCurrentHour();
 
-        let speed = 0;
-
-        for (let i = 0; i < BACKGROUND_COUNT && !steinsGate; i++) {
-            if (currentHour >= 3 && currentHour < 6) {
-                backgrounds_night[i].forEach((component) => (component.hidden = true));
-                backgrounds_early_morning[i].forEach((component) => (component.hidden = false));
-                updateBackground(k, backgrounds_early_morning[i], speed, backgroundCamY, player.pos.x, player.prevPosX);
-            } else if (currentHour >= 6 && currentHour < 12) {
-                backgrounds_early_morning[i].forEach((component) => (component.hidden = true));
-                backgrounds_morning[i].forEach((component) => (component.hidden = false));
-                updateBackground(k, backgrounds_morning[i], speed, backgroundCamY, player.pos.x, player.prevPosX);
-            } else if (currentHour >= 12 && currentHour < 18) {
-                backgrounds_morning[i].forEach((component) => (component.hidden = true));
-                backgrounds_afternoon[i].forEach((component) => (component.hidden = false));
-                updateBackground(k, backgrounds_afternoon[i], speed, backgroundCamY, player.pos.x, player.prevPosX);
-            } else if (currentHour >= 18 && currentHour < 21) {
-                backgrounds_afternoon[i].forEach((component) => (component.hidden = true));
-                backgrounds_evening[i].forEach((component) => (component.hidden = false));
-                updateBackground(k, backgrounds_evening[i], speed, backgroundCamY, player.pos.x, player.prevPosX);
-            } else {
-                backgrounds_evening[i].forEach((component) => (component.hidden = true));
-                backgrounds_night[i].forEach((component) => (component.hidden = false));
-                updateBackground(k, backgrounds_night[i], speed, backgroundCamY, player.pos.x, player.prevPosX);
-            }
-            speed += 0.35;
-        }
-
-        player.prevPosX = player.pos.x;
-        player.prevPosY = player.pos.y;
+        changeBackgroundHour(steinsGate, backgroundCamY, player, currentHour);
 
         for (const interactable of interactables) {
             interactable.blink = Math.floor(k.time() / 0.5) % 2 === 0;
@@ -755,64 +512,13 @@ k.scene("main", async () => {
         createHoverEvents(k, event);
     });
 
-    k.onMouseDown((mouseBtn) => {
-        if (mouseBtn !== "left" || player.isInDialogue) {
-            return;
-        }
-        if (isMousePressed(mouseBtn) && player.isInDialogue) {
-            player.isInDialogue = false;
-            closeDialogue();
-        }
-
-        const worldMousepos = k.toWorld(k.mousePos());
-        player.moveTo(worldMousepos, PLAYER_SPEED);
-
-        const mouseAngle = player.pos.angle(worldMousepos);
-        const lowerBound = 50;
-        const upperBound = 125;
-
-        if (mouseAngle > lowerBound && mouseAngle < upperBound && player.curAnim() !== "walk-up") {
-            player.play("walk-up");
-            player.direction = "up";
-        }
-        if (mouseAngle < -lowerBound && mouseAngle > -upperBound && player.curAnim() !== "walk-down") {
-            player.play("walk-down");
-            player.direction = "down";
-        }
-        if (Math.abs(mouseAngle) < lowerBound) {
-            player.flipX = true;
-            if (player.curAnim() !== "walk-side") {
-                player.play("walk-side");
-                player.direction = "left";
-            }
-        }
-        if (Math.abs(mouseAngle) > upperBound) {
-            player.flipX = false;
-            if (player.curAnim() !== "walk-side") {
-                player.play("walk-side");
-                player.direction = "right";
-            }
-        }
-    });
-
-    k.onMouseRelease(() => {
-        if (player.direction === "down") {
-            player.play("idle-down");
-            return;
-        }
-        if (player.direction === "up") {
-            player.play("idle-up");
-            return;
-        }
-        player.play("idle-side");
-    });
+    handleMouseEvents(k, player);
 });
 
 k.go("main");
 
 // TODO: Refactor the entire codebase for better readability, maintainability, and performance.
 // TODO: Change Kaboom.js to Kaplay (a maintained fork of Kaboom.js, which is deprecated)
-// TODO: Migrate the codebase from JavaScript to TypeScript for improved type safety and maintainability.
 // TODO: Normalize the movement vector for consistent speed in all directions, including diagonals.
 // TODO: Add cub3d.
 // TODO: Implement a digit scroll animation effect for the divergence meter to enhance visual feedback and user experience.

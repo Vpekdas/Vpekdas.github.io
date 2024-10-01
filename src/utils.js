@@ -128,7 +128,7 @@ export function loadAllResources(k) {
             },
             {
                 name: "okabe",
-                path: "/Okabe.png",
+                path: "/steins-gate/okabe.png",
                 config: {
                     sliceX: 5,
                     sliceY: 1,
@@ -139,7 +139,7 @@ export function loadAllResources(k) {
             },
             {
                 name: "kurisu",
-                path: "/Kurisu.png",
+                path: "/steins-gate/kurisu.png",
                 config: {
                     sliceX: 5,
                     sliceY: 3,
@@ -149,13 +149,13 @@ export function loadAllResources(k) {
                 },
             },
             {
-                name: "first",
-                path: "/first.png",
+                name: "steins-gate-background",
+                path: "/steins-gate/background.png",
                 config: {
                     sliceX: 4,
                     sliceY: 3,
                     anims: {
-                        idle: { from: 0, to: 11, loop: true, speed: 8 },
+                        opening: { from: 0, to: 11, loop: true, speed: 8 },
                     },
                 },
             },
@@ -224,8 +224,8 @@ export function loadAllResources(k) {
             { name: "msg2", path: "/menu/Msg03.png" },
             { name: "msg3", path: "/menu/Msg10.png" },
             { name: "menu-background", path: "background/Cyberpunk_city_street.gif" },
-            { name: "phonewawe", path: "Sprite-0005.png" },
-            { name: "sg-001", path: "Sprite-0003.png" },
+            { name: "phonewawe", path: "/steins-gate/phonewawe.png" },
+            { name: "sg-001", path: "/steins-gate/sg-001.png" },
         ],
     };
 
@@ -274,38 +274,6 @@ export function createIndicator(x, y, animation, k) {
     ]);
     indicator.play(animation);
     return indicator;
-}
-
-export function createBackground(k, backgroundNumber, spriteName) {
-    const backgroundArray = [];
-    const tempSprite = k.add([k.sprite(spriteName)]);
-    const spriteWidth = tempSprite.width;
-
-    for (let i = 0; i < backgroundNumber; i++) {
-        backgroundArray.push(
-            k.add([k.sprite(spriteName), k.pos(i * spriteWidth - spriteWidth, 0), k.scale(SCALE_FACTOR)])
-        );
-    }
-    k.destroy(tempSprite);
-    return backgroundArray;
-}
-
-export function updateBackground(k, backgroundLayer, speed, camY, playerX, prevX) {
-    let deltaX = playerX - prevX;
-    for (let i = 0; i < backgroundLayer.length; i++) {
-        if (speed === 0) {
-            backgroundLayer[i].pos.y = camY - 100;
-            backgroundLayer[i].pos.x -= 2;
-            if (backgroundLayer[i].pos.x <= i * backgroundLayer[i].width - backgroundLayer[i].width * 2) {
-                backgroundLayer[i].pos.x = i * backgroundLayer[i].width - backgroundLayer[i].width;
-            }
-        } else {
-            if (deltaX) {
-                backgroundLayer[i].pos.x -= (deltaX * speed) / 2;
-            }
-            backgroundLayer[i].pos.y = camY;
-        }
-    }
 }
 
 export function getIndicatorOffset(boundary, indicatorScale, offset) {
@@ -523,24 +491,6 @@ export function destroyIndicators(k, indicators, projects) {
     }
 }
 
-export function handleKeyEvents(key, isPressed, keysPressed, k, player) {
-    k.onKeyDown(key, () => {
-        keysPressed[key] = isPressed;
-    });
-
-    k.onKeyRelease(key, () => {
-        keysPressed[key] = !isPressed;
-        if (key === "w" || key === "up") {
-            player.play("idle-up");
-            return;
-        } else if (key === "s" || key === "down") {
-            player.play("idle-down");
-            return;
-        }
-        player.play("idle-side");
-    });
-}
-
 export function ensureCanvasFocus() {
     const canvas = document.querySelector("canvas");
     if (canvas) {
@@ -587,7 +537,7 @@ export function resetAdventure() {
     });
 }
 
-loadSound("opening", "opening.mp3");
+loadSound("opening", "/steins-gate/opening.mp3");
 
 export function playMusic() {
     const music = play("opening", {
