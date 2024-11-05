@@ -1,4 +1,55 @@
-export function parseLayers(interactables, indicators, layers) {
+import {
+    OFFSET_X,
+    OFFSET_Y,
+    PLAYER_SPEED,
+    SCALE_FACTOR,
+    DEF_SCALE_IND,
+    INDICATOR_OFFSET,
+    FURNITURES,
+    BOOKS,
+    HOVER_EVENTS,
+    PROJECT_DESCRIPTIONS,
+    OkabeDialogue,
+    KurisuDialogue,
+} from "./constants.js";
+
+import {
+    createHoverEvents,
+    createInteractable,
+    displayDialogue,
+    loadAllResources,
+    setCamScale,
+    createIndicator,
+    createTile,
+    getIndicatorOffset,
+    updateProgress,
+    addProject,
+    setProjectAsDiscovered,
+    countAchievementDiscovered,
+    growBanner,
+    showBannerTemporarily,
+    showAchievementTitle,
+    showAchievementDescription,
+    showAchievementIcon,
+    showAchievementNotification,
+    closeDialogue,
+    showAchievement,
+    saveToLocalStorage,
+    loadLocalStorage,
+    getCurrentHour,
+    clearPopup,
+    destroyIndicators,
+    ensureCanvasFocus,
+    createFireworks,
+    resetAdventure,
+    playMusic,
+    regenerateNumber,
+} from "./utils.js";
+
+let startX = 0;
+let startY = 0;
+
+export function parseAndCreateInteractables(k, player, map, interactables, projects, indicators, layers) {
     for (const layer of layers) {
         if (layer.name === "boundaries") {
             for (const boundary of layer.objects) {
