@@ -305,7 +305,7 @@ export function getIndicatorOffset(boundary, indicatorScale, offset) {
     ];
 }
 
-export function countAchievemenDiscovered(projects) {
+export function countAchievementDiscovered(projects) {
     let achievement = 0;
 
     for (let i = 0; i < projects.length; i++) {
@@ -333,7 +333,7 @@ export function setProjectAsDiscovered(projects, boundary) {
 
 export function updateProgress(projects, discovered) {
     const elem = document.querySelector(".progress-done");
-    const achievementDiscovered = countAchievemenDiscovered(projects);
+    const achievementDiscovered = countAchievementDiscovered(projects);
     const achievementTotal = projects.length;
     const interval = 100;
     let currentWidth = (discovered / achievementTotal) * 100;
@@ -568,7 +568,7 @@ export function regenerateNumber(projects) {
         return;
     }
 
-    const discoveredProjects = countAchievemenDiscovered(projects);
+    const discoveredProjects = countAchievementDiscovered(projects);
 
     if (discoveredProjects === projects.length) {
         currentDivergence = maxDivergence;

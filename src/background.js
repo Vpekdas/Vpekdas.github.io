@@ -110,9 +110,7 @@ function updateBackground(backgroundLayer, speed, camY, playerX, prevX) {
     }
 }
 
-export function changeBackgroundHour(steinsGate, backgroundCamY, player, currentHour) {
-    let speed = 0;
-
+export function changeBackgroundHour(speed, steinsGate, backgroundCamY, player, currentHour) {
     for (let i = 0; i < BACKGROUND_COUNT && !steinsGate; i++) {
         if (currentHour >= 3 && currentHour < 6) {
             backgrounds_night[i].forEach((component) => (component.hidden = true));
