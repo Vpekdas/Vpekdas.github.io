@@ -1,5 +1,5 @@
-import { closeDialogue } from "./utils";
 import { PLAYER_SPEED } from "./constants";
+import { closeDialogue } from "./dialogue";
 
 function movePlayer(player, worldMousepos) {
     player.moveTo(worldMousepos, PLAYER_SPEED);
