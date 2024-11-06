@@ -11,36 +11,43 @@ import {
     KurisuDialogue,
 } from "./constants.js";
 
-import {
-    updateProgress,
-    addProject,
-    setProjectAsDiscovered,
-    countAchievementDiscovered,
-    growBanner,
-    showBannerTemporarily,
-    showAchievementTitle,
-    showAchievementDescription,
-    showAchievementIcon,
-    showAchievementNotification,
-    showAchievement,
-    saveToLocalStorage,
-    destroyIndicators,
-    ensureCanvasFocus,
-    createFireworks,
-    playMusic,
-    regenerateNumber,
-} from "./utils.js";
-
 import { displayDialogue } from "./dialogue.js";
 
 import { getIndicatorOffset, createIndicator, createInteractable } from "./elementFactory.js";
+import {
+    showAchievementIcon,
+    showAchievementTitle,
+    showAchievementDescription,
+    showAchievementNotification,
+    showBannerTemporarily,
+    growBanner,
+    showAchievement,
+} from "./achievement.js";
+import { countDiscoveredProject } from "./utils.js";
+import { regenerateNumber } from "./divergenceMeter.js";
+import { ensureCanvasFocus } from "./utils";
+import { saveToLocalStorage } from "./localStorage.js";
+import { updateProgress } from "./progressBar.js";
+import { createFireworks } from "./firework.js";
+import { playMusic } from "./music.js";
+import { displaySteinsGateBackground, destroyBackground } from "./background.js";
 
 let animationBanner = false;
-
 let startX = 0;
 let startY = 0;
 
-export function parseAndCreateInteractables(k, player, map, interactables, projects, indicators, layers) {
+export function parseAndCreateInteractables(
+    k,
+    player,
+    map,
+    interactables,
+    projects,
+    indicators,
+    layers,
+    steinsGate,
+    chronometer,
+    lightningRefs
+) {
     for (const layer of layers) {
         if (layer.name === "boundaries") {
             for (const boundary of layer.objects) {
@@ -58,27 +65,29 @@ export function parseAndCreateInteractables(k, player, map, interactables, proje
 
                     player.onCollide(boundary.name, () => {
                         if (boundary.name === "PhoneWawe") {
-                            timeTravelTimeout = true;
-                            if (!timerId) {
-                                timerId = setInterval(() => {
-                                    seconds++;
+                            chronometer.timeout = true;
+
+                            if (!chronometer.timerId) {
+                                chronometer.seconds = 0;
+                                chronometer.timerId = setInterval(() => {
+                                    chronometer.seconds++;
                                 }, 1000);
                             }
 
-                            if (countAchievementDiscovered(projects) === projects.length && timeTravelTimeout) {
-                                lightning = k.add([
+                            if (countDiscoveredProject(projects) === projects.length && chronometer.timeout) {
+                                lightningRefs.lightning = k.add([
                                     k.sprite("lightning"),
                                     k.pos(boundary.x * SCALE_FACTOR, (boundary.y + 6) * SCALE_FACTOR),
                                     k.scale(1),
                                 ]);
-                                lightning.play("shock");
+                                lightningRefs.lightning.play("shock");
 
-                                lightning2 = k.add([
+                                lightningRefs.lightning2 = k.add([
                                     k.sprite("lightning2"),
                                     k.pos(boundary.x * SCALE_FACTOR, (boundary.y + 18) * SCALE_FACTOR),
                                     k.scale(1),
                                 ]);
-                                lightning2.play("shock");
+                                lightningRefs.lightning2.play("shock");
                             }
 
                             return;
@@ -87,11 +96,7 @@ export function parseAndCreateInteractables(k, player, map, interactables, proje
                         player.isInDialogue = true;
 
                         if (boundary.name === "SG-001") {
-                            if (
-                                !timeTravelTimeout ||
-                                countAchievementDiscovered(projects) != projects.length ||
-                                steinsGate
-                            ) {
+                            if (!timeout || countDiscoveredProject(projects) != projects.length || steinsGate) {
                                 player.isInDialogue = false;
                                 return;
                             }
@@ -145,7 +150,7 @@ export function parseAndCreateInteractables(k, player, map, interactables, proje
                         displayDialogue(PROJECT_DESCRIPTIONS[boundary.name].story, () => (player.isInDialogue = false));
 
                         if (animationBanner === false) {
-                            const discovered = countAchievementDiscovered(projects);
+                            const discovered = countDiscoveredProject(projects);
                             const projectIndex = projects.findIndex((project) => project.name === boundary.name);
                             if (projectIndex != -1 && projects[projectIndex].discovered) {
                                 return;
@@ -165,7 +170,7 @@ export function parseAndCreateInteractables(k, player, map, interactables, proje
                                 animationBanner = false;
                             }, 7000);
 
-                            if (countAchievementDiscovered(projects) === projects.length) {
+                            if (countDiscoveredProject(projects) === projects.length) {
                                 createFireworks(20);
                                 document.querySelector(".completing-modal-overlay").style.display = "flex";
                             }
@@ -364,4 +369,29 @@ function displayAchievement(projects, boundary) {
     showAchievementTitle(3000, PROJECT_DESCRIPTIONS[boundary.name].title);
     showAchievementDescription(3000, PROJECT_DESCRIPTIONS[boundary.name].achievement);
     growBanner();
+}
+
+function addProject(boundary, projects) {
+    projects.push({
+        name: boundary.name,
+        discovered: false,
+    });
+}
+
+function setProjectAsDiscovered(projects, boundary) {
+    for (let i = 0; i < projects.length; i++) {
+        if (boundary.name === projects[i].name && projects[i].discovered != true) {
+            projects[i].discovered = true;
+        }
+    }
+}
+
+export function destroyIndicators(k, indicators, projects) {
+    for (let i = 0; i < projects.length; i++) {
+        if (projects[i].discovered === true) {
+            indicators[projects[i].name].forEach((indicator) => {
+                k.destroy(indicator);
+            });
+        }
+    }
 }

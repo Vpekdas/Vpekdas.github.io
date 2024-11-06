@@ -1,5 +1,5 @@
 import { PLAYER_SPEED } from "./constants.js";
-import { ensureCanvasFocus } from "./utils.js";
+import { ensureCanvasFocus } from "./utils";
 
 const NOTE_SELECTOR = ".note";
 const DIVERGENCE_METER_SELECTOR = ".glitch-wrapper";

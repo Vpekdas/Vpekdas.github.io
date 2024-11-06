@@ -1,26 +1,20 @@
 import { k } from "./KaboomCtx.js";
 import { PLAYER_SPEED, SCALE_FACTOR, HOVER_EVENTS } from "./constants.js";
-import {
-    setCamScale,
-    updateProgress,
-    countAchievementDiscovered,
-    showAchievement,
-    loadLocalStorage,
-    getCurrentHour,
-    clearPopup,
-    destroyIndicators,
-    ensureCanvasFocus,
-    createFireworks,
-    resetAdventure,
-    regenerateNumber,
-    blinkInteractables,
-} from "./utils.js";
 import { changeBackgroundHour, createAllBackground, createSteinsGateBackground } from "./background.js";
 import { handleKeyPressed, movePlayer, handleUIEvent } from "./keys.js";
 import { handleMouseEvents } from "./mouse.js";
 import { parseAndCreateInteractables } from "./parseMap.js";
 import { loadAllResources } from "./initializeAssets.js";
 import { createTile, createHoverEvents } from "./elementFactory.js";
+import { updateProgress } from "./progressBar";
+import { loadLocalStorage } from "./localStorage.js";
+import { showAchievement } from "./achievement.js";
+import { clearPopup } from "./menu.js";
+import { destroyIndicators } from "./parseMap.js";
+import { countDiscoveredProject } from "./utils.js";
+import { regenerateNumber } from "./divergenceMeter.js";
+import { ensureCanvasFocus } from "./utils";
+import { createFireworks } from "./firework.js";
 
 loadAllResources(k);
 
@@ -37,13 +31,21 @@ k.scene("main", async () => {
 
     const interactables = [];
     const projects = [];
-    let indicators = new Map();
 
+    let indicators = new Map();
     let steinsGate = false;
-    let timeTravelTimeout = false;
-    let timerId = 0;
-    let seconds = 0;
+
+    let speed = 0;
     let lightning, lightning2;
+    const lightningRefs = { lightning, lightning2 };
+
+    const chronometer = [
+        {
+            timerId: 0,
+            seconds: 0,
+            timeout: false,
+        },
+    ];
 
     const map = k.add([k.sprite("map"), k.pos(0), k.scale(SCALE_FACTOR)]);
     const player = k.add([
@@ -66,7 +68,18 @@ k.scene("main", async () => {
         "player",
     ]);
 
-    parseAndCreateInteractables(k, player, map, interactables, projects, indicators, layers);
+    parseAndCreateInteractables(
+        k,
+        player,
+        map,
+        interactables,
+        projects,
+        indicators,
+        layers,
+        steinsGate,
+        chronometer,
+        lightningRefs
+    );
 
     // Left part of doors.
     createTile(k, "tiles", 2, 114 - 32 * 1, 151);
@@ -96,7 +109,7 @@ k.scene("main", async () => {
     // Adding a second destroy ensures discovered projects from previous refreshes are properly removed.
     destroyIndicators(k, indicators, projects);
 
-    if (countAchievementDiscovered(projects) === projects.length) {
+    if (countDiscoveredProject(projects) === projects.length) {
         createFireworks(20);
         document.querySelector(".completing-modal-overlay").style.display = "flex";
     }
@@ -119,8 +132,6 @@ k.scene("main", async () => {
         setCamScale(k);
     });
 
-    let speed = 0;
-
     handleUIEvent(player);
 
     k.onUpdate(() => {
@@ -128,14 +139,14 @@ k.scene("main", async () => {
 
         movePlayer(player);
 
-        if (seconds >= 15) {
-            clearInterval(timerId);
-            timerId = 0;
-            seconds = 0;
-            timeTravelTimeout = false;
-            if (countAchievementDiscovered(projects) === projects.length && !timeTravelTimeout) {
-                k.destroy(lightning);
-                k.destroy(lightning2);
+        if (chronometer.seconds >= 15) {
+            clearInterval(chronometer.timerId);
+            chronometer.timerId = 0;
+            chronometer.seconds = 0;
+            chronometer.timeout = false;
+            if (countDiscoveredProject(projects) === projects.length && !chronometer.timeout) {
+                k.destroy(lightningRefs.lightning);
+                k.destroy(lightningRefs.lightning2);
             }
         }
 
@@ -159,3 +170,38 @@ k.scene("main", async () => {
 });
 
 k.go("main");
+
+function blinkInteractables(k, interactables) {
+    for (const interactable of interactables) {
+        interactable.blink = Math.floor(k.time() / 0.5) % 2 === 0;
+
+        if (interactable.blink) {
+            interactable.originalSprite.opacity = 0.75;
+        } else {
+            interactable.originalSprite.opacity = 1;
+        }
+    }
+}
+
+function getCurrentHour() {
+    const now = new Date();
+    return now.getHours();
+}
+
+function setCamScale(k) {
+    const resizeFactor = k.width() / k.height();
+    if (resizeFactor < 1) {
+        k.camScale(k.vec2(1));
+        return;
+    }
+
+    k.camScale(k.vec2(1.5));
+}
+
+function resetAdventure() {
+    const resetButton = document.getElementById("reset-button");
+    resetButton.addEventListener("click", () => {
+        localStorage.clear();
+        location.reload();
+    });
+}
