@@ -14,9 +14,11 @@
 
 # MAINTAINABILITY
 - [ ] Reorganize assets in the public folders for better structure, accessibility, and maintainability.
+- [ ] Add error handling.
 
 # IMPROVEMENT
 - [ ] Use original Font instead of image for divergence meter.
 - [ ] Store the divergence meter value in local storage to persist the state across sessions.
 - [ ] Normalize the movement vector for consistent speed in all directions, including diagonals.
 - [ ] Customize Achievement banner.
+- [ ] Improve Mobile compatibility.
