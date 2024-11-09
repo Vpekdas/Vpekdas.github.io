@@ -2,27 +2,13 @@ import { OFFSET_X, OFFSET_Y, SCALE_FACTOR, DEF_SCALE_IND, INDICATOR_OFFSET, FURN
 import { getIndicatorOffset, createIndicator, createInteractable } from "./elementFactory.js";
 import { collision } from "./collision.js";
 
-export function parseAndCreateInteractiveElements(k, player, map, layers, gameElements) {
+export function parseLayers(k, player, map, layers, gameElements) {
     for (const layer of layers) {
         if (layer.name === "boundaries") {
             for (const boundary of layer.objects) {
-                map.add([
-                    k.area({
-                        shape: new k.Rect(k.vec2(0, 0), boundary.width, boundary.height),
-                    }),
-                    k.body({ isStatic: true }),
-                    k.pos(boundary.x + OFFSET_X, boundary.y + OFFSET_Y),
-                    boundary.name,
-                ]);
-
+                generateBoundingBox(k, map, boundary);
                 if (boundary.name) {
-                    generateInteractiveElements(
-                        k,
-                        boundary,
-                        gameElements.interactiveElements,
-                        gameElements.indicators,
-                        gameElements.projects
-                    );
+                    generateInteractiveElements(k, boundary, gameElements);
                 }
                 collision(k, player, boundary, gameElements);
             }
@@ -35,7 +21,18 @@ export function parseAndCreateInteractiveElements(k, player, map, layers, gameEl
     }
 }
 
-function generateInteractiveElements(k, boundary, interactiveElements, indicators, projects) {
+function generateBoundingBox(k, map, boundary) {
+    map.add([
+        k.area({
+            shape: new k.Rect(k.vec2(0, 0), boundary.width, boundary.height),
+        }),
+        k.body({ isStatic: true }),
+        k.pos(boundary.x + OFFSET_X, boundary.y + OFFSET_Y),
+        boundary.name,
+    ]);
+}
+
+function generateInteractiveElements(k, boundary, gameElements) {
     if (boundary.name === "so_long") {
         const soLongIndicators = [];
         const soLongIndicatorOffsets = getIndicatorOffset(boundary, DEF_SCALE_IND, INDICATOR_OFFSET);
@@ -44,9 +41,9 @@ function generateInteractiveElements(k, boundary, interactiveElements, indicator
             soLongIndicators.push(createIndicator(boundary.x + dx, boundary.y + dy, direction, k));
         });
 
-        interactiveElements.push(createInteractable(k, "tiles", boundary, 82, 0, 0));
-        addProject(boundary, projects);
-        indicators[boundary.name] = soLongIndicators;
+        gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 82, 0, 0));
+        addProject(boundary, gameElements.projects);
+        gameElements.indicators[boundary.name] = soLongIndicators;
     }
     if (boundary.name === "ft_printf") {
         const ftPrintfIndicators = [];
@@ -59,10 +56,10 @@ function generateInteractiveElements(k, boundary, interactiveElements, indicator
         const interactable = createInteractable(k, "tiles", boundary, 13, 0, 0);
         const interactable2 = createInteractable(k, "tiles", boundary, 14, 32, 0);
 
-        interactiveElements.push(interactable);
-        interactiveElements.push(interactable2);
-        addProject(boundary, projects);
-        indicators[boundary.name] = ftPrintfIndicators;
+        gameElements.interactiveElements.push(interactable);
+        gameElements.interactiveElements.push(interactable2);
+        addProject(boundary, gameElements.projects);
+        gameElements.indicators[boundary.name] = ftPrintfIndicators;
     }
     if (boundary.name == "get_next_line") {
         const getNextLineIndicators = [];
@@ -72,9 +69,9 @@ function generateInteractiveElements(k, boundary, interactiveElements, indicator
             getNextLineIndicators.push(createIndicator(boundary.x + dx, boundary.y + dy, direction, k));
         });
 
-        interactiveElements.push(createInteractable(k, "tiles", boundary, 124, 0, 0));
-        addProject(boundary, projects);
-        indicators[boundary.name] = getNextLineIndicators;
+        gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 124, 0, 0));
+        addProject(boundary, gameElements.projects);
+        gameElements.indicators[boundary.name] = getNextLineIndicators;
     }
     if (boundary.name == "pipex") {
         const pipexIndicators = [];
@@ -93,9 +90,9 @@ function generateInteractiveElements(k, boundary, interactiveElements, indicator
             pipexIndicators.push(createIndicator(boundary.x + dx, boundary.y + dy, direction, k));
         });
 
-        interactiveElements.push(createInteractable(k, "pipe", boundary, 0, 0, -8));
-        addProject(boundary, projects);
-        indicators[boundary.name] = pipexIndicators;
+        gameElements.interactiveElements.push(createInteractable(k, "pipe", boundary, 0, 0, -8));
+        addProject(boundary, gameElements.projects);
+        gameElements.indicators[boundary.name] = pipexIndicators;
     }
     if (boundary.name == "libft") {
         const libftIndicators = [];
@@ -115,10 +112,10 @@ function generateInteractiveElements(k, boundary, interactiveElements, indicator
         });
 
         FURNITURES.forEach(({ frame, x, y }) => {
-            interactiveElements.push(createInteractable(k, "furniture", boundary, frame, x, y));
+            gameElements.interactiveElements.push(createInteractable(k, "furniture", boundary, frame, x, y));
         });
-        addProject(boundary, projects);
-        indicators[boundary.name] = libftIndicators;
+        addProject(boundary, gameElements.projects);
+        gameElements.indicators[boundary.name] = libftIndicators;
     }
     if (boundary.name === "push_swap") {
         const pushSwapIndicators = [];
@@ -129,10 +126,10 @@ function generateInteractiveElements(k, boundary, interactiveElements, indicator
         });
 
         BOOKS.forEach(({ type, x, y }) => {
-            interactiveElements.push(createInteractable(k, type, boundary, 0, x, y));
+            gameElements.interactiveElements.push(createInteractable(k, type, boundary, 0, x, y));
         });
-        addProject(boundary, projects);
-        indicators[boundary.name] = pushSwapIndicators;
+        addProject(boundary, gameElements.projects);
+        gameElements.indicators[boundary.name] = pushSwapIndicators;
     }
     if (boundary.name === "philosophers") {
         const PhilosophersIndicators = [];
@@ -140,14 +137,14 @@ function generateInteractiveElements(k, boundary, interactiveElements, indicator
         PhilosophersIndicatorOffsets.forEach(({ dx, dy, direction }) => {
             PhilosophersIndicators.push(createIndicator(boundary.x + dx, boundary.y + dy, direction, k));
         });
-        interactiveElements.push(createInteractable(k, "tiles", boundary, 159, -10, -13));
-        interactiveElements.push(createInteractable(k, "tiles", boundary, 160, 22, -13));
-        interactiveElements.push(createInteractable(k, "tiles", boundary, 180, -10, 19));
-        interactiveElements.push(createInteractable(k, "tiles", boundary, 181, 22, 19));
+        gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 159, -10, -13));
+        gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 160, 22, -13));
+        gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 180, -10, 19));
+        gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 181, 22, 19));
         createInteractable(k, "tiles", boundary, 163, -4, 0);
         createInteractable(k, "tiles", boundary, 166, 4, -12);
-        addProject(boundary, projects);
-        indicators[boundary.name] = PhilosophersIndicators;
+        addProject(boundary, gameElements.projects);
+        gameElements.indicators[boundary.name] = PhilosophersIndicators;
     }
     if (boundary.name === "minishell") {
         const minishellIndicators = [];
@@ -155,21 +152,21 @@ function generateInteractiveElements(k, boundary, interactiveElements, indicator
         minishellIndicatorOffsets.forEach(({ dx, dy, direction }) => {
             minishellIndicators.push(createIndicator(boundary.x + dx, boundary.y + dy, direction, k));
         });
-        interactiveElements.push(createInteractable(k, "tiles", boundary, 48, -18, 1));
-        interactiveElements.push(createInteractable(k, "tiles", boundary, 49, 14, 1));
-        interactiveElements.push(createInteractable(k, "tiles", boundary, 50, 46, 1));
-        addProject(boundary, projects);
-        indicators[boundary.name] = minishellIndicators;
+        gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 48, -18, 1));
+        gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 49, 14, 1));
+        gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 50, 46, 1));
+        addProject(boundary, gameElements.projects);
+        gameElements.indicators[boundary.name] = minishellIndicators;
     }
     if (boundary.name === "PhoneWawe") {
-        const phonewawe = k.add([
+        k.add([
             k.sprite("phonewawe"),
             k.pos((boundary.x + 22) * SCALE_FACTOR, (boundary.y + 32) * SCALE_FACTOR),
             k.scale(0.1),
         ]);
     }
     if (boundary.name === "SG-001") {
-        const sg001 = k.add([
+        k.add([
             k.sprite("sg-001"),
             k.pos((boundary.x + 24) * SCALE_FACTOR, (boundary.y + 18) * SCALE_FACTOR),
             k.scale(0.1),

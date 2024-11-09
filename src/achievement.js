@@ -1,3 +1,5 @@
+import { PROJECT_DESCRIPTIONS } from "./constants";
+
 export function showAchievementIcon(duration, path) {
     const icon = document.querySelector(".achievement-icon");
     icon.src = path;
@@ -68,11 +70,35 @@ export function growBanner() {
     }, intervalTime);
 }
 
-export function showAchievement(projects) {
+const iconContainer = document.getElementById("iconContainer");
+
+export function generateDiscoveredAchievements(projects) {
     for (let i = 0; i < projects.length; i++) {
-        const icon = document.getElementById(projects[i].name);
-        if (projects[i].discovered === true) {
-            icon.style.display = "block";
+        if (projects[i].discovered) {
+            generateNewDiscoveredAchievement(projects[i]);
         }
     }
+}
+
+export function generateNewDiscoveredAchievement(boundary) {
+    const div = document.createElement("div");
+    div.className = "icon";
+    div.id = boundary.name;
+
+    const img = document.createElement("img");
+    img.src = PROJECT_DESCRIPTIONS[boundary.name].icon;
+
+    const secondDiv = document.createElement("div");
+    secondDiv.className = "icon-message-box";
+
+    const span = document.createElement("span");
+    span.className = "icon-name";
+    span.textContent = boundary.name;
+
+    secondDiv.appendChild(span);
+
+    div.appendChild(img);
+    div.appendChild(secondDiv);
+
+    iconContainer.appendChild(div);
 }

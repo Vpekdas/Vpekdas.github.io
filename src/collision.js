@@ -1,3 +1,5 @@
+import { PROJECT_DESCRIPTIONS, OkabeDialogue, KurisuDialogue } from "./constants.js";
+
 import { countDiscoveredProject } from "./utils.js";
 import { regenerateNumber } from "./divergenceMeter.js";
 import { ensureCanvasFocus } from "./utils";
@@ -7,7 +9,6 @@ import { createFireworks } from "./firework.js";
 import { playMusic } from "./music.js";
 import { displaySteinsGateBackground, destroyBackground } from "./background.js";
 import { displayDialogue } from "./dialogue.js";
-import { PROJECT_DESCRIPTIONS, OkabeDialogue, KurisuDialogue } from "./constants.js";
 import {
     showAchievementIcon,
     showAchievementTitle,
@@ -15,7 +16,7 @@ import {
     showAchievementNotification,
     showBannerTemporarily,
     growBanner,
-    showAchievement,
+    generateNewDiscoveredAchievement,
 } from "./achievement.js";
 import { SCALE_FACTOR } from "./constants.js";
 let animationBanner = false;
@@ -122,7 +123,7 @@ export function collision(k, player, boundary, gameElements) {
             }
             saveToLocalStorage(boundary.name);
             setProjectAsDiscovered(gameElements.projects, boundary);
-            displayAchievement(gameElements.projects, boundary);
+            displayAchievement(boundary);
             destroyIndicators(k, gameElements.indicators, gameElements.projects);
             regenerateNumber(gameElements.projects);
 
@@ -143,8 +144,8 @@ export function collision(k, player, boundary, gameElements) {
     });
 }
 
-function displayAchievement(projects, boundary) {
-    showAchievement(projects);
+function displayAchievement(boundary) {
+    generateNewDiscoveredAchievement(boundary);
     showBannerTemporarily(7000);
     showAchievementNotification(2000);
     showAchievementIcon(3000, PROJECT_DESCRIPTIONS[boundary.name].icon);

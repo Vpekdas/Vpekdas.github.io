@@ -22,3 +22,5 @@
 - [ ] Normalize the movement vector for consistent speed in all directions, including diagonals.
 - [ ] Customize Achievement banner.
 - [ ] Improve Mobile compatibility.
+- [ ] Images should not be draggable, there is no use.
+- [ ] Maybe I can transform bounding box into collision box for more collision detection precision.

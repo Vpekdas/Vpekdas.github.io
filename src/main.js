@@ -3,12 +3,12 @@ import { SCALE_FACTOR, HOVER_EVENTS } from "./constants.js";
 import { changeBackgroundHour, createAllBackground, createSteinsGateBackground } from "./background.js";
 import { handleKeyPressed, movePlayer, handleUIEvent } from "./keys.js";
 import { handleMouseEvents } from "./mouse.js";
-import { parseAndCreateInteractiveElements } from "./parseMap";
+import { parseLayers } from "./parseMap";
 import { loadAllResources } from "./initializeAssets.js";
 import { createTile, createHoverEvents } from "./elementFactory.js";
 import { updateProgress } from "./progressBar";
 import { loadLocalStorage } from "./localStorage.js";
-import { showAchievement } from "./achievement.js";
+import { generateDiscoveredAchievements } from "./achievement.js";
 import { clearPopup } from "./menu.js";
 import { destroyIndicators } from "./collision.js";
 import { countDiscoveredProject, ensureCanvasFocus, getCurrentHour, setCamScale, resetAdventure } from "./utils.js";
@@ -32,7 +32,7 @@ k.scene("main", async () => {
     const player = createPlayer(k);
 
     let backgroundCamY = 0,
-        speed = 0;
+        backgroundSpeed = 0;
 
     const gameElements = {
         interactiveElements: [],
@@ -49,7 +49,7 @@ k.scene("main", async () => {
         startY: 0,
     };
 
-    parseAndCreateInteractiveElements(k, player, map, layers, gameElements);
+    parseLayers(k, player, map, layers, gameElements);
 
     // Left part of doors.
     createTile(k, "tiles", 2, 114 - 32 * 1, 151);
@@ -66,7 +66,7 @@ k.scene("main", async () => {
 
     loadLocalStorage(gameElements.projects);
     updateProgress(gameElements.projects, false);
-    showAchievement(gameElements.projects);
+    generateDiscoveredAchievements(gameElements.projects);
 
     setTimeout(() => {
         const note = document.querySelector(".note");
@@ -127,7 +127,7 @@ k.scene("main", async () => {
 
         backgroundCamY = player.pos.y - 200;
 
-        changeBackgroundHour(speed, gameElements.steinsGate, backgroundCamY, player, currentHour);
+        changeBackgroundHour(backgroundSpeed, gameElements.steinsGate, backgroundCamY, player, currentHour);
 
         player.prevPosX = player.pos.x;
         player.prevPosY = player.pos.y;
