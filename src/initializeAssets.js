@@ -93,14 +93,13 @@ export function loadAllResources(k) {
                 path: "/tiles/spritesheet.png",
                 config: { sliceX: 21, sliceY: 11 },
             },
-            { name: "pipe", path: "/pipe/1.png" },
             {
                 name: "furniture",
                 path: "/furniture/hous_furniture.png",
                 config: { sliceX: 13, sliceY: 18 },
             },
-            { name: "book", path: "/books/1.png" },
-            { name: "book2", path: "/books/2.png" },
+            { name: "books", path: "/books/books.png" },
+            { name: "pipe", path: "/pipe/1.png" },
             { name: "early-morning-1", path: "/background/early-morning/1.png" },
             { name: "early-morning-2", path: "/background/early-morning/2.png" },
             { name: "early-morning-3", path: "/background/early-morning/3.png" },
@@ -133,6 +132,10 @@ export function loadAllResources(k) {
             { name: "menu-background", path: "background/Cyberpunk_city_street.gif" },
             { name: "phonewawe", path: "/steins-gate/phonewawe.png" },
             { name: "sg-001", path: "/steins-gate/sg-001.png" },
+            { name: "library", path: "/furniture/library.png" },
+            { name: "homeSweetHome", path: "/tiles/homeSweetHome.png" },
+            { name: "table", path: "/tiles/table.png" },
+            { name: "computers", path: "/tiles/computers.png" },
         ],
     };
 

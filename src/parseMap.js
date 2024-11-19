@@ -1,4 +1,4 @@
-import { OFFSET_X, OFFSET_Y, SCALE_FACTOR, DEF_SCALE_IND, INDICATOR_OFFSET, FURNITURES, BOOKS } from "./constants.js";
+import { OFFSET_X, OFFSET_Y, SCALE_FACTOR, DEF_SCALE_IND, INDICATOR_OFFSET } from "./constants.js";
 import { getIndicatorOffset, createIndicator, createInteractable } from "./elementFactory.js";
 import { collision } from "./collision.js";
 
@@ -53,11 +53,7 @@ function generateInteractiveElements(k, boundary, gameElements) {
             ftPrintfIndicators.push(createIndicator(boundary.x + dx, boundary.y + dy, direction, k));
         });
 
-        const interactable = createInteractable(k, "tiles", boundary, 13, 0, 0);
-        const interactable2 = createInteractable(k, "tiles", boundary, 14, 32, 0);
-
-        gameElements.interactiveElements.push(interactable);
-        gameElements.interactiveElements.push(interactable2);
+        gameElements.interactiveElements.push(createInteractable(k, "homeSweetHome", boundary, 0, 0, 0));
         addProject(boundary, gameElements.projects);
         gameElements.indicators[boundary.name] = ftPrintfIndicators;
     }
@@ -75,45 +71,24 @@ function generateInteractiveElements(k, boundary, gameElements) {
     }
     if (boundary.name == "pipex") {
         const pipexIndicators = [];
-        const modified_DEF_SCALE_IND = DEF_SCALE_IND.map((indicator) => {
-            if (indicator.name === "topLeft" || indicator.name === "topRight") {
-                return {
-                    ...indicator,
-                    y: indicator.y * 2,
-                };
-            }
-            return indicator;
-        });
-        const pipexIndicatorOffsets = getIndicatorOffset(boundary, modified_DEF_SCALE_IND, INDICATOR_OFFSET);
+        const pipexIndicatorOffsets = getIndicatorOffset(boundary, DEF_SCALE_IND, INDICATOR_OFFSET);
 
         pipexIndicatorOffsets.forEach(({ dx, dy, direction }) => {
             pipexIndicators.push(createIndicator(boundary.x + dx, boundary.y + dy, direction, k));
         });
 
-        gameElements.interactiveElements.push(createInteractable(k, "pipe", boundary, 0, 0, -8));
+        gameElements.interactiveElements.push(createInteractable(k, "pipe", boundary, 0, -4, 2));
         addProject(boundary, gameElements.projects);
         gameElements.indicators[boundary.name] = pipexIndicators;
     }
     if (boundary.name == "libft") {
         const libftIndicators = [];
-        const modified_DEF_SCALE_IND = DEF_SCALE_IND.map((indicator) => {
-            if (indicator.name === "bottomLeft" || indicator.name === "bottomRight") {
-                return {
-                    ...indicator,
-                    y: indicator.y * -0.5,
-                };
-            }
-            return indicator;
-        });
-        const libftIndicatorOffsets = getIndicatorOffset(boundary, modified_DEF_SCALE_IND, INDICATOR_OFFSET);
+        const libftIndicatorOffsets = getIndicatorOffset(boundary, DEF_SCALE_IND, INDICATOR_OFFSET);
 
         libftIndicatorOffsets.forEach(({ dx, dy, direction }) => {
             libftIndicators.push(createIndicator(boundary.x + dx, boundary.y + dy, direction, k));
         });
-
-        FURNITURES.forEach(({ frame, x, y }) => {
-            gameElements.interactiveElements.push(createInteractable(k, "furniture", boundary, frame, x, y));
-        });
+        gameElements.interactiveElements.push(createInteractable(k, "library", boundary, 0, 0, 0));
         addProject(boundary, gameElements.projects);
         gameElements.indicators[boundary.name] = libftIndicators;
     }
@@ -125,9 +100,7 @@ function generateInteractiveElements(k, boundary, gameElements) {
             pushSwapIndicators.push(createIndicator(boundary.x + dx, boundary.y + dy, direction, k));
         });
 
-        BOOKS.forEach(({ type, x, y }) => {
-            gameElements.interactiveElements.push(createInteractable(k, type, boundary, 0, x, y));
-        });
+        gameElements.interactiveElements.push(createInteractable(k, "books", boundary, 0, 0, 0));
         addProject(boundary, gameElements.projects);
         gameElements.indicators[boundary.name] = pushSwapIndicators;
     }
@@ -137,12 +110,12 @@ function generateInteractiveElements(k, boundary, gameElements) {
         PhilosophersIndicatorOffsets.forEach(({ dx, dy, direction }) => {
             PhilosophersIndicators.push(createIndicator(boundary.x + dx, boundary.y + dy, direction, k));
         });
-        gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 159, -10, -13));
-        gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 160, 22, -13));
-        gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 180, -10, 19));
-        gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 181, 22, 19));
+        gameElements.interactiveElements.push(createInteractable(k, "table", boundary, 0, -1, 0));
+
+        // Food on table.
         createInteractable(k, "tiles", boundary, 163, -4, 0);
         createInteractable(k, "tiles", boundary, 166, 4, -12);
+
         addProject(boundary, gameElements.projects);
         gameElements.indicators[boundary.name] = PhilosophersIndicators;
     }
@@ -152,9 +125,7 @@ function generateInteractiveElements(k, boundary, gameElements) {
         minishellIndicatorOffsets.forEach(({ dx, dy, direction }) => {
             minishellIndicators.push(createIndicator(boundary.x + dx, boundary.y + dy, direction, k));
         });
-        gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 48, -18, 1));
-        gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 49, 14, 1));
-        gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 50, 46, 1));
+        gameElements.interactiveElements.push(createInteractable(k, "computers", boundary, 0, -1, 0));
         addProject(boundary, gameElements.projects);
         gameElements.indicators[boundary.name] = minishellIndicators;
     }

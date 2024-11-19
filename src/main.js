@@ -1,5 +1,5 @@
 import { k } from "./KaboomCtx.js";
-import { SCALE_FACTOR, HOVER_EVENTS } from "./constants.js";
+import { SCALE_FACTOR, HOVER_EVENTS, DOOR_OFFSET } from "./constants.js";
 import { changeBackgroundHour, createAllBackground, createSteinsGateBackground } from "./background.js";
 import { handleKeyPressed, movePlayer, handleUIEvent } from "./keys.js";
 import { handleMouseEvents } from "./mouse.js";
@@ -51,17 +51,10 @@ k.scene("main", async () => {
 
     parseLayers(k, player, map, layers, gameElements);
 
-    // Left part of doors.
-    createTile(k, "tiles", 2, 114 - 32 * 1, 151);
-    createTile(k, "tiles", 2, 114 - 32 * 2, 151);
-
-    createTile(k, "tiles", 23, 114 - 32 * 1, 183);
-    createTile(k, "tiles", 23, 114 - 32 * 2, 183);
-
-    // DOOR.
+    // DOOR with kaboon. allows me to manage z index as I want.
     for (let i = 0; i < 3; i++) {
-        createTile(k, "tiles", 153 + i, 48 + 6 + 32 * i, 150, 3);
-        createTile(k, "tiles", 174 + i, 48 + +6 + 32 * i, 182, 0);
+        createTile(k, "tiles", 153 + i, 48 + 6 + DOOR_OFFSET * i, 150, 3);
+        createTile(k, "tiles", 174 + i, 48 + 6 + DOOR_OFFSET * i, 182, 0);
     }
 
     loadLocalStorage(gameElements.projects);
