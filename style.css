@@ -207,7 +207,7 @@ a:link {
     width: 70px;
     height: 70px;
     background-color: transparent;
-    display: none;
+    animation: fadeIn 1s ease-in-out;
 }
 
 .icon img {
