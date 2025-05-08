@@ -136,29 +136,6 @@ function generateInteractiveElements(k, boundary, gameElements) {
             k.scale(0.1),
         ]);
     }
-    if (boundary.name === "SG-001") {
-        k.add([
-            k.sprite("sg-001"),
-            k.pos((boundary.x + 24) * SCALE_FACTOR, (boundary.y + 18) * SCALE_FACTOR),
-            k.scale(0.1),
-        ]);
-    }
-    if (boundary.name === "Okabe") {
-        const okabe = k.add([
-            k.sprite("okabe"),
-            k.pos((boundary.x + 16) * SCALE_FACTOR, (boundary.y + 12) * SCALE_FACTOR),
-            k.scale(0.7),
-        ]);
-        okabe.play("idle");
-    }
-    if (boundary.name === "Kurisu") {
-        const kurisu = k.add([
-            k.sprite("kurisu"),
-            k.pos((boundary.x + 22) * SCALE_FACTOR, (boundary.y + 12) * SCALE_FACTOR),
-            k.scale(0.7),
-        ]);
-        kurisu.play("idle");
-    }
 }
 
 function generatePlayerPosition(k, layer, player, map, gameElements) {

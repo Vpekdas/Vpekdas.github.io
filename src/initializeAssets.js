@@ -34,39 +34,6 @@ export function loadAllResources(k) {
                 },
             },
             {
-                name: "okabe",
-                path: "/steins-gate/okabe.png",
-                config: {
-                    sliceX: 5,
-                    sliceY: 1,
-                    anims: {
-                        idle: { from: 0, to: 2, loop: true, speed: 8 },
-                    },
-                },
-            },
-            {
-                name: "kurisu",
-                path: "/steins-gate/kurisu.png",
-                config: {
-                    sliceX: 5,
-                    sliceY: 3,
-                    anims: {
-                        idle: { from: 0, to: 11, loop: true, speed: 8 },
-                    },
-                },
-            },
-            {
-                name: "steins-gate-background",
-                path: "/steins-gate/background.png",
-                config: {
-                    sliceX: 4,
-                    sliceY: 3,
-                    anims: {
-                        opening: { from: 0, to: 11, loop: true, speed: 8 },
-                    },
-                },
-            },
-            {
                 name: "lightning",
                 path: "lightning/4.png",
                 config: {
@@ -130,8 +97,7 @@ export function loadAllResources(k) {
             { name: "msg2", path: "/menu/Msg03.png" },
             { name: "msg3", path: "/menu/Msg10.png" },
             { name: "menu-background", path: "background/Cyberpunk_city_street.gif" },
-            { name: "phonewawe", path: "/steins-gate/phonewawe.png" },
-            { name: "sg-001", path: "/steins-gate/sg-001.png" },
+            { name: "phonewawe", path: "/furniture/phonewawe.png" },
             { name: "library", path: "/furniture/library.png" },
             { name: "homeSweetHome", path: "/tiles/homeSweetHome.png" },
             { name: "table", path: "/tiles/table.png" },

@@ -121,16 +121,11 @@ function toggleDisplay(element, displayStyle) {
 
 function handleNoteToggle(event) {
     const note = document.querySelector(NOTE_SELECTOR);
-    const divergenceMeter = document.querySelector(DIVERGENCE_METER_SELECTOR);
 
     if (event.key === "c") {
         toggleDisplay(note, "none");
-        if (divergenceMeter.style.display === "none") {
-            toggleDisplay(divergenceMeter, "flex");
-        }
     } else if (event.key === "h") {
         toggleDisplay(note, "block");
-        toggleDisplay(divergenceMeter, "none");
     }
 }
 
@@ -148,15 +143,9 @@ function handleHexagonMenuToggle(event) {
 }
 
 function handleEscapeKey(event, player) {
-    const dMailInterface = document.querySelector(D_MAIL_INTERFACE_SELECTOR);
     const completingModalOverlay = document.querySelector(COMPLETING_MODAL_OVERLAY_SELECTOR);
 
     if (event.key === "Escape") {
-        if (dMailInterface.style.display === "flex") {
-            toggleDisplay(dMailInterface, "none");
-            player.isInDialogue = false;
-            ensureCanvasFocus();
-        }
         if (completingModalOverlay.style.display === "flex") {
             toggleDisplay(completingModalOverlay, "none");
             player.isInDialogue = false;

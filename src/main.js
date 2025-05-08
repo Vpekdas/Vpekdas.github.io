@@ -1,6 +1,6 @@
 import { k } from "./KaboomCtx.js";
 import { SCALE_FACTOR, HOVER_EVENTS, DOOR_OFFSET } from "./constants.js";
-import { changeBackgroundHour, createAllBackground, createSteinsGateBackground } from "./background.js";
+import { changeBackgroundHour, createAllBackground } from "./background.js";
 import { handleKeyPressed, movePlayer, handleUIEvent } from "./keys.js";
 import { handleMouseEvents } from "./mouse.js";
 import { parseLayers } from "./parseMap";
@@ -12,7 +12,6 @@ import { generateDiscoveredAchievements } from "./achievement.js";
 import { clearPopup } from "./menu.js";
 import { destroyIndicators } from "./collision.js";
 import { countDiscoveredProject, ensureCanvasFocus, getCurrentHour, setCamScale, resetAdventure } from "./utils.js";
-import { regenerateNumber } from "./divergenceMeter.js";
 import { createFireworks } from "./firework.js";
 import { createPlayer } from "./player.js";
 
@@ -25,7 +24,6 @@ k.scene("main", async () => {
     const layers = mapData.layers;
 
     createAllBackground(k);
-    createSteinsGateBackground(k);
 
     const currentHour = getCurrentHour();
     const map = k.add([k.sprite("map"), k.pos(0), k.scale(SCALE_FACTOR)]);
@@ -38,20 +36,12 @@ k.scene("main", async () => {
         interactiveElements: [],
         projects: [],
         indicators: new Map(),
-        steinsGate: false,
-        chronometer: {
-            timerId: 0,
-            seconds: 0,
-            timeout: false,
-        },
-        lightningRefs: { lightning: null, lightning2: null },
         startX: 0,
         startY: 0,
     };
 
     parseLayers(k, player, map, layers, gameElements);
 
-    // DOOR with kaboon. allows me to manage z index as I want.
     for (let i = 0; i < 3; i++) {
         createTile(k, "tiles", 153 + i, 48 + 6 + DOOR_OFFSET * i, 150, 3);
         createTile(k, "tiles", 174 + i, 48 + 6 + DOOR_OFFSET * i, 182, 0);
@@ -64,7 +54,6 @@ k.scene("main", async () => {
     setTimeout(() => {
         const note = document.querySelector(".note");
         note.style.display = "none";
-        regenerateNumber(gameElements.projects);
     }, 4000);
 
     clearPopup();
@@ -102,25 +91,11 @@ k.scene("main", async () => {
 
         movePlayer(player);
 
-        if (gameElements.chronometer.seconds >= 15) {
-            clearInterval(gameElements.chronometer.timerId);
-            gameElements.chronometer.timerId = 0;
-            gameElements.chronometer.seconds = 0;
-            gameElements.chronometer.timeout = false;
-            if (
-                countDiscoveredProject(gameElements.projects) === gameElements.projects.length &&
-                !gameElements.chronometer.timeout
-            ) {
-                k.destroy(gameElements.lightningRefs.lightning);
-                k.destroy(gameElements.lightningRefs.lightning2);
-            }
-        }
-
         k.camPos(player.pos.x, player.pos.y + 100);
 
         backgroundCamY = player.pos.y - 200;
 
-        changeBackgroundHour(backgroundSpeed, gameElements.steinsGate, backgroundCamY, player, currentHour);
+        changeBackgroundHour(backgroundSpeed, backgroundCamY, player, currentHour);
 
         player.prevPosX = player.pos.x;
         player.prevPosY = player.pos.y;

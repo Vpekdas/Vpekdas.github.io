@@ -1,40 +1,5 @@
 import { BACKGROUND_COUNT, SCALE_FACTOR } from "./constants.js";
 
-const steinsGateBackgrounds = [];
-const steinsGateTileName = "steins-gate-background";
-
-function createSteinsGateTile(k, x, y) {
-    return k.add([k.sprite(steinsGateTileName), k.pos(x, y), k.scale(SCALE_FACTOR)]);
-}
-
-export function createSteinsGateBackground(k) {
-    const steinsGateBackground = createSteinsGateTile(k, 0, 0);
-    const steinsGateWidth = steinsGateBackground.width;
-    const steinsGateHeight = steinsGateBackground.height;
-    k.destroy(steinsGateBackground);
-
-    const rows = 3;
-    const cols = 2;
-
-    for (let row = 0; row < rows; row++) {
-        for (let col = -1; col <= cols; col++) {
-            const x = col * steinsGateWidth;
-            const y = row * steinsGateHeight * 2;
-            steinsGateBackgrounds.push(createSteinsGateTile(k, x, y));
-        }
-    }
-    steinsGateBackgrounds.forEach((background) => {
-        background.hidden = true;
-        background.play("opening");
-    });
-}
-
-export function displaySteinsGateBackground() {
-    steinsGateBackgrounds.forEach((background) => {
-        background.hidden = false;
-    });
-}
-
 const backgrounds_early_morning = [];
 const backgrounds_morning = [];
 const backgrounds_afternoon = [];
@@ -110,8 +75,8 @@ function updateBackground(backgroundLayer, speed, camY, playerX, prevX) {
     }
 }
 
-export function changeBackgroundHour(speed, steinsGate, backgroundCamY, player, currentHour) {
-    for (let i = 0; i < BACKGROUND_COUNT && !steinsGate; i++) {
+export function changeBackgroundHour(speed, backgroundCamY, player, currentHour) {
+    for (let i = 0; i < BACKGROUND_COUNT; i++) {
         if (currentHour >= 3 && currentHour < 6) {
             backgrounds_night[i].forEach((component) => (component.hidden = true));
             backgrounds_early_morning[i].forEach((component) => (component.hidden = false));

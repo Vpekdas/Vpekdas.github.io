@@ -146,11 +146,3 @@ export const PROJECT_DESCRIPTIONS = {
         icon: `/achievement/minishell.png`,
     },
 };
-
-export const OkabeDialogue = `
-"Ah, you've finally done it! Just as I, Hououin Kyouma, the mad scientist, predicted! Your journey through the labyrinth of code has reached its zenith. The digital realm bows to your prowess. Remember, this is not the end, but merely the beginning of your legend. Continue to defy the impossible and rewrite the rules of reality itself. El Psy Kongroo!"
-`;
-
-export const KurisuDialogue = `
-"Impressive work! You've navigated through complex algorithms and systems with precision and skill. Your dedication to mastering the intricacies of code is commendable. Remember, science is a continuous journey of discovery. Keep pushing the boundaries and never stop questioning. The future is yours to shape."
-`;
