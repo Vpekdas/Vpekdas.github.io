@@ -1,16 +1,9 @@
 import type { GameObj, KAPLAYCtx } from "kaplay";
-import type { GameElements } from "../components/Game.js";
 import { collision } from "./collision.js";
 import { createIndicator, createInteractable, getIndicatorOffset } from "./elementFactory.js";
 import { OFFSET_X, OFFSET_Y, SCALE_FACTOR, DEF_SCALE_IND, INDICATOR_OFFSET } from "./constants.js";
 
-export function parseLayers(
-    k: KAPLAYCtx,
-    player: GameObj,
-    map: GameObj,
-    layers: any,
-    gameElements: GameElements
-): void {
+export function parseLayers(k: KAPLAYCtx, player: GameObj, map: GameObj, layers: any, gameElements: any): void {
     for (const layer of layers) {
         if (layer.name === "boundaries") {
             for (const boundary of layer.objects) {

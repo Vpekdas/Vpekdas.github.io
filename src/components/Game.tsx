@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import type { GameObj, KAPLAYCtx } from "kaplay";
 import { loadAllResources } from "../Game/initializeAssets";
 import { changeBackgroundHour, createAllBackground } from "../Game/background";
