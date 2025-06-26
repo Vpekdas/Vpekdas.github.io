@@ -26,7 +26,7 @@ export default function Game() {
         k.scene("main", async () => {
             loadAllResources(k);
 
-            const mapData = await (await fetch("./map/map.json")).json();
+            const mapData = await (await fetch("assets/map/map.json")).json();
             const layers = mapData.layers;
 
             createAllBackground(k);

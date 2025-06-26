@@ -1,9 +1,32 @@
-import NavBar from "../components/NavBar";
+import ProjectCard from "../components/Card/Project/ProjectCard";
+import NavBar from "../components/NavBar/NavBar";
+import Section from "../components/Section";
+import { testProject } from "../constants";
+
+const projects = [testProject, testProject, testProject, testProject, testProject];
 
 function Projects() {
     return (
         <>
             <NavBar />
+            <Section header={"My Projects"} text={"Here you can find some of most valuable project in my opinion."} />
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
+                {projects.map((project, index) => (
+                    <ProjectCard
+                        key={index}
+                        image={project.image}
+                        title={project.title}
+                        technologies={project.technologies}
+                        description={project.description}
+                        tags={project.tags}
+                        href={project.href}
+                        style={{
+                            animationDelay: `${index * 0.5}s`,
+                            animationFillMode: "both",
+                        }}
+                    />
+                ))}
+            </div>
         </>
     );
 }
