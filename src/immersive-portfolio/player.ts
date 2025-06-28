@@ -15,7 +15,6 @@ export function createPlayer(k: KAPLAYCtx): GameObj {
         {
             speed: PLAYER_SPEED,
             direction: "down",
-            isInDialogue: false,
             prevPosX: 0,
             prevPosY: 0,
         },

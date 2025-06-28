@@ -20,8 +20,12 @@ function Home() {
                     bio={profile.bio}
                     location={profile.location}
                     favoriteTech={profile.favoriteTech}
-                    socials={profile.socials}
                     funFact={profile.funFact}
+                    socials={{
+                        props: profile.socials.props,
+                        header: profile.socials.header,
+                    }}
+                    header={true}
                 />
                 <div className="flex flex-col items-center w-full">
                     <h1

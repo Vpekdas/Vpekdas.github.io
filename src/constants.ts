@@ -6,18 +6,7 @@ import discordLogo from "/assets/logo/discord.svg";
 import fortyTwoLogo from "/assets/logo/42.svg";
 import githubLogo from "/assets/logo/github.svg";
 
-
 export type TagType = "domain" | "mode" | "status";
-
-export type ProjectCardProps = {
-    image: { path: string; alt: string };
-    title: string;
-    technologies: { src: string; alt: string; title: string }[];
-    description: string;
-    tags: { text: string; type: TagType }[];
-    href: string;
-    style?: React.CSSProperties;
-};
 
 export const profile = {
     name: "Volkan Pekdas",
@@ -31,12 +20,25 @@ export const profile = {
         { src: csLogo, alt: "C# logo", title: "C#" },
         { src: unityLogo, alt: "Unity logo", title: "Unity" },
     ],
-    socials: [
-        { src: linkedinLogo, alt: "LinkedIn logo", title: "LinkedIn", url: "https://linkedin.com/in/volkan-pekdas" },
-        { src: discordLogo, alt: "Discord logo", title: "Discord", url: "https://discordapp.com/users/415118435174055947" },
-        { src: fortyTwoLogo, alt: "42 logo", title: "42", url: "https://profile.intra.42.fr/users/vopekdas" },
-        { src: githubLogo, alt: "Github logo", title: "Github", url: "https://github.com/Vpekdas" },
-    ],
+    socials: {
+        props: [
+            {
+                src: linkedinLogo,
+                alt: "LinkedIn logo",
+                title: "LinkedIn",
+                url: "https://linkedin.com/in/volkan-pekdas",
+            },
+            {
+                src: discordLogo,
+                alt: "Discord logo",
+                title: "Discord",
+                url: "https://discordapp.com/users/415118435174055947",
+            },
+            { src: fortyTwoLogo, alt: "42 logo", title: "42", url: "https://profile.intra.42.fr/users/vopekdas" },
+            { src: githubLogo, alt: "Github logo", title: "Github", url: "https://github.com/Vpekdas" },
+        ],
+        header: true,
+    },
     funFact: "blub... glub... bluuub blop... glub glub...",
 };
 

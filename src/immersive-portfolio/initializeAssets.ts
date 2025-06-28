@@ -1,42 +1,42 @@
 import type { KAPLAYCtx } from "kaplay";
 
-type FontResource = {
+interface FontResource {
     name: string;
     path: string;
-};
+}
 
-type AnimConfig = {
+interface AnimConfig {
     from: number;
     to: number;
     loop: boolean;
     speed: number;
-};
+}
 
-type SpriteConfig = {
+interface SpriteConfig {
     sliceX: number;
     sliceY: number;
     anims?: Record<string, AnimConfig | number>;
-};
+}
 
-type SpriteResource = {
+interface SpriteResource {
     name: string;
     path: string;
     config?: SpriteConfig;
-};
+}
 
-type Resources = {
+interface Resources {
     fonts: FontResource[];
     sprites: SpriteResource[];
-};
+}
 
 export function loadAllResources(k: KAPLAYCtx) {
     const resources: Resources = {
         fonts: [{ name: "myFont", path: "assets/ThaleahFat.ttf" }],
         sprites: [
-            { name: "hover", path: "assets/hover/hover.png" },
+            { name: "hover", path: "assets/UI/hover.png" },
             {
                 name: "indicator",
-                path: "assets/ui/1.png",
+                path: "assets/UI/1.png",
                 config: {
                     sliceX: 8,
                     sliceY: 2,
@@ -69,6 +69,11 @@ export function loadAllResources(k: KAPLAYCtx) {
                 path: "assets/tiles/spritesheet.png",
                 config: { sliceX: 21, sliceY: 11 },
             },
+            { name: "philosophers", path: "assets/tiles/philosophers.png" },
+            { name: "unity", path: "assets/tiles/unity.png" },
+            { name: "scop", path: "assets/tiles/scop.png" },
+            { name: "ft_transcendance", path: "assets/tiles/ft_transcendance.png" },
+            { name: "door", path: "assets/tiles/door.png" },
             { name: "early-morning-1", path: "assets/background/early-morning/1.png" },
             { name: "early-morning-2", path: "assets/background/early-morning/2.png" },
             { name: "early-morning-3", path: "assets/background/early-morning/3.png" },
@@ -95,9 +100,6 @@ export function loadAllResources(k: KAPLAYCtx) {
             { name: "night-4", path: "assets/background/night/4.png" },
             { name: "night-5", path: "assets/background/night/5.png" },
             { name: "map", path: "assets/map/map.png" },
-            { name: "homeSweetHome", path: "assets/tiles/homeSweetHome.png" },
-            { name: "table", path: "assets/tiles/table.png" },
-            { name: "computers", path: "assets/tiles/computers.png" },
         ],
     };
 

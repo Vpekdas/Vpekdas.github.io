@@ -2,11 +2,11 @@ import React from "react";
 import type { TimelineProps } from "./TimelineItem";
 import TimelineItems from "./TimelineItem";
 
-export interface TimelineListProps {
+export interface TimelineList {
     timelineProps: TimelineProps[];
 }
 
-const Timeline: React.FC<TimelineListProps> = ({ timelineProps }) => {
+const Timeline: React.FC<TimelineList> = ({ timelineProps }) => {
     return (
         <ol className="relative border-s border-cyan-200">
             {timelineProps.map((timeline, index) => (

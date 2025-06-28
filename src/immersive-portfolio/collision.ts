@@ -1,31 +1,33 @@
 import { PROJECT_DESCRIPTIONS, type ProjectKey } from "./constants.js";
-import { displayDialogue } from "./dialogue.js";
-import { countDiscoveredProject } from "./utils.js";
-import { saveToLocalStorage } from "./localStorage.js";
 
 import type { GameObj, KAPLAYCtx } from "kaplay";
-import { updateProgress } from "./progressBar.js";
+import { closeDialogue, modifyDialogue } from "./dialogue.js";
 
 export function collision(k: KAPLAYCtx, player: GameObj, boundary: any, gameElements: any) {
     player.onCollide(boundary.name, () => {
-        player.isInDialogue = true;
-
         const name = boundary.name as ProjectKey;
+
         if (name in PROJECT_DESCRIPTIONS) {
-            displayDialogue(PROJECT_DESCRIPTIONS[name].story, () => (player.isInDialogue = false));
+            modifyDialogue(k, gameElements.dialogue, PROJECT_DESCRIPTIONS[name].description);
         }
-        const discovered = countDiscoveredProject(gameElements.projects);
         const projectIndex = gameElements.projects.findIndex((project: any) => project.name === boundary.name);
         if (projectIndex != -1 && gameElements.projects[projectIndex].discovered) {
             return;
         }
-        saveToLocalStorage(boundary.name);
         setProjectAsDiscovered(gameElements.projects, boundary);
         destroyIndicators(k, gameElements.indicators, gameElements.projects);
 
-        if (discovered <= gameElements.projects.length) {
-            updateProgress(gameElements.projects, discovered);
+        const elToRemove = gameElements.interactiveElements.find((el: any) => el.name === boundary.name);
+        if (elToRemove) {
+            elToRemove.sprite.opacity = 1;
         }
+        gameElements.interactiveElements = gameElements.interactiveElements.filter(
+            (el: any) => el.name !== boundary.name
+        );
+    });
+
+    player.onCollideEnd(boundary.name, () => {
+        closeDialogue(gameElements.dialogue.box);
     });
 }
 

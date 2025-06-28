@@ -1,15 +1,29 @@
 import React from "react";
 import { IoShareSocial } from "react-icons/io5";
 
-const Socials: React.FC<{ socials: { src: string; alt: string; title: string; url: string }[] }> = ({ socials }) => {
+export interface SocialList {
+    socialProps: SocialProps[];
+    header: boolean;
+}
+
+export interface SocialProps {
+    src: string;
+    alt: string;
+    title: string;
+    url: string;
+}
+
+const Socials: React.FC<SocialList> = ({ socialProps, header }) => {
     return (
         <div className="mt-6">
-            <p className="flex gap-2 mb-2 text-cyan-400 font-semibold text-center items-center justify-center">
-                <IoShareSocial />
-                Socials
-            </p>
+            {header && (
+                <p className="flex gap-2 mb-2 text-cyan-400 font-semibold text-center items-center justify-center">
+                    <IoShareSocial />
+                    Socials
+                </p>
+            )}
             <div className="flex flex-row gap-x-6 items-center justify-center">
-                {socials.map((social) => (
+                {socialProps.map((social) => (
                     <a
                         key={social.title}
                         href={social.url}

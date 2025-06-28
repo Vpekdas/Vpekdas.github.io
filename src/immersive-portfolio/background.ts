@@ -1,0 +1,87 @@
+import type { GameObj, KAPLAYCtx } from "kaplay";
+import { getCurrentHour } from "./utils.js";
+import { BACKGROUND_COUNT, BACKGROUND_H, BACKGROUND_SCALE, BACKGROUND_W, CLOUD_SPEED } from "./constants.js";
+
+function getBackgroundTime(): string {
+    const hour = getCurrentHour();
+
+    if (hour >= 5 && hour < 8) {
+        return "early-morning";
+    } else if (hour >= 8 && hour < 12) {
+        return "morning";
+    } else if (hour >= 12 && hour < 18) {
+        return "afternoon";
+    } else if (hour >= 18 && hour < 23) {
+        return "evening";
+    } else {
+        return "night";
+    }
+}
+
+interface BackgroundsList {
+    background: BackgroundProps[];
+    leftBound: number;
+    rightBound: number;
+}
+
+interface BackgroundProps {
+    layer: GameObj[];
+}
+
+export function createBackground(k: KAPLAYCtx): BackgroundsList {
+    const backgroundTime = getBackgroundTime();
+
+    const backgroundsList: BackgroundsList = {
+        background: [],
+        leftBound: 0,
+        rightBound: 0,
+    };
+
+    for (let i = 0; i < BACKGROUND_COUNT; i++) {
+        const props: BackgroundProps = {
+            layer: [],
+        };
+
+        let cloudOffset = 0;
+
+        i == 0 ? (cloudOffset = 50) : (cloudOffset = 0);
+
+        for (let j = -1; j < 4; j++) {
+            const posX = j * BACKGROUND_W * BACKGROUND_SCALE;
+            props.layer.push(
+                k.add([
+                    k.sprite(backgroundTime + "-" + `${i + 1}`),
+                    k.pos(posX, cloudOffset),
+                    k.scale(BACKGROUND_SCALE),
+                ])
+            );
+        }
+        backgroundsList.background.push(props);
+        backgroundsList.rightBound = BACKGROUND_W * BACKGROUND_SCALE;
+        backgroundsList.leftBound = -BACKGROUND_W * BACKGROUND_SCALE;
+    }
+
+    return backgroundsList;
+}
+
+export function updateBackground(k: KAPLAYCtx, backgrounds: BackgroundsList, player: GameObj, camY: number) {
+    let deltaX = player.pos.x - player.prevPosX;
+    let speed = k.dt();
+
+    for (let i = 0; i < BACKGROUND_COUNT; i++) {
+        for (let j = 0; j < 5; j++) {
+            // First layer is cloud or whatever that will move auto.
+            if (i === 0) {
+                backgrounds.background[i].layer[j].pos.x -= CLOUD_SPEED * k.dt();
+                if (backgrounds.background[i].layer[j].pos.x < backgrounds.leftBound) {
+                    backgrounds.background[i].layer[j].pos.x = backgrounds.rightBound;
+                }
+            }
+            if (deltaX && i != 0) {
+                backgrounds.background[i].layer[j].pos.x -= deltaX * speed;
+            }
+            backgrounds.background[i].layer[j].pos.y = camY - BACKGROUND_H * 1.5;
+        }
+        speed += 0.3;
+    }
+}

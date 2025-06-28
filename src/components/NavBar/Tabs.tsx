@@ -7,7 +7,7 @@ const Tabs: React.FC<{ title: string; link: string }> = ({ title, link }) => {
     const isActive = (path: string) => location.pathname === path;
 
     return (
-        <li>
+        <li className="squishy">
             <Link
                 to={link}
                 className={`px-3 py-2 rounded-lg transition-colors ${

@@ -9,7 +9,7 @@ function Footer() {
             <div className="flex flex-col items-center space-y-2">
                 <div className="flex space-x-4">
                     <a
-                        href={profile.socials[3].url}
+                        href=""
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-cyan-200 hover:underline hover:text-white"
@@ -17,7 +17,7 @@ function Footer() {
                         GitHub
                     </a>
                     <a
-                        href={profile.socials[0].url}
+                        href=""
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-cyan-200 hover:underline hover:text-white"

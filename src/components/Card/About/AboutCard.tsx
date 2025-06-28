@@ -1,26 +1,30 @@
 import React from "react";
 import AvatarWIthTitle from "./AvatarWithTitle";
 import Location from "./Location";
-import Socials from "./Socials";
+import Socials, { type SocialProps } from "./Socials";
 import FunFact from "./FunFact";
 import Technologies from "./Technologies";
 import { MdFavorite } from "react-icons/md";
 
-type AboutCardProps = {
+interface AboutCardProps {
     name: string;
     job: string;
     path: string;
     bio: string;
     location: string;
     favoriteTech: { src: string; alt: string; title: string }[];
-    socials: { src: string; alt: string; title: string; url: string }[];
+    socials: {
+        props: SocialProps[];
+        header: boolean;
+    };
+    header: true;
     funFact: string;
-};
+}
 
 const AboutCard: React.FC<AboutCardProps> = ({ name, job, path, bio, location, favoriteTech, socials, funFact }) => {
     return (
         <div
-            className="squishy-card overflow-hidden
+            className="squishy overflow-hidden
             mx-auto p-6
             w-full max-w-sm 
             rounded-2xl shadow-lg 
@@ -31,7 +35,7 @@ const AboutCard: React.FC<AboutCardProps> = ({ name, job, path, bio, location, f
             <p className="mt-4 text-cyan-200/90 text-center italic">{bio}</p>
             <Location location={location} />
             <Technologies technologies={favoriteTech} title="Favorite Technologies" icon={<MdFavorite />} />
-            <Socials socials={socials} />
+            <Socials socialProps={socials.props} header={socials.header} />
             <FunFact funFact={funFact} />
         </div>
     );

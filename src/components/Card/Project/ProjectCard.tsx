@@ -1,4 +1,3 @@
-import type { ProjectCardProps } from "../../../constants";
 import React from "react";
 import { useInView } from "react-intersection-observer";
 import { FaTools } from "react-icons/fa";
@@ -8,6 +7,17 @@ import ProjectTitle from "./ProjectTitle";
 import ProjectDescription from "./ProjectDescription";
 import ProjectTag from "./ProjectTag";
 import ProjectButton from "./ProjectButton";
+import type { TagType } from "../../../constants";
+
+interface ProjectCardProps {
+    image: { path: string; alt: string };
+    title: string;
+    technologies: { src: string; alt: string; title: string }[];
+    description: string;
+    tags: { text: string; type: TagType }[];
+    href: string;
+    style?: React.CSSProperties;
+}
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ image, title, technologies, description, tags, href, style }) => {
     const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.15 });
@@ -27,7 +37,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ image, title, technologies, d
                         : "opacity-40 translate-y-24 blur-sm bg-blue-900/60"
                 }`}
         >
-            <div className="squishy-card flex flex-col space-y-4">
+            <div className="squishy flex flex-col space-y-4">
                 <ProjectImage path={image.path} alt={image.alt} />
                 <ProjectTitle title={title} />
                 <Technologies technologies={technologies} title="Technologies Used" icon={<FaTools />} />

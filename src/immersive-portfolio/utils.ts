@@ -15,3 +15,8 @@ export function countDiscoveredProject(projects: any) {
     }
     return achievement;
 }
+
+export function getCurrentHour() {
+    const now = new Date();
+    return now.getHours();
+}

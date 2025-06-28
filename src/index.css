@@ -54,7 +54,7 @@ h5 {
     }
 }
 
-.squishy-card:hover {
+.squishy:hover {
     animation: squish 0.5s cubic-bezier(0.5, 1.8, 0.6, 1);
     box-shadow: 0 8px 40px 0 #0e749044;
     border-color: #0ea5e9;
