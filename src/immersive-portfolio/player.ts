@@ -1,6 +1,11 @@
 import { SCALE_FACTOR, PLAYER_SPEED } from "./constants";
 import type { GameObj, KAPLAYCtx } from "kaplay";
 
+/**
+ * Creates a player and returns its game object.
+ * @param {KAPLAYCtx} k The Kaplay context.
+ * @returns {GameObj} The created player game object.
+ */
 export function createPlayer(k: KAPLAYCtx): GameObj {
     const player = k.add([
         k.sprite("player", { anim: "idle-down" }),

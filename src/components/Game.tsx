@@ -5,14 +5,21 @@ import { createBackground, updateBackground } from "../immersive-portfolio/backg
 import { createPlayer } from "../immersive-portfolio/player";
 import { SCALE_FACTOR } from "../immersive-portfolio/constants";
 import { parseLayers } from "../immersive-portfolio/parseMap";
-import { createTile } from "../immersive-portfolio/elementFactory";
+import { createTile, type Interactable } from "../immersive-portfolio/elementFactory";
 import { destroyIndicators } from "../immersive-portfolio/collision";
 import { handleKeyPressed, handleMouseEvents, movePlayer } from "../immersive-portfolio/Input";
 import { setCamScale } from "../immersive-portfolio/camera";
 
 import kaplay from "kaplay";
 import { blinkInteractiveElements } from "../immersive-portfolio/ui";
-import { createDialogueBox } from "../immersive-portfolio/dialogue";
+import { createDialogueBox, type Dialogue } from "../immersive-portfolio/dialogue";
+
+export interface GameElements {
+    interactiveElements: Interactable[];
+    projects: [];
+    indicators: Map<string, GameObj[]>;
+    dialogue: Dialogue;
+}
 
 export default function Game() {
     useEffect(() => {
@@ -33,10 +40,10 @@ export default function Game() {
             const map = k.add([k.sprite("map"), k.pos(0), k.scale(SCALE_FACTOR)]);
             const player = createPlayer(k);
 
-            const gameElements = {
+            const gameElements: GameElements = {
                 interactiveElements: [],
                 projects: [],
-                indicators: new Map<String, GameObj>(),
+                indicators: new Map<string, GameObj[]>(),
                 dialogue: createDialogueBox(k),
             };
 

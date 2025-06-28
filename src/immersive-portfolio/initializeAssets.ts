@@ -1,35 +1,101 @@
 import type { KAPLAYCtx } from "kaplay";
 
+/**
+ * Stores the name and path of a font resource.
+ * The `name` is used to access the loaded font.
+ */
 interface FontResource {
+    /**
+     * The name used to reference the loaded font.
+     */
     name: string;
+    /**
+     * The file path used to load the font.
+     */
     path: string;
 }
 
-interface AnimConfig {
-    from: number;
-    to: number;
-    loop: boolean;
-    speed: number;
-}
-
-interface SpriteConfig {
-    sliceX: number;
-    sliceY: number;
-    anims?: Record<string, AnimConfig | number>;
-}
+/**
+ * Stores the name and path of a sprite resource.
+ * The `name` is used to access the loaded sprite.
+ */
 
 interface SpriteResource {
+    /**
+     * The name used to reference the loaded sprite.
+     */
     name: string;
+    /**
+     * The file path used to load the sprite.
+     */
     path: string;
+    /**
+     * Optional animation configurations for the sprite.
+     */
     config?: SpriteConfig;
 }
 
+/**
+ * Represents a sprite that will be sliced from a spritesheet.
+ */
+interface SpriteConfig {
+    /**
+     * The x position of the slice.
+     */
+    sliceX: number;
+    /**
+     * The y position of the slice.
+     */
+    sliceY: number;
+    /**
+     * Optional animation configurations for the sprite.
+     * Maps animation names to either an AnimConfig object or a frame number.
+     */
+    anims?: Record<string, AnimConfig | number>;
+}
+
+/**
+ * Represents an animation configuration.
+ */
+interface AnimConfig {
+    /**
+     * The starting frame index of the animation.
+     */
+    from: number;
+    /**
+     * The ending frame index of the animation.
+     */
+    to: number;
+    /**
+     * Whether the animation should loop.
+     */
+    loop: boolean;
+    /**
+     * The speed of the animation in frames per second.
+     */
+    speed: number;
+}
+
+/**
+ * Stores fonts and sprites resources.
+ */
 interface Resources {
+    /**
+     * All font resources.
+     */
     fonts: FontResource[];
+    /**
+     * All sprite resources.
+     */
     sprites: SpriteResource[];
 }
 
-export function loadAllResources(k: KAPLAYCtx) {
+/**
+ * Loads all assets.
+ * @param {KAPLAYCtx} k The Kaplay context.
+ * @returns {void}
+ */
+export function loadAllResources(k: KAPLAYCtx): void {
     const resources: Resources = {
         fonts: [{ name: "myFont", path: "assets/ThaleahFat.ttf" }],
         sprites: [

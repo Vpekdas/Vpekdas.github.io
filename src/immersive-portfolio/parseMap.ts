@@ -9,11 +9,27 @@ import {
     INDICATOR_OFFSET,
     TEXT_WIDTH,
     TEXT_SIZE,
-    TEXT_SCALE,
+    BUBBLE_SCALE,
 } from "./constants.js";
 import { generateHoverEvents, type HoverProps } from "./ui.js";
+import type { GameElements } from "../components/Game.js";
 
-export function parseLayers(k: KAPLAYCtx, player: GameObj, map: GameObj, layers: any, gameElements: any): void {
+/**
+ * Parses JSON from Tiled and creates all bounding boxes, interactive elements, hover elements, and collision objects.
+ * @param {KAPLAYCtx} k The Kaplay context.
+ * @param {GameObj} player The player game object.
+ * @param {GameObj} map The map game object.
+ * @param {any} layers Layers parsed from the JSON.
+ * @param {GameElements} gameElements Custom object that contains projects, interactive elements, indicators, and dialogue.
+ * @returns {void}
+ */
+export function parseLayers(
+    k: KAPLAYCtx,
+    player: GameObj,
+    map: GameObj,
+    layers: any,
+    gameElements: GameElements
+): void {
     for (const layer of layers) {
         if (layer.name === "boundaries") {
             for (const boundary of layer.objects) {
@@ -25,15 +41,9 @@ export function parseLayers(k: KAPLAYCtx, player: GameObj, map: GameObj, layers:
                         name: boundary.name,
                         bubbleX: boundary.x * SCALE_FACTOR,
                         bubbleY: boundary.y * SCALE_FACTOR,
-                        bubbleScale: TEXT_SCALE,
+                        bubbleScale: BUBBLE_SCALE,
                         textSize: TEXT_SIZE,
                         textWidth: TEXT_WIDTH * SCALE_FACTOR,
-                        textX:
-                            boundary.x * SCALE_FACTOR +
-                            (boundary.name.length * SCALE_FACTOR) / 2 +
-                            TEXT_WIDTH -
-                            TEXT_SIZE,
-                        textY: boundary.y * SCALE_FACTOR + (boundary.name.length * SCALE_FACTOR) / 2,
                     };
 
                     generateHoverEvents(k, props);
@@ -49,7 +59,7 @@ export function parseLayers(k: KAPLAYCtx, player: GameObj, map: GameObj, layers:
     }
 }
 
-function generateBoundingBox(k: KAPLAYCtx, map: any, boundary: any) {
+function generateBoundingBox(k: KAPLAYCtx, map: GameObj, boundary: any): void {
     map.add([
         k.area({
             shape: new k.Rect(k.vec2(0, 0), boundary.width, boundary.height),
@@ -60,8 +70,8 @@ function generateBoundingBox(k: KAPLAYCtx, map: any, boundary: any) {
     ]);
 }
 
-function generateInteractiveElements(k: KAPLAYCtx, boundary: any, gameElements: any): void {
-    const indicators: any = [];
+function generateInteractiveElements(k: KAPLAYCtx, boundary: any, gameElements: GameElements): void {
+    const indicators: GameObj[] = [];
     const indicatorOffsets = getIndicatorOffset(boundary, DEF_SCALE_IND, INDICATOR_OFFSET);
 
     indicatorOffsets.forEach(({ dx, dy, direction }) => {
@@ -69,7 +79,7 @@ function generateInteractiveElements(k: KAPLAYCtx, boundary: any, gameElements: 
     });
 
     addProject(boundary, gameElements.projects);
-    gameElements.indicators[boundary.name] = indicators;
+    gameElements.indicators.set(boundary.name, indicators);
     if (boundary.name === "so_long") {
         gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 82, -4, 0));
     } else if (boundary.name === "philosophers") {
@@ -89,7 +99,7 @@ function generateInteractiveElements(k: KAPLAYCtx, boundary: any, gameElements: 
     }
 }
 
-function generatePlayerPosition(k: KAPLAYCtx, layer: any, player: any, map: any) {
+function generatePlayerPosition(k: KAPLAYCtx, layer: any, player: GameObj, map: GameObj) {
     for (const entity of layer.objects) {
         if (entity.name === "player") {
             player.pos = k.vec2(

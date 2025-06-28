@@ -1,19 +1,34 @@
-import { PROJECT_DESCRIPTIONS, type ProjectKey } from "./constants.js";
-
 import type { GameObj, KAPLAYCtx } from "kaplay";
-import { closeDialogue, modifyDialogue } from "./dialogue.js";
+import { PROJECT_DESCRIPTIONS, type ProjectKey } from "./constants.js";
+import { closeDialogue, handleDialogue } from "./dialogue.js";
 
-export function collision(k: KAPLAYCtx, player: GameObj, boundary: any, gameElements: any) {
+/**
+ * Updates and handles collision events such as discovering a project, removing its indicators and blinking effect, and closing the dialogue.
+ * @param {KAPLAYCtx} k The Kaplay context.
+ * @param {GameObj} player The player game object.
+ * @param {any} boundary Contains JSON information about a boundary placed in Tiled.
+ * @param {GameElements} gameElements Custom object that contains projects, interactive elements, indicators, and the dialogue.
+ * @returns {void}
+ */
+export function collision(k: KAPLAYCtx, player: GameObj, boundary: any, gameElements: any): void {
     player.onCollide(boundary.name, () => {
         const name = boundary.name as ProjectKey;
 
         if (name in PROJECT_DESCRIPTIONS) {
-            modifyDialogue(k, gameElements.dialogue, PROJECT_DESCRIPTIONS[name].description);
+            handleDialogue(
+                k,
+                gameElements.dialogue,
+                PROJECT_DESCRIPTIONS[name].description,
+                PROJECT_DESCRIPTIONS[name].url,
+                boundary.name
+            );
         }
+
         const projectIndex = gameElements.projects.findIndex((project: any) => project.name === boundary.name);
         if (projectIndex != -1 && gameElements.projects[projectIndex].discovered) {
             return;
         }
+
         setProjectAsDiscovered(gameElements.projects, boundary);
         destroyIndicators(k, gameElements.indicators, gameElements.projects);
 
@@ -39,12 +54,22 @@ function setProjectAsDiscovered(projects: any, boundary: any) {
     }
 }
 
-export function destroyIndicators(k: KAPLAYCtx, indicators: any, projects: any) {
+/**
+ * Destroys indicators associated with discovered projects.
+ * @param {KAPLAYCtx} k The Kaplay context.
+ * @param {Map<string, GameObj[]>} indicators Map containing all indicators, keyed by boundary name.
+ * @param {any} projects Array containing project objects.
+ * @returns {void}
+ */
+export function destroyIndicators(k: KAPLAYCtx, indicators: Map<string, GameObj[]>, projects: any): void {
     for (let i = 0; i < projects.length; i++) {
         if (projects[i].discovered === true) {
-            indicators[projects[i].name].forEach((indicator: GameObj) => {
-                k.destroy(indicator);
-            });
+            const indicatorArr = indicators.get(projects[i].name);
+            if (indicatorArr) {
+                indicatorArr.forEach((indicator: GameObj) => {
+                    k.destroy(indicator);
+                });
+            }
         }
     }
 }

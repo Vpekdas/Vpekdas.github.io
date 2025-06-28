@@ -10,16 +10,7 @@ export interface TimelineProps {
     latest: boolean;
 }
 
-// position, display, flex/grid, gap, overflow, z-index,
-// margin, padding,
-// width, max-width, height, max-height,
-// rounded, shadow,
-// bg, border,
-// typography, effects,
-// other,
-// responsive overrides (sm:, md:, etc)
 
-// flex gap-2 text-cyan-400/90 items-center
 
 const TimelineItem: React.FC<TimelineProps> = ({ time, header, description, link, icon, latest }) => {
     return (
