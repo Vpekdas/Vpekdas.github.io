@@ -5,12 +5,10 @@ export interface TimelineProps {
     time: string;
     header: string;
     description: string;
-    link: string;
+    link?: string;
     icon: React.ReactNode;
     latest: boolean;
 }
-
-
 
 const TimelineItem: React.FC<TimelineProps> = ({ time, header, description, link, icon, latest }) => {
     return (
@@ -28,15 +26,17 @@ const TimelineItem: React.FC<TimelineProps> = ({ time, header, description, link
             </h3>
             <time className="block mb-2 text-sm text-cyan-300/80 font-mono">{time}</time>
             <p className="mb-4 text-base font-normal text-cyan-200/80">{description}</p>
-            <a
-                href={link}
-                className="inline-flex items-center gap-1 px-4 py-2 rounded-lg 
+            {link && (
+                <a
+                    href={link}
+                    className="inline-flex items-center gap-1 px-4 py-2 rounded-lg 
                     bg-cyan-900/60 border border-cyan-800 text-sm font-medium text-cyan-200 
                     hover:bg-cyan-800/80 hover:text-cyan-100 transition focus:ring-2 focus:ring-cyan-700"
-            >
-                Learn more
-                <FaArrowUpRightFromSquare className="ms-1" />
-            </a>
+                >
+                    Learn more
+                    <FaArrowUpRightFromSquare className="ms-1" />
+                </a>
+            )}
         </li>
     );
 };

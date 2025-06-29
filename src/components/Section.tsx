@@ -13,7 +13,7 @@ const Section: React.FC<{ header: string; text?: string }> = ({ header, text }) 
             </h1>
             {text && (
                 <p
-                    className="shadow-sufokia-glow mb-8 px-3 py-1 rounded drop-shadow-lg
+                    className="glow mb-8 px-3 py-1 rounded drop-shadow-lg
                 bg-gradient-to-r from-cyan-800 via-cyan-700 to-blue-900 font-mono text-lg text-cyan-300"
                 >
                     <DecodeEffect text={text} />

@@ -9,7 +9,7 @@ import ProjectTag from "./ProjectTag";
 import ProjectButton from "./ProjectButton";
 import type { TagType } from "../../../constants";
 
-interface ProjectCardProps {
+export interface ProjectCardProps {
     image: { path: string; alt: string };
     title: string;
     technologies: { src: string; alt: string; title: string }[];

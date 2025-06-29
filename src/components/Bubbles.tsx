@@ -27,8 +27,8 @@ const Bubbles: React.FC<{ className: string }> = ({ className }) => (
                         animationDelay: `${delay}s`,
                         animationDuration: `${duration}s`,
                         filter: `blur(${random(0, 1.5)}px)`,
-                        ["--bubble-travel" as any]: `${random(200, 360)}px`,
-                        ["--bubble-opacity" as any]: opacity,
+                        ["--bubble-travel" as string]: `${random(200, 360)}px`,
+                        ["--bubble-opacity" as string]: opacity,
                     }}
                 />
             );

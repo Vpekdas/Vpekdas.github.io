@@ -8,8 +8,9 @@ const getStatusStyle = (text: string) => {
     }
     if (text.toLowerCase() === "ongoing") {
         return "bg-yellow-100 text-yellow-800";
+    } else {
+        return "bg-gray-100 text-gray-800";
     }
-    return "bg-gray-100 text-gray-800";
 };
 
 const getModeStyle = (text: string) => {
@@ -18,8 +19,9 @@ const getModeStyle = (text: string) => {
     }
     if (text.toLowerCase() === "group") {
         return "bg-pink-100 text-pink-800";
+    } else {
+        return "bg-gray-100 text-gray-800";
     }
-    return "bg-gray-100 text-gray-800";
 };
 
 const getDomainStyle = () => {

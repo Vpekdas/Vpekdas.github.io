@@ -9,7 +9,7 @@ function Footer() {
             <div className="flex flex-col items-center space-y-2">
                 <div className="flex space-x-4">
                     <a
-                        href=""
+                        href="https://github.com/Vpekdas"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-cyan-200 hover:underline hover:text-white"
@@ -17,14 +17,14 @@ function Footer() {
                         GitHub
                     </a>
                     <a
-                        href=""
+                        href="https://linkedin.com/in/volkan-pekdas"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-cyan-200 hover:underline hover:text-white"
                     >
                         LinkedIn
                     </a>
-                    <a href="mailto:your@email.com" className=" text-cyan-200 hover:underline hover:text-white">
+                    <a href="vopekdas@student.42.fr" className=" text-cyan-200 hover:underline hover:text-white">
                         Email
                     </a>
                 </div>
@@ -33,11 +33,17 @@ function Footer() {
                 </p>
                 <p className="text-xs text-center">
                     <span className="text-cyan-100">Made with </span>
-                    <span className="text-cyan-300 font-semibold mx-1">React</span>
+                    <a className="text-cyan-300 font-semibold mx-1 hover:underline" href="https://react.dev/">
+                        React
+                    </a>
                     <span className="text-cyan-100">&amp;</span>
-                    <span className="text-sky-400 font-semibold mx-1">Tailwind CSS</span>
+                    <a className="text-sky-400 font-semibold mx-1 hover:underline" href="https://tailwindcss.com/">
+                        Tailwind CSS
+                    </a>
                     <span className="text-cyan-100">&amp;</span>
-                    <span className="text-fuchsia-400 font-semibold mx-1">Vite</span>
+                    <a className="text-fuchsia-400 font-semibold mx-1 hover:underline" href="https://vite.dev/">
+                        Vite
+                    </a>
                 </p>
             </div>
         </footer>
