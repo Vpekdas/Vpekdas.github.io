@@ -1,19 +1,97 @@
 @import "tailwindcss";
 
-@keyframes bubbleUp {
-    0% {
-        transform: translateY(0);
-        opacity: 0.7;
-    }
-    80% {
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(-180px);
-        opacity: 0;
-    }
+body {
+    font-family: "Quicksand", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    font-family: "JetBrains Mono", monospace;
 }
 
 .bubble {
-    animation: bubbleUp 5s linear infinite;
+    animation: bubbleUp linear infinite;
+    transform-origin: center;
+}
+
+@keyframes bubbleUp {
+    0% {
+        opacity: var(--bubble-opacity);
+        transform: translateY(0px) scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(calc(var(--bubble-travel) * -0.5)) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(calc(var(--bubble-travel) * -1)) scale(0);
+    }
+}
+
+.water-pop {
+    animation: popFromWater 3s ease-in-out;
+}
+
+@keyframes popFromWater {
+    0% {
+        opacity: 0;
+        transform: scale(1.05) rotate(0deg);
+        filter: blur(0px);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.1) rotate(2deg);
+        filter: blur(2px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1.05) rotate(0deg);
+        filter: blur(0px);
+    }
+}
+
+.squishy:hover {
+    animation: squish 0.5s cubic-bezier(0.5, 1.8, 0.6, 1);
+    box-shadow: 0 8px 40px 0 #0e749044;
+    border-color: #0ea5e9;
+}
+
+@keyframes squish {
+    0% {
+        transform: scale(1, 1);
+    }
+    20% {
+        transform: scale(1.06, 0.93);
+    }
+    40% {
+        transform: scale(0.92, 1.09);
+    }
+    60% {
+        transform: scale(1.03, 0.97);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+.floating-header {
+    animation: floating 2.8s ease-in-out infinite;
+}
+
+@keyframes floating {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px) scale(1.06);
+    }
+}
+
+.glow {
+    box-shadow: 0 0 14px 4px #22d3ee88, 0 0 36px 8px #164e6388, 0 0 4px 2px #0e749088;
 }

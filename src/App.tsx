@@ -9,20 +9,18 @@ import Background from "./components/Background.tsx";
 
 function App() {
     return (
-        <HashRouter>
-            <div>
-                <Background>
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/about" element={<About />} />
-                        <Route path="/projects" element={<Projects />} />
-                        <Route path="/contact" element={<Contact />} />
-                        <Route path="/game" element={<Game />} />
-                        <Route path="/*" element={<NotFound />} />
-                    </Routes>
-                </Background>
-            </div>
-        </HashRouter>
+        <Background>
+            <HashRouter>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/projects" element={<Projects />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/immersive-portfolio" element={<Game />} />
+                    <Route path="/*" element={<NotFound />} />
+                </Routes>
+            </HashRouter>
+        </Background>
     );
 }
 
