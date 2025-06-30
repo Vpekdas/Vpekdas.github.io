@@ -72,7 +72,6 @@ export function generateHoverEvents(k: KAPLAYCtx, props: HoverProps): void {
     let { name, bubbleX, bubbleY, bubbleScale, textSize, textWidth, sprite = "hover", font = "myFont" } = props;
     let bubble: any = null;
     let bubbleText: any = null;
-    let bubbleOpacity = 0;
     let fadingOut = false;
     const maxOpacity = 1;
     const fadeSpeed = 0.05;
@@ -86,7 +85,6 @@ export function generateHoverEvents(k: KAPLAYCtx, props: HoverProps): void {
                 k.anchor("center"),
                 k.opacity(0),
             ]);
-            bubbleOpacity = 0;
             fadingOut = false;
             bubbleText = bubble.add([
                 k.text(name, {
