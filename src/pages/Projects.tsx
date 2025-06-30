@@ -2,6 +2,7 @@ import ProjectCard from "../components/Card/Project/ProjectCard";
 import NavBar from "../components/NavBar/NavBar";
 import Section from "../components/Section";
 import { FEATURED_PROJECTS, OTHER_PROJECTS } from "../constants";
+import { guidGenerator } from "../id";
 
 function Projects() {
     return (
@@ -11,7 +12,7 @@ function Projects() {
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
                 {FEATURED_PROJECTS.map((project, index) => (
                     <ProjectCard
-                        key={index}
+                        key={guidGenerator()}
                         image={project.image}
                         title={project.title}
                         technologies={project.technologies}
@@ -26,7 +27,7 @@ function Projects() {
                 ))}
                 {OTHER_PROJECTS.map((project, index) => (
                     <ProjectCard
-                        key={index}
+                        key={guidGenerator()}
                         image={project.image}
                         title={project.title}
                         technologies={project.technologies}

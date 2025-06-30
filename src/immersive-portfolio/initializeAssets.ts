@@ -99,10 +99,10 @@ export function loadAllResources(k: KAPLAYCtx): void {
     const resources: Resources = {
         fonts: [{ name: "myFont", path: "assets/ThaleahFat.ttf" }],
         sprites: [
-            { name: "hover", path: "assets/UI/hover.png" },
+            { name: "hover", path: "assets/ui/hover.png" },
             {
                 name: "indicator",
-                path: "assets/UI/1.png",
+                path: "assets/ui/1.png",
                 config: {
                     sliceX: 8,
                     sliceY: 2,

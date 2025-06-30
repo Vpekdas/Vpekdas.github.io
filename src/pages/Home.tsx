@@ -4,6 +4,7 @@ import AboutCard from "../components/Card/About/AboutCard";
 import { FEATURED_PROJECTS, profile } from "../constants";
 import ProjectCard from "../components/Card/Project/ProjectCard";
 import Footer from "../components/Footer";
+import { guidGenerator } from "../id";
 
 function Home() {
     return (
@@ -36,7 +37,7 @@ function Home() {
                     <div className="flex flex-row justify-center gap-8 flex-wrap w-full">
                         {FEATURED_PROJECTS.map((project, index) => (
                             <ProjectCard
-                                key={index}
+                                key={guidGenerator()}
                                 image={project.image}
                                 title={project.title}
                                 technologies={project.technologies}

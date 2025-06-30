@@ -1,6 +1,7 @@
 import React from "react";
 import type { TimelineProps } from "./TimelineItem";
 import TimelineItems from "./TimelineItem";
+import { guidGenerator } from "../../id";
 
 export interface TimelineList {
     timelineProps: TimelineProps[];
@@ -9,9 +10,9 @@ export interface TimelineList {
 const Timeline: React.FC<TimelineList> = ({ timelineProps }) => {
     return (
         <ol className="relative border-s border-cyan-200">
-            {timelineProps.map((timeline, index) => (
+            {timelineProps.map((timeline) => (
                 <TimelineItems
-                    key={index}
+                    key={guidGenerator()}
                     time={timeline.time}
                     header={timeline.header}
                     description={timeline.description}

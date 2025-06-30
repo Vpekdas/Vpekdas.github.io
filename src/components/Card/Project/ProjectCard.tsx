@@ -8,6 +8,7 @@ import ProjectDescription from "./ProjectDescription";
 import ProjectTag from "./ProjectTag";
 import ProjectButton from "./ProjectButton";
 import type { TagType } from "../../../constants";
+import { guidGenerator } from "../../../id";
 
 export interface ProjectCardProps {
     image: { path: string; alt: string };
@@ -44,7 +45,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ image, title, technologies, d
                 <ProjectDescription description={description} />
                 <div className="flex flex-wrap gap-2 justify-center ">
                     {tags.map((tag) => (
-                        <ProjectTag key={`${tag.type}:${tag.text}`} text={tag.text} type={tag.type} />
+                        <ProjectTag key={guidGenerator()} text={tag.text} type={tag.type} />
                     ))}
                 </div>
                 <ProjectButton href={href} />

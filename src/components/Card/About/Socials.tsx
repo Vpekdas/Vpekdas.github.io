@@ -1,6 +1,7 @@
 import React from "react";
 import { IoShareSocial } from "react-icons/io5";
 import Tooltip from "../../Tooltip";
+import { guidGenerator } from "../../../id";
 
 export interface SocialList {
     socialProps: SocialProps[];
@@ -26,10 +27,10 @@ const Socials: React.FC<SocialList> = ({ socialProps, header }) => {
             <div className="flex flex-row gap-x-6 items-center justify-center">
                 {socialProps.map((social) => (
                     <Tooltip
+                        key={guidGenerator()}
                         text={social.title}
                         children={
                             <a
-                                key={social.title}
                                 href={social.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
