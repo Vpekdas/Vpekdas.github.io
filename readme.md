@@ -1,4 +1,4 @@
-# 2D Interactive Portfolio
+# Vpekdas.github.io
 
 ## Table of Contents
 1. [Description](#description)
@@ -8,29 +8,32 @@
 
 ## Description
 
-Hello! This is my first portfolio project, built using JavaScript and hosted on GitHub Pages. You can "Play" it by clicking here [Portfolio](https://vpekdas.github.io/)
+Hello! This is my interactive portfolio website that showcases my development journey and projects. 
 
 ### Purpose
 
-This project showcases some of my 42 Common Core projects. You can explore them in a more interactive way, as the portfolio is designed to look and feel like a 2D game. It might also inspire you to create your own 2D portfolio using only JavaScript!
+I wanted to learn web development and build a cool portfolio that showcases my passion for coding and experimenting with new technologies. 
 
-### Technologies used
+- **Started with the basics:** Learned JavaScript and built the first version with vanilla JS.
+- **Added interactivity:** Integrated KAPLAY to create an immersive portfolio.
+- **Expanded my skills:** Learned TypeScript, React, and TailwindCSS.
+  
+### Technologies Used
 
-- JavaScript
-- HTML
-- CSS
-- Kaboom.js
-- Vite
+- **TypeScript** : For type-safe JavaScript development
+- **React** : Frontend framework for building interactive user interfaces
+- **TailwindCSS** : Utility-first CSS framework for responsive styling
+- **KaPlay** : Game library
 
 ### Challenges and Future Features
 
-This was my first time coding in JavaScript, which felt a bit strange at first especially coming from typed language like C. I had to learn how JavaScript interacts with HTML and CSS, as well as how to work with the Kaboom.js library to bring the 2D game-like experience to life. Each feature I wanted to implement came with its own challenges and took varying amounts of time to figure out.
+The main challenges in this project were learning JavaScript fundamentals and HTML interaction. Then I had to understand how CSS works for styling. After that, I learned how to use Kaboom.js for game development.
 
-I'm not planning to add more content or features to this version.
+After a long moment, migrating to TypeScript was challenging because of the typing system. Most of all, understanding how React works with its component system and hooks was the biggest difficulty.
 
 ## Credits
 
-I learned JavaScript by myself while working on this project, but I was inspired by [JSLegend](https://github.com/JSLegendDev) and his excellent [video tutorial](https://www.youtube.com/watch?v=wy_fSStEgMs&t=349s).  
+I learned all the technologies used in this project through self-study, but I was inspired by [JSLegend](https://github.com/JSLegendDev) and his excellent [video tutorial](https://www.youtube.com/watch?v=wy_fSStEgMs&t=349s).  
 
 ## Contributing
 
