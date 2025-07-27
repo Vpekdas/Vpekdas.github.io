@@ -11,7 +11,7 @@ function Home() {
         <>
             <NavBar />
             <main className="flex flex-col items-center space-y-12 px-2 py-8">
-                <Hero name="Volkan Pekdas" job="Junior Unity Game Developer " path="/assets/Avatar.webp" />
+                <Hero name="Volkan Pekdas" job="Junior Software Engineer & Game Developer" path="/assets/Avatar.webp" />
                 <AboutCard
                     name={profile.name}
                     job={profile.job}
