@@ -73,10 +73,10 @@ export type TagType = "domain" | "mode" | "status";
 
 export const profile = {
     name: "Volkan Pekdas",
-    job: "Junior Unity Game Developer",
+    job: "Junior Software Engineer & Game Developer",
     heroPath: "/assets/Avatar.webp",
     avatarPath: "https://cdn.intra.42.fr/users/c5377b67724a79c195a65b3cac642622/vopekdas.jpg",
-    bio: "Forged in the depths of Sufokia, I code the abyss into playful worlds.",
+    bio: "Hello there! I enjoy working with OOP languages and love creating different programs and games with them.",
     location: "Sufokia, The Abyss",
     favoriteTech: [
         { src: cppLogo, alt: "C++ logo", title: "C++" },
@@ -197,7 +197,7 @@ export const FEATURED_PROJECTS: ProjectCardProps[] = [
             },
         ],
         description:
-            "My first game development project at 42—this is where it all began! I learned how to program a simple game using a basic graphics library. The result is a 2D platformer in which you must avoid or defeat enemies and collect coins.",
+            "My first game development project at 42, this is where it all began! I learned how to program a simple game using a basic graphics library. The result is a 2D platformer in which you must avoid or defeat enemies and collect coins.",
         tags: [
             {
                 text: "Graphics",

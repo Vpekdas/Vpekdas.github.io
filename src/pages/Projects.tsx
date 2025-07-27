@@ -1,4 +1,5 @@
 import ProjectCard from "../components/Card/Project/ProjectCard";
+import Footer from "../components/Footer";
 import NavBar from "../components/NavBar/NavBar";
 import Section from "../components/Section";
 import { FEATURED_PROJECTS, OTHER_PROJECTS } from "../constants";
@@ -41,6 +42,7 @@ function Projects() {
                     />
                 ))}
             </div>
+            <Footer />
         </>
     );
 }

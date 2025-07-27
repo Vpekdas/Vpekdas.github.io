@@ -1,3 +1,4 @@
+import Footer from "../components/Footer";
 import NavBar from "../components/NavBar/NavBar";
 import Tentacle from "../components/Tentacle";
 import { Colors, EndPaths, InitialPaths } from "../constants";
@@ -31,6 +32,7 @@ function NotFound() {
                 <Tentacle id={"tent4"} initialPath={InitialPaths[3]} finalPath={EndPaths[3]} color={Colors[1]} />
                 <Tentacle id={"tent5"} initialPath={InitialPaths[4]} finalPath={EndPaths[4]} color={Colors[1]} />
             </svg>
+            <Footer />
         </>
     );
 }

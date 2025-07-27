@@ -1,5 +1,5 @@
 import React from "react";
-import AvatarWIthTitle from "./AvatarWithTitle";
+import AvatarWithTitle from "./AvatarWithTitle";
 import Location from "./Location";
 import Socials, { type SocialProps } from "./Socials";
 import FunFact from "./FunFact";
@@ -24,14 +24,15 @@ interface AboutCardProps {
 const AboutCard: React.FC<AboutCardProps> = ({ name, job, path, bio, location, favoriteTech, socials, funFact }) => {
     return (
         <div
-            className="squishy overflow-hidden
+            className="squishy overflow-hidden 
             mx-auto p-6
             w-full max-w-sm 
             rounded-2xl shadow-lg 
             bg-gradient-to-b from-blue-950/80 via-cyan-900/80 to-blue-800/70 border-2 border-cyan-800/60
             backdrop-blur"
         >
-            <AvatarWIthTitle name={name} path={path} job={job} />
+            <AvatarWithTitle name={name} path={path} />
+            <p className="text-cyan-400/90 text-center ">{job}</p>
             <p className="mt-4 text-cyan-200/90 text-center italic">{bio}</p>
             <Location location={location} />
             <Technologies technologies={favoriteTech} title="Favorite Technologies" icon={<MdFavorite />} />

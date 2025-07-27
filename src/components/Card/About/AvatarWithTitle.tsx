@@ -1,7 +1,6 @@
 import React from "react";
-import { IoGameController } from "react-icons/io5";
 
-const AvatarWIthTitle: React.FC<{ name: string; path: string; job: string }> = ({ name, path, job }) => {
+const AvatarWithTitle: React.FC<{ name: string; path: string}> = ({ name, path }) => {
     return (
         <div className="flex flex-col z-10 items-center">
             <div className="relative mb-3">
@@ -22,12 +21,8 @@ const AvatarWIthTitle: React.FC<{ name: string; path: string; job: string }> = (
                     {name}
                 </h5>
             </div>
-            <span className="flex gap-2 text-cyan-400/90 items-center ">
-                <IoGameController />
-                {job}
-            </span>
         </div>
     );
 };
 
-export default AvatarWIthTitle;
+export default AvatarWithTitle;

@@ -1,5 +1,6 @@
 import Socials from "../components/Card/About/Socials";
 import DecodeEffect from "../components/DecodeText";
+import Footer from "../components/Footer";
 import NavBar from "../components/NavBar/NavBar";
 import Section from "../components/Section";
 import { profile } from "../constants";
@@ -16,6 +17,7 @@ function Contact() {
                 className="glow mb-8 font-mono text-lg text-cyan-300 drop-shadow-lg bg-gradient-to-r from-cyan-800 via-cyan-700 to-blue-900 rounded px-3 py-1 "
             />
             <Socials socialProps={socials.props} header={false} />
+            <Footer />
         </>
     );
 }

@@ -24,7 +24,7 @@ function Footer() {
                     >
                         LinkedIn
                     </a>
-                    <a href="vopekdas@student.42.fr" className=" text-cyan-200 hover:underline hover:text-white">
+                    <a href="mailto:vopekdas@student.42.fr" className=" text-cyan-200 hover:underline hover:text-white">
                         Email
                     </a>
                 </div>

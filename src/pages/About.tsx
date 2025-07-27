@@ -6,6 +6,7 @@ import Timeline, { type TimelineList } from "../components/Timeline/Timeline";
 import { profile } from "../constants";
 import { IoSchool } from "react-icons/io5";
 import { MdOutlineWork } from "react-icons/md";
+import Footer from "../components/Footer";
 
 const favoriteTech = profile.favoriteTech;
 
@@ -60,8 +61,7 @@ function About() {
             <NavBar />
             <Section
                 header="Who Am I ?"
-                text="Hi there, I'm Volkan. I completed the 42 Paris cursus and am aspiring to become a game developer!
-                    I speak French, English, and Turkish. Previously, I graduated in accounting and management.
+                text="Hi there, I'm Volkan. I completed the 42 Paris cursus, and I am looking for my first work experience in game development or software development.
                     I love learning new things and enjoy experimenting with fun ideas while coding. And of course, I love playing video games!"
             />
             <Timeline timelineProps={timelineList.timelineProps} />
@@ -74,20 +74,34 @@ function About() {
             <Technologies technologies={favoriteTech} title={""} icon={null} />
             <Section
                 header="What Am I Doing Now?"
-                text="I earned 2 credits through Unity learning, so now it's time to code my first game! At the same time, I'm trying to get my first experience in the game development industry."
+                text="I'm working on a 2D side-scrolling platformer metroidvania game using C# and Unity."
             />
-            <Section header="Resume" text="Here you can find my resume." />
-            <a
-                href="https://flowcv.com/resume/8esu2vmsetka"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 px-4 py-2 rounded-lg 
-                bg-cyan-900/60 border border-cyan-800 text-sm font-medium text-cyan-200 
-                hover:bg-cyan-800/80 hover:text-cyan-100 transition focus:ring-2 focus:ring-cyan-700"
-            >
-                View Resume
-                <FaArrowUpRightFromSquare className="ms-1" />
-            </a>
+            <Section header="Resumes" text="Here you can find my resumes." />
+            <div className="flex flex-row gap-2 items-center ">
+                <a
+                    href="https://flowcv.com/resume/8esu2vmsetka"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 px-4 py-2 rounded-lg 
+                    bg-cyan-900/60 border border-cyan-800 text-sm font-medium text-cyan-200 
+                    hover:bg-cyan-800/80 hover:text-cyan-100 transition focus:ring-2 focus:ring-cyan-700"
+                >
+                    Game Developer Resume
+                    <FaArrowUpRightFromSquare className="ms-1" />
+                </a>
+                <a
+                    href="https://flowcv.com/resume/olkim3dqig79"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 px-4 py-2 rounded-lg 
+                    bg-cyan-900/60 border border-cyan-800 text-sm font-medium text-cyan-200 
+                    hover:bg-cyan-800/80 hover:text-cyan-100 transition focus:ring-2 focus:ring-cyan-700"
+                >
+                    Software Engineer Resume
+                    <FaArrowUpRightFromSquare className="ms-1" />
+                </a>
+            </div>
+            <Footer />
         </>
     );
 }
