@@ -1,4 +1,3 @@
-import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 import Technologies from "../components/Card/About/Technologies";
 import NavBar from "../components/NavBar/NavBar";
 import Section from "../components/Section";
@@ -61,8 +60,8 @@ function About() {
             <NavBar />
             <Section
                 header="Who Am I ?"
-                text="Hi there, I'm Volkan. I completed the 42 Paris cursus, and I am looking for my first work experience in game development or software development.
-                    I love learning new things and enjoy experimenting with fun ideas while coding. And of course, I love playing video games!"
+                text="Hi there, I'm Volkan. Passionate about numbers, I earned my Master’s degree (DSCG) in accounting and learned programming by completing the core curriculum at École 42.
+                I’m currently pursuing the Chartered Professional Accountant (DEC) path, with the goal of combining my skills in accounting and software development. And of course, I love playing video games!"
             />
             <Timeline timelineProps={timelineList.timelineProps} />
             <Section
@@ -74,33 +73,8 @@ function About() {
             <Technologies technologies={favoriteTech} title={""} icon={null} />
             <Section
                 header="What Am I Doing Now?"
-                text="I'm working on a 2D side-scrolling platformer metroidvania game using C# and Unity."
+                text="Participating in Game Jams"
             />
-            <Section header="Resumes" text="Here you can find my resumes." />
-            <div className="flex flex-row gap-2 items-center ">
-                <a
-                    href="https://flowcv.com/resume/8esu2vmsetka"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 px-4 py-2 rounded-lg 
-                    bg-cyan-900/60 border border-cyan-800 text-sm font-medium text-cyan-200 
-                    hover:bg-cyan-800/80 hover:text-cyan-100 transition focus:ring-2 focus:ring-cyan-700"
-                >
-                    Game Developer Resume
-                    <FaArrowUpRightFromSquare className="ms-1" />
-                </a>
-                <a
-                    href="https://flowcv.com/resume/olkim3dqig79"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 px-4 py-2 rounded-lg 
-                    bg-cyan-900/60 border border-cyan-800 text-sm font-medium text-cyan-200 
-                    hover:bg-cyan-800/80 hover:text-cyan-100 transition focus:ring-2 focus:ring-cyan-700"
-                >
-                    Software Engineer Resume
-                    <FaArrowUpRightFromSquare className="ms-1" />
-                </a>
-            </div>
             <Footer />
         </>
     );

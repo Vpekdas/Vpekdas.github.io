@@ -73,10 +73,10 @@ export type TagType = "domain" | "mode" | "status";
 
 export const profile = {
     name: "Volkan Pekdas",
-    job: "Junior Software Engineer & Game Developer",
+    job: "Accounting Student (DEC) | Student at 42 Paris",
     heroPath: "/assets/Avatar.webp",
     avatarPath: "https://cdn.intra.42.fr/users/c5377b67724a79c195a65b3cac642622/vopekdas.jpg",
-    bio: "Hello there! I enjoy working with OOP languages and love creating different programs and games with them.",
+    bio: "Passionate about numbers, I earned my Master’s degree (DSCG) in accounting and learned programming by completing the core curriculum at École 42.",
     location: "Sufokia, The Abyss",
     favoriteTech: [
         { src: cppLogo, alt: "C++ logo", title: "C++" },
