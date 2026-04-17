@@ -35,7 +35,7 @@ interface ProjectDescription {
     url: string;
 }
 
-export type ProjectKey = "so_long" | "unity" | "webserv" | "scop" | "ft_transcendance";
+export type ProjectKey = "so_long" | "unity" | "webserv" | "scop" | "ft_transcendance" | "philosophers";
 
 export const PROJECT_DESCRIPTIONS: Record<ProjectKey, ProjectDescription> = {
     so_long: {
@@ -68,5 +68,11 @@ export const PROJECT_DESCRIPTIONS: Record<ProjectKey, ProjectDescription> = {
         description:
             "Tadaaa, the last project of the common core and the gateway to post-common core projects. The idea was to create a SPA with a Pong game inside it. We used Bootstrap, Django, and ThreeJS, no libraries like React that could do the work for you were allowed. I had a lot of fun with this one. (It's on a gate because it's the end of one chapter and the start of a new one!)",
         url: "https://github.com/Vpekdas/ft_transcendence",
+    },
+    philosophers: {
+        title: "philosophers",
+        description:
+            "This project taught me how to multithread a simple program, still written in C. The purpose was to simulate the dining philosophers problem and make them last as long as possible by efficiently managing their forks (mutexes in programming terms). (The table and spaghetti make it obvious where I should place this project.)",
+        url: "https://github.com/Vpekdas/Philosophers",
     },
 };

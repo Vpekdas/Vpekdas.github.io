@@ -73,6 +73,10 @@ function generateInteractiveElements(k: KAPLAYCtx, boundary: any, gameElements: 
     gameElements.indicators.set(boundary.name, indicators);
     if (boundary.name === "so_long") {
         gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 82, -4, 0));
+    } else if (boundary.name === "philosophers") {
+        gameElements.interactiveElements.push(createInteractable(k, "philosophers", boundary, 0, -10, -14));
+        gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 163, 0, 0));
+        gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 166, 0, -12));
     } else if (boundary.name === "unity") {
         gameElements.interactiveElements.push(createInteractable(k, "unity", boundary, 0, 0, 0));
     } else if (boundary.name === "webserv") {

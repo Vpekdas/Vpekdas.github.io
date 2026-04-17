@@ -429,6 +429,17 @@
                  "y":74
                 }, 
                 {
+                 "height":35,
+                 "id":311,
+                 "name":"philosophers",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":47,
+                 "x":397,
+                 "y":216
+                }, 
+                {
                  "height":17,
                  "id":323,
                  "name":"",
