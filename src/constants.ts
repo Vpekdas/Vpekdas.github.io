@@ -186,7 +186,7 @@ export const FEATURED_PROJECTS: ProjectCardProps[] = [
             path: "project/so_long.png",
             alt: "scop image",
         },
-        title: "so_long",
+        title: "So_long",
         technologies: [
             {
                 src: cLogo,
@@ -316,7 +316,7 @@ export const OTHER_PROJECTS: ProjectCardProps[] = [
             path: "project/webserv.png",
             alt: "webserv image",
         },
-        title: "webserv",
+        title: "Webserv",
         technologies: [
             {
                 src: cppLogo,
@@ -351,7 +351,7 @@ export const OTHER_PROJECTS: ProjectCardProps[] = [
             path: "project/philosophers.png",
             alt: "philosophers image",
         },
-        title: "philosophers",
+        title: "Philosophers",
         technologies: [
             {
                 src: cLogo,
@@ -376,5 +376,41 @@ export const OTHER_PROJECTS: ProjectCardProps[] = [
             },
         ],
         href: "https://github.com/Vpekdas/philosophers",
+    },
+    {
+        image: {
+            path: "project/simple-ecs.png",
+            alt: "simple-ecs image",
+        },
+        title: "Simple-ecs",
+        technologies: [
+            {
+                src: csLogo,
+                alt: "C# Logo",
+                title: "C#",
+            },
+            {
+                src: unityLogo,
+                alt: "Unity Logo",
+                title: "Unity",
+            },
+        ],
+        description:
+            "Circuit designer for learning ECS programming with Unity DOTS. Circuits can be assigned to car spawners, allowing cars to follow paths with adjustable color, speed, and spawn rate.",
+        tags: [
+            {
+                text: "Graphics",
+                type: "domain",
+            },
+            {
+                text: "Solo",
+                type: "mode",
+            },
+            {
+                text: "Finished",
+                type: "status",
+            },
+        ],
+        href: "https://github.com/Vpekdas/Simple-ECS",
     },
 ];
