@@ -17,7 +17,7 @@ const Hero: React.FC<{ name: string; job: string; path: string }> = ({ name, job
             <p className="mb-8 drop-shadow-sm text-lg font-mono text-cyan-200">
                 Adventurer, welcome to the abyss.
                 <br />
-                Explore my worlds, crafted with code and creativity.
+                You can explore freely in this abyss, try not to sink too deep 🤿.
             </p>
             <div className="flex flex-col gap-4 justify-center sm:flex-row">
                 <HeroButton to="/projects" text="🤿 Dive Deeper" />

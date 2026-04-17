@@ -12,10 +12,6 @@ interface BackgroundProps {
     layer: GameObj[];
 }
 
-/**
- * Returns the appropriate background sprite name based on the current hour.
- * @returns {string} The background time ("early-morning", "morning", "afternoon", "evening", or "night").
- */
 function getBackgroundTime(): string {
     const hour = getCurrentHour();
 
@@ -32,11 +28,6 @@ function getBackgroundTime(): string {
     }
 }
 
-/**
- * Creates and returns the background.
- * @param {KAPLAYCtx} k Kaplay context.
- * @returns {BackgroundsList} An array containing 5 layers for each background.
- */
 export function createBackground(k: KAPLAYCtx): BackgroundsList {
     const backgroundTime = getBackgroundTime();
 
@@ -63,7 +54,7 @@ export function createBackground(k: KAPLAYCtx): BackgroundsList {
                     k.sprite(backgroundTime + "-" + `${i + 1}`),
                     k.pos(posX, cloudOffset),
                     k.scale(BACKGROUND_SCALE),
-                ])
+                ]),
             );
         }
         backgroundsList.background.push(props);
@@ -76,14 +67,6 @@ export function createBackground(k: KAPLAYCtx): BackgroundsList {
     return backgroundsList;
 }
 
-/**
- * Updates the background position.
- * @param {KAPLAYCtx} k The Kaplay context.
- * @param {BackgroundsList} backgrounds The list of background layers.
- * @param {GameObj} player The player game object.
- * @param {number} camY The Y position of the camera.
- * @returns {void}
- */
 export function updateBackground(k: KAPLAYCtx, backgrounds: BackgroundsList, player: GameObj, camY: number): void {
     let deltaX = player.pos.x - player.prevPosX;
     let speed = k.dt();
@@ -100,7 +83,7 @@ export function updateBackground(k: KAPLAYCtx, backgrounds: BackgroundsList, pla
             if (deltaX && i != 0) {
                 backgrounds.background[i].layer[j].pos.x -= deltaX * speed;
             }
-            // Ensure that the background follows the camera; otherwise, we will see the blue background of the canvas.
+            // Ensure that the background follows the camera otherwise, we will see the blue background of the canvas.
             backgrounds.background[i].layer[j].pos.y = camY - BACKGROUND_H * 1.5;
         }
         // Increase speed to create a parallax effect.

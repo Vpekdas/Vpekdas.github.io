@@ -73,10 +73,10 @@ export type TagType = "domain" | "mode" | "status";
 
 export const profile = {
     name: "Volkan Pekdas",
-    job: "Accounting Student (DEC) | Student at 42 Paris",
+    job: "Junior Game Developer | Student at 42 Paris",
     heroPath: "/assets/Avatar.webp",
     avatarPath: "https://cdn.intra.42.fr/users/c5377b67724a79c195a65b3cac642622/vopekdas.jpg",
-    bio: "Passionate about numbers, I earned my Master’s degree (DSCG) in accounting and learned programming by completing the core curriculum at École 42.",
+    bio: "Learned coding at École 42 Paris, now I'm focused on improving my game development skills and building other projects like apps.",
     location: "Sufokia, The Abyss",
     favoriteTech: [
         { src: cppLogo, alt: "C++ logo", title: "C++" },
@@ -124,8 +124,7 @@ export const FEATURED_PROJECTS: ProjectCardProps[] = [
                 title: "Unity",
             },
         ],
-        description:
-            "This project marks my first adventure with Unity and C#. It’s a collection of early prototypes that helped me master the fundamentals of game development using Unity and C#.",
+        description: "Coded several game prototypes in Unity to learn C# and game development.",
         tags: [
             {
                 text: "Graphics",
@@ -165,8 +164,7 @@ export const FEATURED_PROJECTS: ProjectCardProps[] = [
                 title: "Cmake",
             },
         ],
-        description:
-            "This project marks my first experience with graphical programming and using a graphics API like OpenGL. Its purpose is to render any .obj file, apply textures, and allow rotation of the model along all three axes.",
+        description: "3D OBJ renderer using OpenGL and SDL3, with texture support and model rotation.",
         tags: [
             {
                 text: "Graphics",
@@ -197,7 +195,7 @@ export const FEATURED_PROJECTS: ProjectCardProps[] = [
             },
         ],
         description:
-            "My first game development project at 42, this is where it all began! I learned how to program a simple game using a basic graphics library. The result is a 2D platformer in which you must avoid or defeat enemies and collect coins.",
+            "2D game built in C using MiniLibX, featuring custom rendering, event handling, enemy patrols, and custom physics.",
         tags: [
             {
                 text: "Graphics",
@@ -245,8 +243,7 @@ export const OTHER_PROJECTS: ProjectCardProps[] = [
                 title: "Vite",
             },
         ],
-        description:
-            "My portfolio, built with TypeScript, React, TailwindCSS, and Vite. Through this project, I learned how to use the open Kaplay library to create an immersive portfolio experience.",
+        description: "Portfolio built with TypeScript, React, TailwindCSS. For an immersive portfolio, I used Kaplay.",
         tags: [
             {
                 text: "Web",
@@ -297,7 +294,7 @@ export const OTHER_PROJECTS: ProjectCardProps[] = [
             },
         ],
         description:
-            "My first web development project with 2 teammates. The goal was to build a Single Page Application (SPA) using only JavaScript, Bootstrap and Three.js, with Python (Django) for the backend. We implemented a Pong game with multiple modes, integrated chat, and a user management system, all featuring a stylish and inspired design.",
+            "SPA website built with 2 teammates, featuring a 3D Pong game made with Three.js, backend in Django, and frontend with Bootstrap and custom overrides. Theme inspired by Outer Wilds and Steins;Gate.",
         tags: [
             {
                 text: "Web",
@@ -328,7 +325,7 @@ export const OTHER_PROJECTS: ProjectCardProps[] = [
             },
         ],
         description:
-            "This project aims to help us understand how the HTTP protocol works and how I/O management is handled. We created a web server that can serve static pages when requested by a browser. Multiple routes, methods, and ports can be configured. The server also supports directory listing and custom error pages.",
+            "Web server that tries to mimic Nginx, can serve pages and respond to methods like GET, POST, and DELETE.",
         tags: [
             {
                 text: "Unix",
@@ -363,7 +360,7 @@ export const OTHER_PROJECTS: ProjectCardProps[] = [
             },
         ],
         description:
-            "This project aims to teach multithreading concepts by simulating the Dining Philosophers problem using mutexes. Proper management of mutexes is crucial for the philosophers to survive, as it helps prevent data races and ensures safe creation and synchronization of threads.",
+            "Simulation of the Dining Philosophers problem, with threads for philosophers and mutexes for forks.",
         tags: [
             {
                 text: "Unix",

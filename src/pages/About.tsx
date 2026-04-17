@@ -12,12 +12,19 @@ const favoriteTech = profile.favoriteTech;
 const timelineList: TimelineList = {
     timelineProps: [
         {
+            time: "2025 - 2026",
+            header: "HeartBeat Games",
+            description: "Worked as a Junior Game Developer during a 6-month internship.",
+            icon: <MdOutlineWork />,
+            latest: true,
+        },
+        {
             time: "2025",
             header: "42 Paris",
             description: "Finished the 42 common core.",
             link: "https://42.fr/",
             icon: <IoSchool />,
-            latest: true,
+            latest: false,
         },
         {
             time: "2023",
@@ -60,21 +67,19 @@ function About() {
             <NavBar />
             <Section
                 header="Who Am I ?"
-                text="Hi there, I'm Volkan. Passionate about numbers, I earned my Master’s degree (DSCG) in accounting and learned programming by completing the core curriculum at École 42.
-                I’m currently pursuing the Chartered Professional Accountant (DEC) path, with the goal of combining my skills in accounting and software development. And of course, I love playing video games!"
+                text="Hi there, I'm Volkan. I earned my Master’s degree (DSCG) in accounting and learned programming by completing the core curriculum at École 42.
+                I prefer to pursue a developer path for passion, nonetheless accounting can be interesting sometimes :). I’m focusing mainly on game development-related projects."
             />
             <Timeline timelineProps={timelineList.timelineProps} />
             <Section
                 header="Skills"
-                text="I’ve explored a variety of languages and frameworks since i started 42. My journey began with C and C++,
-                followed by C#. On the web side, I started with JavaScript, HTML, and CSS (using Bootstrap), and later
-                learned TypeScript and React. Along the way, I also picked up Docker and Unity. Here you can find my best stacks"
+                text="I'm mainly programming in object-oriented languages such as C++, C#, and Luau, sometimes TypeScript. As for game engines, I love Unity, but using other engines like Godot or Unreal Engine 5 doesn’t bother me. Nonetheless, I'm enjoying learning new tech stacks and new languages."
             />
             <Technologies technologies={favoriteTech} title={""} icon={null} />
             <Section
                 header="What Am I Doing Now?"
-                text="Participating in Game Jams"
-            />
+                text="Helping a friend on a Minecraft-like game in C++ and wgpu. Coding my own game in Unity, and building an app in React Native for chartered accountant students."
+            />{" "}
             <Footer />
         </>
     );

@@ -2,54 +2,18 @@ import type { KAPLAYCtx } from "kaplay";
 import { OFFSET_X, SCALE_FACTOR } from "./constants";
 import type { Interactable } from "./elementFactory";
 
-/**
- * Contains all properties for hovering elements.
- */
 export interface HoverProps {
-    /**
-     * Text that will be written.
-     */
     name: string;
-    /**
-     * X position of the bubble.
-     */
     bubbleX: number;
-    /**
-     * Y position of the bubble.
-     */
     bubbleY: number;
-    /**
-     * Scale of the bubble.
-     */
     bubbleScale: number;
-    /**
-     * Size of the text.
-     */
     textSize: number;
-    /**
-     * Width of the text before wrapping.
-     */
     textWidth: number;
-    /**
-     * Optional sprite for the bubble.
-     */
     sprite?: string;
-    /**
-     * Sprite for the bubble.
-     */
     bubbleSprite?: string;
-    /**
-     * Font for the text.
-     */
     font?: string;
 }
 
-/**
- * Handles the blinking effect for interactive elements.
- * @param {KAPLAYCtx} k The Kaplay context.
- * @param {Interactable[]} interactiveElements List of all interactive elements.
- * @returns {void}
- */
 export function blinkInteractiveElements(k: KAPLAYCtx, interactiveElements: Interactable[]): void {
     for (const element of interactiveElements) {
         element.blink = Math.floor(k.time() / 0.5) % 2 === 0;
@@ -62,12 +26,6 @@ export function blinkInteractiveElements(k: KAPLAYCtx, interactiveElements: Inte
     }
 }
 
-/**
- * Handles all hover events, from creation when hovered to destruction when hover ends.
- * @param {KAPLAYCtx} k The Kaplay context.
- * @param {HoverProps} props Properties of a hovering element.
- * @returns {void}
- */
 export function generateHoverEvents(k: KAPLAYCtx, props: HoverProps): void {
     let { name, bubbleX, bubbleY, bubbleScale, textSize, textWidth, sprite = "hover", font = "myFont" } = props;
     let bubble: any = null;

@@ -43,11 +43,6 @@ export function handleKeyPressed(k: KAPLAYCtx, player: any) {
     Object.keys(keysPressed).forEach((key) => registerKeyEvents(key, keysPressed, k, player));
 }
 
-/**
- * Moves the player based on key input.
- * @param {GameObj} player The player game object.
- * @returns {void}
- */
 export function movePlayer(player: GameObj): void {
     if (keysPressed["mouse"]) {
         return;
@@ -112,24 +107,12 @@ export function movePlayer(player: GameObj): void {
     }
 }
 
-/**
- * Moves the player based on where the mouse has been clicked.
- * @param {GameObj} player The player game object.
- * @param {Vec2} worldMousepos The x and y coordinates in world space.
- * @returns {void}
- */
 function movePlayerTo(player: GameObj, worldMousepos: Vec2): void {
     player.moveTo(worldMousepos, PLAYER_SPEED);
 }
 
-/**
- * Updates the animation when clicked with the mouse.
- * @param {GameObj} player The player game object.
- * @param {Vec2} worldMousepos The x and y coordinates in world space.
- * @returns {void}
- */
-function updatePlayerAnimation(player: GameObj, worldMousepos: Vec2): void {
-    const mouseAngle = player.pos.angle(worldMousepos);
+function updatePlayerAnimation(player: GameObj, worldMousePos: Vec2): void {
+    const mouseAngle = player.pos.angle(worldMousePos);
     const lowerBound = 50;
     const upperBound = 125;
 
@@ -163,9 +146,9 @@ function onMousePressed(k: KAPLAYCtx, player: GameObj): void {
             return;
         }
 
-        const worldMousepos = k.toWorld(k.mousePos());
-        movePlayerTo(player, worldMousepos);
-        updatePlayerAnimation(player, worldMousepos);
+        const worldMousePos = k.toWorld(k.mousePos());
+        movePlayerTo(player, worldMousePos);
+        updatePlayerAnimation(player, worldMousePos);
         keysPressed["mouse"] = true;
     });
 }
@@ -183,12 +166,6 @@ function onMouseReleased(k: KAPLAYCtx, player: GameObj): void {
     });
 }
 
-/**
- * Handles all events related to mouse actions, including press and release.
- * @param {KAPLAYCtx} k The Kaplay context.
- * @param {GameObj} player The player game object.
- * @returns {void}
- */
 export function handleMouseEvents(k: KAPLAYCtx, player: GameObj): void {
     onMousePressed(k, player);
     onMouseReleased(k, player);

@@ -1,25 +1,13 @@
 import type { GameObj, KAPLAYCtx } from "kaplay";
 import { FONT_SIZE, SCALE_FACTOR } from "./constants";
 
-/**
- * Represents the dialogue box.
- */
 export interface Dialogue {
-    /** The main rectangle background of the dialogue box. */
     box: GameObj;
-    /** The main text displayed inside the dialogue box. */
     text: GameObj;
-    /** The button located at the bottom right of the dialogue box. */
     button: GameObj;
-    /** The text displayed on the button at the bottom right. */
     buttonText: GameObj;
 }
 
-/**
- * Creates a dialogue box and returns it.
- * @param {KAPLAYCtx} k The Kaplay context.
- * @returns {Dialogue} A dialogue interface that contains four GameObj instances: box, text, button, and button text.
- */
 export function createDialogueBox(k: KAPLAYCtx): Dialogue {
     const dialogueBox = k.add([
         k.pos(0, k.height() - k.height() / 2.5),
@@ -40,7 +28,6 @@ export function createDialogueBox(k: KAPLAYCtx): Dialogue {
         "dialogueText",
     ]);
 
-    // Add as a child so position will depend on the position of dialogue box.
     const button = dialogueBox.add([
         k.pos(dialogueBox.width - 100, dialogueBox.height),
         k.rect(50, 14),
@@ -74,37 +61,18 @@ export function createDialogueBox(k: KAPLAYCtx): Dialogue {
     return dialogue;
 }
 
-/**
- * Shows the dialogue by disabling its hidden property, avoiding re-creation each time.
- * @param {GameObj} dialogueBox The dialogue box to be shown.
- * @returns {void}
- */
 export function showDialogue(dialogueBox: GameObj): void {
     if (dialogueBox.exists()) {
         dialogueBox.hidden = false;
     }
 }
 
-/**
- * Hide the dialogue by enable its hidden property, avoiding re-creation each time.
- * @param {GameObj} dialogueBox The dialogue box to be hidden.
- * @returns {void}
- */
 export function closeDialogue(dialogueBox: GameObj): void {
     if (dialogueBox.exists()) {
         dialogueBox.hidden = true;
     }
 }
 
-/**
- * Modifies the text in the dialogue, runs the animation, and handles the button hover.
- * @param {KAPLAYCtx} k The Kaplay context.
- * @param {Dialogue} dialogue The dialogue box.
- * @param {string} newText The new text to display.
- * @param {string} url The URL to redirect to.
- * @param {string} boundary The boundary for the dialogue box to be hidden.
- * @returns {void}
- */
 export function handleDialogue(k: KAPLAYCtx, dialogue: Dialogue, newText: string, url: string, boundary: string): void {
     dialogue.text.text = "";
     let displayedText = "";

@@ -14,21 +14,12 @@ import {
 import { generateHoverEvents, type HoverProps } from "./ui.js";
 import type { GameElements } from "../components/Game.js";
 
-/**
- * Parses JSON from Tiled and creates all bounding boxes, interactive elements, hover elements, and collision objects.
- * @param {KAPLAYCtx} k The Kaplay context.
- * @param {GameObj} player The player game object.
- * @param {GameObj} map The map game object.
- * @param {any} layers Layers parsed from the JSON.
- * @param {GameElements} gameElements Custom object that contains projects, interactive elements, indicators, and dialogue.
- * @returns {void}
- */
 export function parseLayers(
     k: KAPLAYCtx,
     player: GameObj,
     map: GameObj,
     layers: any,
-    gameElements: GameElements
+    gameElements: GameElements,
 ): void {
     for (const layer of layers) {
         if (layer.name === "boundaries") {
@@ -82,12 +73,6 @@ function generateInteractiveElements(k: KAPLAYCtx, boundary: any, gameElements: 
     gameElements.indicators.set(boundary.name, indicators);
     if (boundary.name === "so_long") {
         gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 82, -4, 0));
-    } else if (boundary.name === "philosophers") {
-        gameElements.interactiveElements.push(createInteractable(k, "philosophers", boundary, 0, -10, -14));
-        gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 163, 0, 0));
-        gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 166, 0, -12));
-    } else if (boundary.name === "minishell") {
-        gameElements.interactiveElements.push(createInteractable(k, "tiles", boundary, 35, -1, -5));
     } else if (boundary.name === "unity") {
         gameElements.interactiveElements.push(createInteractable(k, "unity", boundary, 0, 0, 0));
     } else if (boundary.name === "webserv") {
@@ -104,7 +89,7 @@ function generatePlayerPosition(k: KAPLAYCtx, layer: any, player: GameObj, map: 
         if (entity.name === "player") {
             player.pos = k.vec2(
                 (map.pos.x + entity.x + OFFSET_X) * SCALE_FACTOR,
-                (map.pos.y + entity.y + OFFSET_Y) * SCALE_FACTOR
+                (map.pos.y + entity.y + OFFSET_Y) * SCALE_FACTOR,
             );
             player.prevPosX = player.pos.x;
             player.prevPosY = player.pos.y;

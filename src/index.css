@@ -40,17 +40,14 @@ h5 {
     0% {
         opacity: 0;
         transform: scale(1.05) rotate(0deg);
-        filter: blur(0px);
     }
     50% {
-        opacity: 0.5;
+        opacity: 0.6;
         transform: scale(1.1) rotate(2deg);
-        filter: blur(2px);
     }
     100% {
         opacity: 1;
         transform: scale(1.05) rotate(0deg);
-        filter: blur(0px);
     }
 }
 
@@ -78,6 +75,11 @@ h5 {
     }
 }
 
+.bubble,
+.floating-header {
+    will-change: transform, opacity;
+}
+
 .floating-header {
     animation: floating 2.8s ease-in-out infinite;
 }
@@ -93,5 +95,8 @@ h5 {
 }
 
 .glow {
-    box-shadow: 0 0 14px 4px #22d3ee88, 0 0 36px 8px #164e6388, 0 0 4px 2px #0e749088;
+    box-shadow:
+        0 0 14px 4px #22d3ee88,
+        0 0 36px 8px #164e6388,
+        0 0 4px 2px #0e749088;
 }

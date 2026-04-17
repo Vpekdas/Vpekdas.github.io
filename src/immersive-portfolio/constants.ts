@@ -22,11 +22,6 @@ export const TEXT_WIDTH = 100;
 export const TEXT_SIZE = 24;
 export const FONT_SIZE = 14;
 
-
-/**
- * Default scale indicators for UI corners.
- * Each object represents a corner with its name with x, y coordinates.
- */
 export const DEF_SCALE_IND = [
     { name: "topLeft", x: 1, y: 1 },
     { name: "topRight", x: 1, y: 1 },
@@ -34,11 +29,14 @@ export const DEF_SCALE_IND = [
     { name: "bottomRight", x: 1, y: 1 },
 ];
 
-export type ProjectKey = "so_long" | "philosophers" | "minishell" | "unity" | "webserv" | "scop" | "ft_transcendance";
+interface ProjectDescription {
+    title: string;
+    description: string;
+    url: string;
+}
 
-/**
- * Contains all projects, each with a title, description, and URL.
- */
+export type ProjectKey = "so_long" | "unity" | "webserv" | "scop" | "ft_transcendance";
+
 export const PROJECT_DESCRIPTIONS: Record<ProjectKey, ProjectDescription> = {
     so_long: {
         title: "so_long",
@@ -46,18 +44,6 @@ export const PROJECT_DESCRIPTIONS: Record<ProjectKey, ProjectDescription> = {
             "First game development project during the 42 common core. The purpose was to learn how to use a simple graphical library in C. I made a 2D platformer and learned all my basics for game development here. (The poster resembles a pixel art game, which is why I included it here.)",
 
         url: "https://github.com/Vpekdas/so_long",
-    },
-    philosophers: {
-        title: "philosophers",
-        description:
-            "This project taught me how to multithread a simple program, still written in C. The purpose was to simulate the dining philosophers problem and make them last as long as possible by efficiently managing their forks (mutexes in programming terms). (The table and spaghetti make it obvious where I should place this project.)",
-        url: "https://github.com/Vpekdas/Philosophers",
-    },
-    minishell: {
-        title: "minishell",
-        description:
-            "First big group project. The purpose was to create a small shell similar to Bash. It handles some built-in commands and basic inputs. It seemed scary at first, but not so much once it's behind you. (It's a sink because 'shell' reminds me of seashells, and C shell, get the joke?)",
-        url: "https://github.com/Vpekdas/minishell",
     },
     unity: {
         title: "unity",
@@ -84,15 +70,3 @@ export const PROJECT_DESCRIPTIONS: Record<ProjectKey, ProjectDescription> = {
         url: "https://github.com/Vpekdas/ft_transcendence",
     },
 };
-
-/**
- * Represents a project description.
- */
-interface ProjectDescription {
-    /** The title of the project. */
-    title: string;
-    /** A brief description of the project. */
-    description: string;
-    /** The URL of the project. */
-    url: string;
-}
