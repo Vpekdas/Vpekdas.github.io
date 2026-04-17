@@ -8,28 +8,22 @@
 
 ## Description
 
-Hello! This is my interactive portfolio website that showcases my development journey and projects. 
+A portfolio showcasing projects I find meaningful and relevant.
 
 ### Purpose
 
-I wanted to learn web development and build a cool portfolio that showcases my passion for coding and experimenting with new technologies. 
+To explore my projects, learn more about me, and access contact information, with GitHub links provided for each project.
 
-- **Started with the basics:** Learned JavaScript and built the first version with vanilla JS.
-- **Added interactivity:** Integrated KAPLAY to create an immersive portfolio.
-- **Expanded my skills:** Learned TypeScript, React, and TailwindCSS.
-  
 ### Technologies Used
 
-- **TypeScript** : For type-safe JavaScript development
-- **React** : Frontend framework for building interactive user interfaces
-- **TailwindCSS** : Utility-first CSS framework for responsive styling
+- **TypeScript**
+- **React**
+- **TailwindCSS**
 - **KaPlay** : Game library
 
 ### Challenges and Future Features
 
-The main challenges in this project were learning JavaScript fundamentals and HTML interaction. Then I had to understand how CSS works for styling. After that, I learned how to use Kaboom.js for game development.
-
-After a long moment, migrating to TypeScript was challenging because of the typing system. Most of all, understanding how React works with its component system and hooks was the biggest difficulty.
+It's a simple portfolio. The web part was easy, the main challenge was figuring out how to use KaPlay. If I find some time, I could do some cool things with Three.js.
 
 ## Credits
 
@@ -40,7 +34,6 @@ I learned all the technologies used in this project through self-study, but I wa
 - [everlyspixelsandpens](https://evanwritesgames.itch.io/free-retro-cybercity-cyberpunk-2077edgerunners-inspired-character-pack) for the character sprite pack.
 - [craftpix](https://free-game-assets.itch.io/free-city-backgrounds-pixel-art) for the cityscape background assets.
 - [Crusenho](https://crusenho.itch.io/complete-ui-essential-pack) and [Wenrexa](https://wenrexa.itch.io/ui-different01) for the excellent UI elements.
-
 
 ## Contributing
 
